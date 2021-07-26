@@ -17,7 +17,7 @@ def add_boot_entry(configs=None):
             '/usr/sbin/grubby',
             '--add-kernel', '{0}'.format(kernel_dst_path),
             '--initrd', '{0}'.format(initram_dst_path),
-            '--title', 'RHEL-Upgrade-Initramfs',
+            '--title', 'AlmaLinux-Upgrade-Initramfs',
             '--copy-default',
             '--make-default',
             '--args', '{DEBUG} enforcing=0 rd.plymouth=0 plymouth.enable=0'.format(DEBUG=debug)
