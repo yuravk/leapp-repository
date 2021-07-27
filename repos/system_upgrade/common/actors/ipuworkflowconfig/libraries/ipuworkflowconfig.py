@@ -1,4 +1,5 @@
 import os
+import platform
 
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.stdlib import run, CalledProcessError
@@ -60,6 +61,7 @@ def get_env_vars():
 
 def get_os_release(path):
     """Retrieve data about System OS release from provided file."""
+    os_version = '.'.join(platform.dist()[1].split('.')[:2])
     try:
         with open(path) as f:
             data = dict(l.strip().split('=', 1) for l in f.readlines() if '=' in l)
@@ -68,7 +70,7 @@ def get_os_release(path):
                 name=data.get('NAME', '').strip('"'),
                 pretty_name=data.get('PRETTY_NAME', '').strip('"'),
                 version=data.get('VERSION', '').strip('"'),
-                version_id=data.get('VERSION_ID', '').strip('"'),
+                version_id=os_version,
                 variant=data.get('VARIANT', '').strip('"') or None,
                 variant_id=data.get('VARIANT_ID', '').strip('"') or None
             )
