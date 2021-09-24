@@ -8,7 +8,7 @@ fi
 type getarg >/dev/null 2>&1 || . /lib/dracut-lib.sh
 
 get_rhel_major_release() {
-    local os_version=$(cat /etc/initrd-release | grep -o '^VERSION="[0-9][0-9]*\.' | grep -o '[0-9]*')
+    local os_version=$(cat /etc/initrd-release | grep -o '^VERSION="[0-9][0-9]*' | grep -o '[0-9]*')
     [ -z "$os_version" ] && {
         # This should not happen as /etc/initrd-release is supposed to have API
         # stability, but check is better than broken system.
@@ -326,4 +326,3 @@ getarg 'rd.break=leapp-logs' && emergency_shell -n upgrade "Break after LEAPP sa
 sync
 mount -o "remount,$old_opts" $NEWROOT
 exit $result
-
