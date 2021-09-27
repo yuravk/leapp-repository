@@ -246,10 +246,15 @@ lint:
 	echo "--- Running pylint ---" && \
 	bash -c "[[ ! -z $${SEARCH_PATH} ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint" && \
 	echo "--- Running flake8 ---" && \
-	bash -c "[[ ! -z $${SEARCH_PATH} ]] && flake8 $${SEARCH_PATH}" && \
-	echo "--- Checking py3 compatibility ---" && \
-	bash -c "[[ ! -z $${SEARCH_PATH} ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint --py3k" && \
-	echo "--- Linting done. ---"
+	bash -c "[[ ! -z $${SEARCH_PATH} ]] && flake8 $${SEARCH_PATH}"
+
+	if [[ "$(_PYTHON_VENV)" == "python2.7" ]] ; then \
+		. $(VENVNAME)/bin/activate; \
+		echo "--- Checking py3 compatibility ---" && \
+		SEARCH_PATH=$(REPOS_PATH) && \
+		bash -c "[[ ! -z $${SEARCH_PATH} ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint --py3k" && \
+		echo "--- Linting done. ---"; \
+	fi
 
 test_no_lint:
 	. $(VENVNAME)/bin/activate; \
@@ -260,6 +265,23 @@ test_no_lint:
 	python -m pytest $(REPORT_ARG) $(ACTOR_PATH) $(LIBRARY_PATH)
 
 test: lint test_no_lint
+
+fast_lint:
+	@. $(VENVNAME)/bin/activate; \
+	FILES_TO_LINT="$$(git diff --name-only $(MASTER_BRANCH)| grep '\.py$$')"; \
+	if [[ -n "$$FILES_TO_LINT" ]]; then \
+		pylint -j 0 $$FILES_TO_LINT && \
+		flake8 $$FILES_TO_LINT; \
+		LINT_EXIT_CODE="$$?"; \
+		if [[ "$$LINT_EXIT_CODE" != "0" ]]; then \
+			exit $$LINT_EXIT_CODE; \
+		fi; \
+		if [[ "$(_PYTHON_VENV)" == "python2.7" ]] ; then \
+			pylint --py3k $$FILES_TO_LINT; \
+		fi; \
+	else \
+		echo "No files to lint."; \
+	fi
 
 dashboard_data:
 	. $(VENVNAME)/bin/activate; \

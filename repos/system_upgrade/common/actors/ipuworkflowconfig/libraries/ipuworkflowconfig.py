@@ -2,6 +2,7 @@ import os
 import platform
 
 from leapp.exceptions import StopActorExecutionError
+from leapp.libraries.common.config.version import get_major_version
 from leapp.libraries.stdlib import run, CalledProcessError
 from leapp.models import EnvVar, OSRelease
 
@@ -25,7 +26,7 @@ upgrade_paths_map = {
     # expected upgrade paths for RHEL 7
     ('7.6', LEAPP_UPGRADE_FLAVOUR_DEFAULT): '8.4',
     ('7.9', LEAPP_UPGRADE_FLAVOUR_DEFAULT): '8.4',
-    ('7.7', LEAPP_UPGRADE_FLAVOUR_SAP_HANA): '8.2',
+    ('7.9', LEAPP_UPGRADE_FLAVOUR_SAP_HANA): '8.4',
 
     # expected upgrade paths for RHEL 8
     ('8.6', LEAPP_UPGRADE_FLAVOUR_DEFAULT): '9.0',
@@ -37,10 +38,6 @@ upgrade_paths_map = {
     # unsupported fallback paths for RHEL 8
     ('8', LEAPP_UPGRADE_FLAVOUR_DEFAULT): '9.0',
 }
-
-
-def _get_major_version(version):
-    return version.split('.')[0]
 
 
 def get_env_vars():
@@ -107,7 +104,7 @@ def get_target_version(flavour=LEAPP_UPGRADE_FLAVOUR_DEFAULT):
         # If we cannot find a particular major.minor version in the map,
         # we fallback to pick a target version just based on a major version.
         # This can happen for example when testing not yet released versions
-        major_version = _get_major_version(current_version_id)
+        major_version = get_major_version(current_version_id)
         target_version = upgrade_paths_map.get((major_version, flavour), None)
 
     return os.getenv('LEAPP_DEVEL_TARGET_RELEASE', None) or target_version

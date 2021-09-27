@@ -14,6 +14,7 @@ from leapp.libraries.common import (
     utils,
 )
 from leapp.libraries.common.config import get_product_type, get_env
+from leapp.libraries.common.config.version import get_target_major_version
 from leapp.libraries.stdlib import CalledProcessError, api, config, run
 from leapp.models import (
     CustomTargetRepositoryFile,
@@ -56,6 +57,7 @@ from leapp.utils.deprecation import suppress_deprecation
 # Issue: #486
 
 PROD_CERTS_FOLDER = 'prod-certs'
+PERSISTENT_PACKAGE_CACHE_DIR = '/var/lib/leapp/persistent_package_cache'
 
 
 def _check_deprecated_rhsm_skip():
@@ -84,7 +86,7 @@ class _InputData(object):
         It doesn't consume TargetRepositories, which are consumed in the
         own function.
         """
-        self.packages = {'dnf'}
+        self.packages = {'dnf', 'dnf-command(config-manager)'}
         self.files = []
         _cftuples = set()
 
@@ -121,16 +123,38 @@ class _InputData(object):
             raise StopActorExecutionError('No storage info available cannot proceed.')
 
 
+def _restore_persistent_package_cache(userspace_dir):
+    if get_env('LEAPP_DEVEL_USE_PERSISTENT_PACKAGE_CACHE', None) == '1':
+        if os.path.exists(PERSISTENT_PACKAGE_CACHE_DIR):
+            with mounting.NspawnActions(base_dir=userspace_dir) as target_context:
+                target_context.copytree_to(PERSISTENT_PACKAGE_CACHE_DIR, '/var/cache/dnf')
+    # We always want to remove the persistent cache here to unclutter the system
+    run(['rm', '-rf', PERSISTENT_PACKAGE_CACHE_DIR])
+
+
+def _backup_to_persistent_package_cache(userspace_dir):
+    if get_env('LEAPP_DEVEL_USE_PERSISTENT_PACKAGE_CACHE', None) == '1':
+        # Clean up any dead bodies, just in case
+        run(['rm', '-rf', PERSISTENT_PACKAGE_CACHE_DIR])
+        if os.path.exists(os.path.join(userspace_dir, 'var', 'cache', 'dnf')):
+            with mounting.NspawnActions(base_dir=userspace_dir) as target_context:
+                target_context.copytree_from('/var/cache/dnf', PERSISTENT_PACKAGE_CACHE_DIR)
+
+
 def prepare_target_userspace(context, userspace_dir, enabled_repos, packages):
     """
     Implement the creation of the target userspace.
     """
-    target_major_version = api.current_actor().configuration.version.target.split('.')[0]
+    _backup_to_persistent_package_cache(userspace_dir)
+
+    target_major_version = get_target_major_version()
     run(['rm', '-rf', userspace_dir])
     _create_target_userspace_directories(userspace_dir)
     with mounting.BindMount(
         source=userspace_dir, target=os.path.join(context.base_dir, 'el{}target'.format(target_major_version))
     ):
+        _restore_persistent_package_cache(userspace_dir)
+
         repos_opt = [['--enablerepo', repo] for repo in enabled_repos]
         repos_opt = list(itertools.chain(*repos_opt))
         cmd = ['dnf',
@@ -298,7 +322,7 @@ def _get_all_available_repoids(context):
 
 
 def _get_rhsm_available_repoids(context):
-    target_major_version = api.current_actor().configuration.version.target.split('.')[0]
+    target_major_version = get_target_major_version()
     # FIXME: check that required repo IDs (baseos, appstream)
     # + or check that all required RHEL repo IDs are available.
     if rhsm.skip_rhsm():
@@ -494,15 +518,17 @@ def _copy_files(context, files):
 
 
 def _get_target_userspace():
-    target_major_version = api.current_actor().configuration.version.target.split('.')[0]
-    return constants.TARGET_USERSPACE.format(target_major_version)
+    return constants.TARGET_USERSPACE.format(get_target_major_version())
 
 
 def _create_target_userspace(context, packages, files, target_repoids):
     """Create the target userspace."""
-    prepare_target_userspace(context, _get_target_userspace(), target_repoids, list(packages))
-    _prep_repository_access(context, _get_target_userspace())
-    _copy_files(context, files)
+    target_path = _get_target_userspace()
+    prepare_target_userspace(context, target_path, target_repoids, list(packages))
+    _prep_repository_access(context, target_path)
+
+    with mounting.NspawnActions(base_dir=target_path) as target_context:
+        _copy_files(target_context, files)
     dnfplugin.install(_get_target_userspace())
 
     # and do not forget to set the rhsm into the container mode again

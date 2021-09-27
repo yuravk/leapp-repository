@@ -2,7 +2,14 @@
 %global  lrdname  leapp-repository-deps-el%{rhel}
 %global  ldname   leapp-deps-el%{rhel}
 
-%define leapp_repo_deps  5
+%if 0%{?rhel} == 8
+    %define lpr_name_src leapp-upgrade-el7toel8-deps
+%else
+    %define lpr_name_src leapp-upgrade-el8toel9-deps
+%endif
+
+
+%define leapp_repo_deps  6
 %define leapp_framework_deps   3
 
 # NOTE: the Version contains the %{rhel} macro just for the convenience to
@@ -30,7 +37,10 @@ URL:        https://oamg.github.io/leapp/
 %package -n %{lrdname}
 Summary:    Meta-package with system dependencies for leapp repository
 Provides:   leapp-repository-dependencies = %{leapp_repo_deps}
+
+# NOTE: we can drop this one Obsoletes later, but keeping it for now...
 Obsoletes:  leapp-repository-deps
+Obsoletes:  %{lpr_name_src}
 
 Requires:   dnf >= 4
 Requires:   pciutils
@@ -38,6 +48,11 @@ Requires:   python3
 Requires:   python3-pyudev
 # required by SELinux actors
 Requires:   policycoreutils-python-utils
+
+# we need the dnf configuration manager to check and modify configuration
+# The package is first installed inside the target userspace container
+# Than we ensure the rpm will be present after the upgrade transaction.
+Requires:   dnf-command(config-manager)
 
 %description -n %{lrdname}
 %{summary}
@@ -64,6 +79,7 @@ Requires:   python2-requests
 Requires:   python3-six
 Requires:   python3-setuptools
 Requires:   python3-requests
+
 
 %description -n %{ldname}
 %{summary}
