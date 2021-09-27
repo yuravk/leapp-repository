@@ -92,7 +92,7 @@ def _handle_rhsm_exceptions(hint=None):
 
 def skip_rhsm():
     """Check whether we should skip RHSM related code."""
-    return get_env('LEAPP_NO_RHSM', '0') == '1'
+    return True
 
 
 def with_rhsm(f):
