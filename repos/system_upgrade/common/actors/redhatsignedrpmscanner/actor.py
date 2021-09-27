@@ -26,8 +26,7 @@ class RedHatSignedRpmScanner(Actor):
                    '938a80caf21541eb',
                    'fd372689897da07a',
                    '45689c882fa658e0',
-                   '24c6a8a7f4a80eb5',
-                   '51d6647ec21ad6ea']
+                   '24c6a8a7f4a80eb5']
 
         signed_pkgs = InstalledRedHatSignedRPM()
         unsigned_pkgs = InstalledUnsignedRPM()
@@ -52,7 +51,7 @@ class RedHatSignedRpmScanner(Actor):
             """
             return (    # pylint: disable-msg=consider-using-ternary
                     pkg.name == 'gpg-pubkey'
-                    and (pkg.packager.startswith('Red Hat, Inc.') or pkg.packager.startswith('CentOS') or pkg.packager.startswith('AlmaLinux'))
+                    and (pkg.packager.startswith('Red Hat, Inc.') or pkg.packager.startswith('CentOS'))
                     or all_signed
             )
 
