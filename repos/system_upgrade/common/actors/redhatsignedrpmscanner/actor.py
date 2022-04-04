@@ -23,7 +23,8 @@ class RedHatSignedRpmScanner(Actor):
                    'fd372689897da07a',
                    '45689c882fa658e0',
                    '24c6a8a7f4a80eb5',
-                   '51d6647ec21ad6ea']
+                   '51d6647ec21ad6ea',
+                   '4eb84e71f2ee9d55']
 
         signed_pkgs = InstalledRedHatSignedRPM()
         unsigned_pkgs = InstalledUnsignedRPM()
