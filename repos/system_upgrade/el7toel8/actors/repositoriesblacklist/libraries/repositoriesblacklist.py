@@ -83,8 +83,7 @@ def _get_optional_repo_mapping():
     It returns the mapping as a dict {'from_repoid' : 'to_repoid'}.
     """
     opt_repo_mapping = {}
-    repo_map = next(api.consume(RepositoriesMap), None)
-    if repo_map:
+    for repo_map in api.consume(RepositoriesMap):
         for repo in repo_map.repositories:
             if _is_optional_repo(repo):
                 opt_repo_mapping[repo.from_repoid] = repo.to_repoid

@@ -30,7 +30,7 @@ class SystemFactsActor(Actor):
                 SELinuxFacts,
                 FirewallsFacts,
                 FirmwareFacts)
-    tags = (IPUWorkflowTag, FactsPhaseTag,)
+    tags = (IPUWorkflowTag, FactsPhaseTag.Before,)
 
     def process(self):
         self.produce(systemfacts.get_sysctls_status())

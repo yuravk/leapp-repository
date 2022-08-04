@@ -16,7 +16,7 @@ class ReadRepoFileMock(object):
     def __init__(self, repomap_data):
         self.repomap_file = self._gen_data_file(repomap_data)
 
-    def __call__(self, dummy_filename):
+    def __call__(self, dummy_filename, dummy_directory):
         return self.repomap_file
 
     def _gen_data_file(self, repomap_data):

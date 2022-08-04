@@ -4,6 +4,8 @@ import json
 import os
 import shutil
 
+import six
+
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.common import dnfconfig, guards, mounting, overlaygen, rhsm, utils
 from leapp.libraries.common.config.version import get_target_major_version, get_source_major_version
@@ -190,10 +192,15 @@ def _transaction(context, stage, target_repoids, tasks, plugin_info, test=False,
                 message='Failed to execute dnf. Reason: {}'.format(str(e))
             )
         except CalledProcessError as e:
+            if six.PY2:
+                e.stdout = e.stdout.encode('utf-8', 'xmlcharrefreplace')
+                e.stderr = e.stdout.encode('utf-8', 'xmlcharrefreplace')
+
             api.current_logger().error('DNF execution failed: ')
             raise StopActorExecutionError(
                 message='DNF execution failed with non zero exit code.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}'.format(
-                    stdout=e.stdout, stderr=e.stderr)
+                    stdout=e.stdout, stderr=e.stderr
+                )
             )
         finally:
             if stage == 'check':

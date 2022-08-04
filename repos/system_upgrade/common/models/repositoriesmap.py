@@ -31,5 +31,12 @@ class RepositoryMap(Model):
 class RepositoriesMap(Model):
     topic = TransactionTopic
 
+    file = fields.String(default="repomap.csv")
     repositories = fields.List(fields.Model(RepositoryMap), default=[])
     """List of source RHEL repo <-> target RHEL repo mappings"""
+
+
+class VendorRepositoriesMapCollection(Model):
+    topic = TransactionTopic
+
+    maps = fields.List(fields.Model(RepositoriesMap))
