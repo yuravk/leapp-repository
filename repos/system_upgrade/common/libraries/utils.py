@@ -1,11 +1,13 @@
 import functools
+import os
 import sys
 
 import six
 
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.common import mounting
-from leapp.libraries.stdlib import STDOUT, CalledProcessError, api, config, run
+from leapp.libraries.stdlib import api, CalledProcessError, config, run, STDOUT
+from leapp.utils.deprecation import deprecated
 
 
 def parse_config(cfg=None, strict=True):
@@ -45,6 +47,11 @@ def makedirs(path, mode=0o777, exists_ok=True):
     mounting._makedirs(path=path, mode=mode, exists_ok=exists_ok)
 
 
+@deprecated(since='2022-02-03', message=(
+        'The "apply_yum_workaround" function has been deprecated, use "DNFWorkaround" '
+        'message as used in the successing "RegisterYumAdjustment" actor.'
+    )
+)
 def apply_yum_workaround(context=None):
     """
     Applies a workaround on the system to allow the upgrade to succeed for yum/dnf.
@@ -75,14 +82,13 @@ def logging_handler(fd_info, buf):
     Custom log handler to always show stdout to console and stderr only in DEBUG mode
     """
     (_unused, fd_type) = fd_info
-
-    if isinstance(buf, bytes) and str is not bytes:
-        buf = buf.decode('utf-8')
-    if fd_type == STDOUT:
-        sys.stdout.write(buf)
+    if fd_type != STDOUT and not config.is_debug():
+        return
+    target = sys.stdout if fd_type == STDOUT else sys.stderr
+    if sys.version_info > (3, 0):
+        os.writev(target.fileno(), [buf])
     else:
-        if config.is_debug():
-            sys.stderr.write(buf)
+        target.write(buf)
 
 
 def reinstall_leapp_repository_hint():

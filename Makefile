@@ -9,12 +9,16 @@ DEPS_PKGNAME=leapp-el7toel8-deps
 VERSION=`grep -m1 "^Version:" packaging/$(PKGNAME).spec | grep -om1 "[0-9].[0-9.]**"`
 DEPS_VERSION=`grep -m1 "^Version:" packaging/$(DEPS_PKGNAME).spec | grep -om1 "[0-9].[0-9.]**"`
 REPOS_PATH=repos
-ACTOR_PATH=
+_SYSUPG_REPOS="$(REPOS_PATH)/system_upgrade"
 LIBRARY_PATH=
 REPORT_ARG=
+REPOSITORIES ?= $(shell ls $(_SYSUPG_REPOS) | xargs echo | tr " " ",")
+SYSUPG_TEST_PATHS=$(shell echo $(REPOSITORIES) | sed -r "s|(,\\|^)| $(_SYSUPG_REPOS)/|g")
+TEST_PATHS:=commands repos/common $(SYSUPG_TEST_PATHS)
+
 
 ifdef ACTOR
-	ACTOR_PATH=`python utils/actor_path.py $(ACTOR)`
+	TEST_PATHS=`python utils/actor_path.py $(ACTOR)`
 endif
 
 ifeq ($(TEST_LIBS),y)
@@ -102,6 +106,7 @@ help:
 	@echo "  install-deps-fedora    create python virtualenv and install there"
 	@echo "                         leapp-repository with dependencies for Fedora OS"
 	@echo "  lint                   lint source code"
+	@echo "  lint_fix               attempt to fix isort violations inplace"
 	@echo "  test                   lint source code and run tests"
 	@echo "  test_no_lint           run tests without linting the source code"
 	@echo ""
@@ -135,6 +140,7 @@ clean:
 	@echo "--- Clean repo ---"
 	@rm -rf packaging/{sources,SRPMS,tmp,BUILD,BUILDROOT,RPMS}/
 	@rm -rf build/ dist/ *.egg-info .pytest_cache/
+	@rm -f *src.rpm packaging/*tar.gz
 	@find . -name 'leapp.db' | grep "\.leapp/leapp.db" | xargs rm -f
 	@find . -name '__pycache__' -exec rm -fr {} +
 	@find . -name '*.pyc' -exec rm -f {} +
@@ -201,22 +207,20 @@ register:
 install-deps:
 	@# in centos:7 python 3.x is not installed by default
 	case $(_PYTHON_VENV) in python3*) yum install -y ${shell echo $(_PYTHON_VENV) | tr -d .}; esac
-	@# in centos:7 actor's python 3.x dependencies are in epel
-	case $(_PYTHON_VENV) in python3*) yum install -y epel-release; esac
 	@# in centos:7 python dependencies required gcc
 	case $(_PYTHON_VENV) in python3*) yum install gcc -y; esac
 	virtualenv --system-site-packages -p /usr/bin/$(_PYTHON_VENV) $(VENVNAME); \
 	. $(VENVNAME)/bin/activate; \
 	pip install -U pip; \
 	pip install --upgrade setuptools; \
-	pip install --upgrade -r requirements.txt \
+	pip install --upgrade -r requirements.txt; \
+	./utils/install_commands.sh $(_PYTHON_VENV); \
 	# In case the top commit Depends-On some yet unmerged framework patch - override master leapp with the proper version
 	if [[ ! -z "$(REQ_LEAPP_PR)" ]] ; then \
 		echo "Leapp-repository depends on the yet unmerged pr of the framework #$(REQ_LEAPP_PR), installing it.." && \
 		$(VENVNAME)/bin/pip install -I "git+https://github.com/oamg/leapp.git@refs/pull/$(REQ_LEAPP_PR)/head"; \
 	fi
-	python utils/install_actor_deps.py --actor=$(ACTOR)
-
+	$(_PYTHON_VENV) utils/install_actor_deps.py --actor=$(ACTOR) --repos="$(TEST_PATHS)"
 install-deps-fedora:
 	@# Check the necessary rpms are installed for py3 (and py2 below)
 	if ! rpm -q git findutils python3-virtualenv gcc; then \
@@ -232,6 +236,7 @@ install-deps-fedora:
 	pip install -U pip; \
 	pip install --upgrade setuptools; \
 	pip install --upgrade -r requirements.txt; \
+	./utils/install_commands.sh $(_PYTHON_VENV); \
 	# In case the top commit Depends-On some yet unmerged framework patch - override master leapp with the proper version
 	if [[ ! -z "$(REQ_LEAPP_PR)" ]] ; then \
 		echo "Leapp-repository depends on the yet unmerged pr of the framework #$(REQ_LEAPP_PR), installing it.." && \
@@ -241,20 +246,37 @@ install-deps-fedora:
 lint:
 	. $(VENVNAME)/bin/activate; \
 	echo "--- Linting ... ---" && \
-	SEARCH_PATH=$(REPOS_PATH) && \
+	SEARCH_PATH="$(TEST_PATHS)" && \
 	echo "Using search path '$${SEARCH_PATH}'" && \
 	echo "--- Running pylint ---" && \
-	bash -c "[[ ! -z $${SEARCH_PATH} ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint" && \
+	bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint -j0" && \
 	echo "--- Running flake8 ---" && \
-	bash -c "[[ ! -z $${SEARCH_PATH} ]] && flake8 $${SEARCH_PATH}"
+	bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && flake8 $${SEARCH_PATH}"
 
 	if [[ "$(_PYTHON_VENV)" == "python2.7" ]] ; then \
 		. $(VENVNAME)/bin/activate; \
 		echo "--- Checking py3 compatibility ---" && \
 		SEARCH_PATH=$(REPOS_PATH) && \
-		bash -c "[[ ! -z $${SEARCH_PATH} ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint --py3k" && \
+		bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint --py3k" && \
 		echo "--- Linting done. ---"; \
 	fi
+
+	if [[  "`git rev-parse --abbrev-ref HEAD`" != "master" ]] && [[ -n "`git diff $(MASTER_BRANCH) --name-only`" ]]; then \
+		. $(VENVNAME)/bin/activate; \
+		git diff $(MASTER_BRANCH) --name-only | xargs isort -c --diff || \
+		{ \
+			echo; \
+			echo "------------------------------------------------------------------------------"; \
+			echo "Hint: Apply the required changes."; \
+			echo "      Execute the following command to apply them automatically: make lint_fix"; \
+			exit 1; \
+		} && echo "--- isort check done. ---"; \
+	fi
+
+lint_fix:
+	. $(VENVNAME)/bin/activate; \
+	git diff $(MASTER_BRANCH) --name-only | xargs isort && \
+	echo "--- isort inplace fixing done. ---;"
 
 test_no_lint:
 	. $(VENVNAME)/bin/activate; \
@@ -262,7 +284,7 @@ test_no_lint:
 	cd repos/system_upgrade/el7toel8/; \
 	snactor workflow sanity-check ipu && \
 	cd - && \
-	python -m pytest $(REPORT_ARG) $(ACTOR_PATH) $(LIBRARY_PATH)
+	$(_PYTHON_VENV) -m pytest $(REPORT_ARG) $(TEST_PATHS) $(LIBRARY_PATH)
 
 test: lint test_no_lint
 
@@ -287,7 +309,7 @@ dashboard_data:
 	. $(VENVNAME)/bin/activate; \
 	snactor repo find --path repos/; \
 	pushd repos/system_upgrade/el7toel8/; \
-	python ../../../utils/dashboard-json-dump.py > ../../../discover.json; \
+	$(_PYTHON_VENV) ../../../utils/dashboard-json-dump.py > ../../../discover.json; \
 	popd
 
 .PHONY: help build clean prepare source srpm copr_build print_release register install-deps install-deps-fedora lint test_no_lint test dashboard_data

@@ -1,16 +1,17 @@
 import os
 import sys
 import uuid
-from datetime import datetime
 
-from leapp.cli.commands.upgrade import util
-from leapp.config import get_config
+from leapp.cli.commands import command_utils
+from leapp.cli.commands.config import get_config
+from leapp.cli.commands.upgrade import breadcrumbs, util
 from leapp.exceptions import CommandError, LeappError
 from leapp.logger import configure_logger
 from leapp.utils.audit import Execution
-from leapp.utils.clicmd import command, command_arg, command_opt
-from leapp.utils.output import (beautify_actor_exception, report_errors, report_info, report_inhibitors)
+from leapp.utils.clicmd import command, command_opt
+from leapp.utils.output import beautify_actor_exception, report_errors, report_info, report_inhibitors
 
+# NOTE:
 # If you are adding new parameters please ensure that they are set in the upgrade function invocation in `rerun`
 # otherwise there might be errors.
 
@@ -25,12 +26,21 @@ from leapp.utils.output import (beautify_actor_exception, report_errors, report_
                                            ' with Red Hat Subscription Manager')
 @command_opt('enablerepo', action='append', metavar='<repoid>',
              help='Enable specified repository. Can be used multiple times.')
-def upgrade(args):
+@command_opt('channel',
+             help='Set preferred channel for the IPU target.',
+             choices=['ga', 'tuv', 'e4s', 'eus', 'aus'],
+             value_type=str.lower)  # This allows the choices to be case insensitive
+@command_opt('target', choices=command_utils.get_supported_target_versions(),
+             help='Specify RHEL version to upgrade to for {} detected upgrade flavour'.format(
+                 command_utils.get_upgrade_flavour()))
+@command_opt('report-schema', help='Specify report schema version for leapp-report.json', choices=['1.0.0', '1.1.0'],
+             default=get_config().get('report', 'schema'))
+@breadcrumbs.produces_breadcrumbs
+def upgrade(args, breadcrumbs):
     skip_phases_until = None
     context = str(uuid.uuid4())
     cfg = get_config()
     util.handle_output_level(args)
-    configuration = util.prepare_configuration(args)
     answerfile_path = cfg.get('report', 'answerfile')
     userchoices_path = cfg.get('report', 'userchoices')
 
@@ -38,6 +48,8 @@ def upgrade(args):
     # therefore we have to assume that they aren't even in `args` as they are added only by rerun.
     only_with_tags = args.only_with_tags if 'only_with_tags' in args else None
     resume_context = args.resume_context if 'resume_context' in args else None
+
+    report_schema = util.process_report_schema(args, cfg)
 
     if os.getuid():
         raise CommandError('This command has to be run under the root user.')
@@ -56,6 +68,8 @@ def upgrade(args):
         util.restore_leapp_env_vars(context)
         skip_phases_until = util.get_last_phase(context)
     else:
+        util.disable_database_sync()
+        configuration = util.prepare_configuration(args)
         e = Execution(context=context, kind='upgrade', configuration=configuration)
         e.store()
         util.archive_logfiles()
@@ -75,6 +89,10 @@ def upgrade(args):
     with beautify_actor_exception():
         logger.info("Using answerfile at %s", answerfile_path)
         workflow.load_answers(answerfile_path, userchoices_path)
+
+        # Set the locale, so that the actors parsing command outputs that might be localized will not fail
+        os.environ['LC_ALL'] = 'en_US.UTF-8'
+        os.environ['LANG'] = 'en_US.UTF-8'
         workflow.run(context=context, skip_phases_until=skip_phases_until, skip_dialogs=True,
                      only_with_tags=only_with_tags)
 
@@ -82,7 +100,7 @@ def upgrade(args):
     workflow.save_answers(answerfile_path, userchoices_path)
     report_errors(workflow.errors)
     report_inhibitors(context)
-    util.generate_report_files(context)
+    util.generate_report_files(context, report_schema)
     report_files = util.get_cfg_files('report', cfg)
     log_files = util.get_cfg_files('logs', cfg)
     report_info(report_files, log_files, answerfile_path, fail=workflow.failure)

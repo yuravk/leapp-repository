@@ -1,3 +1,4 @@
+import functools
 import itertools
 import json
 import os
@@ -5,12 +6,32 @@ import shutil
 import tarfile
 from datetime import datetime
 
-from leapp.config import get_config
+from leapp.cli.commands import command_utils
+from leapp.cli.commands.config import get_config
 from leapp.exceptions import CommandError
 from leapp.repository.scan import find_and_scan_repositories
-from leapp.utils.audit import get_connection, get_checkpoints, get_messages
+from leapp.utils import audit
+from leapp.utils.audit import get_checkpoints, get_connection, get_messages
 from leapp.utils.output import report_unsupported
 from leapp.utils.report import fetch_upgrade_report_messages, generate_report_file
+
+
+def disable_database_sync():
+    def disable_db_sync_decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            try:
+                saved = os.environ.get('LEAPP_DEVEL_DATABASE_SYNC_OFF', None)
+                os.environ['LEAPP_DEVEL_DATABASE_SYNC_OFF'] = '1'
+                return f(*args, **kwargs)
+            finally:
+                os.environ.pop('LEAPP_DEVEL_DATABASE_SYNC_OFF')
+                if saved:
+                    os.environ['LEAPP_DEVEL_DATABASE_SYNC_OFF'] = saved
+        return wrapper
+
+    if not os.environ.get('LEAPP_DATABASE_FORCE_SYNC_ON', None):
+        audit.create_connection = disable_db_sync_decorator(audit.create_connection)
 
 
 def restore_leapp_env_vars(context):
@@ -104,6 +125,7 @@ def get_last_phase(context):
     checkpoints = get_checkpoints(context=context)
     if checkpoints:
         return checkpoints[-1]['phase']
+    return None
 
 
 def check_env_and_conf(env_var, conf_var, configuration):
@@ -113,7 +135,7 @@ def check_env_and_conf(env_var, conf_var, configuration):
     return os.getenv(env_var, '0') == '1' or configuration.get(conf_var, '0') == '1'
 
 
-def generate_report_files(context):
+def generate_report_files(context, report_schema):
     """
     Generates all report files for specific leapp run (txt and json format)
     """
@@ -122,8 +144,8 @@ def generate_report_files(context):
                                             'leapp-report.{}'.format(f)) for f in ['txt', 'json']]
     # fetch all report messages as a list of dicts
     messages = fetch_upgrade_report_messages(context)
-    generate_report_file(messages, context, report_json)
-    generate_report_file(messages, context, report_txt)
+    generate_report_file(messages, context, report_json, report_schema)
+    generate_report_file(messages, context, report_txt, report_schema)
 
 
 def get_cfg_files(section, cfg, must_exist=True):
@@ -156,6 +178,9 @@ def handle_output_level(args):
         os.environ['LEAPP_VERBOSE'] = os.getenv('LEAPP_VERBOSE', '0')
 
 
+# NOTE(ivasilev) Please make sure you are not calling prepare_configuration after first reboot.
+# If called as leapp upgrade --resume this will happily crash in target version container for
+# the latest supported release because of target_version discovery attempt.
 def prepare_configuration(args):
     """Returns a configuration dict object while setting a few env vars as a side-effect"""
     if args.whitelist_experimental:
@@ -170,6 +195,21 @@ def prepare_configuration(args):
         os.environ['LEAPP_NO_RHSM'] = os.getenv('LEAPP_DEVEL_SKIP_RHSM', '0')
     if args.enablerepo:
         os.environ['LEAPP_ENABLE_REPOS'] = ','.join(args.enablerepo)
+
+    if args.channel:
+        os.environ['LEAPP_TARGET_PRODUCT_CHANNEL'] = args.channel
+
+    # Check upgrade path and fail early if it's unsupported
+    target_version, flavor = command_utils.vet_upgrade_path(args)
+    os.environ['LEAPP_UPGRADE_PATH_TARGET_RELEASE'] = target_version
+    os.environ['LEAPP_UPGRADE_PATH_FLAVOUR'] = flavor
+
+    current_version = command_utils.get_os_release_version_id('/etc/os-release')
+    os.environ['LEAPP_IPU_IN_PROGRESS'] = '{source}to{target}'.format(
+        source=command_utils.get_major_version(current_version),
+        target=command_utils.get_major_version(target_version)
+    )
+
     configuration = {
         'debug': os.getenv('LEAPP_DEBUG', '0'),
         'verbose': os.getenv('LEAPP_VERBOSE', '0'),
@@ -188,3 +228,11 @@ def process_whitelist_experimental(repositories, workflow, configuration, logger
             if logger:
                 logger.error(msg)
             raise CommandError(msg)
+
+
+def process_report_schema(args, configuration):
+    default_report_schema = configuration.get('report', 'schema')
+    if args.report_schema and args.report_schema > default_report_schema:
+        raise CommandError('--report-schema version can not be greater that the '
+                           'actual {} one.'.format(default_report_schema))
+    return args.report_schema or default_report_schema

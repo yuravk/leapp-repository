@@ -10,7 +10,7 @@
 
 
 %define leapp_repo_deps  6
-%define leapp_framework_deps   3
+%define leapp_framework_deps 5
 
 # NOTE: the Version contains the %{rhel} macro just for the convenience to
 # have always upgrade path between newer and older deps packages. So for
@@ -23,6 +23,8 @@ Name:       leapp-el7toel8-deps
 Version:    5.0.%{rhel}
 Release:    1%{?dist}
 Summary:    Dependencies for *leapp* packages
+
+# NOTE: Our packages must be noarch. Do no drop this in any way.
 BuildArch:  noarch
 
 License:    ASL 2.0
@@ -76,6 +78,7 @@ Requires:   python2-requests
 %endif
 
 # Python3 deps
+Requires:   python3
 Requires:   python3-six
 Requires:   python3-setuptools
 Requires:   python3-requests

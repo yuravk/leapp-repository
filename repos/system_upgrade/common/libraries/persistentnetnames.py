@@ -1,7 +1,7 @@
 import pyudev
 
-from leapp.models import PCIAddress, Interface
 from leapp.libraries.stdlib import api
+from leapp.models import Interface, PCIAddress
 
 udev_context = pyudev.Context()
 
@@ -44,7 +44,9 @@ def interfaces():
             attrs['driver'] = dev['ID_NET_DRIVER']
             attrs['vendor'] = dev['ID_VENDOR_ID']
             attrs['pci_info'] = PCIAddress(**pci_info(dev['ID_PATH']))
-            attrs['mac'] = dev.attributes['address']
+            attrs['mac'] = dev.attributes.get('address')
+            if isinstance(attrs['mac'], bytes):
+                attrs['mac'] = attrs['mac'].decode()
         except Exception as e:  # pylint: disable=broad-except
             # FIXME(msekleta): We should probably handle errors more granularly
             # Maybe we should inhibit upgrade process at this point
