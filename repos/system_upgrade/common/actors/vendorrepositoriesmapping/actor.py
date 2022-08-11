@@ -16,6 +16,7 @@ class VendorRepositoriesMapping(Actor):
 
     def process(self):
         vendor_repomap_collection = scan_vendor_repomaps(VENDOR_REPOMAP_DIR)
-        self.produce(vendor_repomap_collection)
-        for repomap in vendor_repomap_collection.maps:
-            self.produce(repomap)
+        if vendor_repomap_collection:
+            self.produce(vendor_repomap_collection)
+            for repomap in vendor_repomap_collection.maps:
+                self.produce(repomap)

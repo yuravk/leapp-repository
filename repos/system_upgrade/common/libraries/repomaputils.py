@@ -138,7 +138,7 @@ def scan_vendor_repomaps(repomap_dir):
         api.current_logger().debug(
             "The {} directory doesn't exist. Nothing to do.".format(repomap_dir)
         )
-        return
+        return None
 
     vendor_maps = []
 
