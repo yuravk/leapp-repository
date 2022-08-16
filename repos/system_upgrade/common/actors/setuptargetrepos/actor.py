@@ -12,6 +12,7 @@ from leapp.models import (
     UsedRepositories
 )
 from leapp.tags import FactsPhaseTag, IPUWorkflowTag
+from leapp.libraries.stdlib import api
 
 
 class SetupTargetRepos(Actor):

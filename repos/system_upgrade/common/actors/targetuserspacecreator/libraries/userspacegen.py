@@ -592,6 +592,7 @@ def _install_custom_repofiles(context, custom_repofiles):
     """
     for rfile in custom_repofiles:
         _dst_path = os.path.join('/etc/yum.repos.d', os.path.basename(rfile.file))
+        api.current_logger().debug("Copying {} to {}".format(rfile.file, _dst_path))
         context.copy_to(rfile.file, _dst_path)
 
 

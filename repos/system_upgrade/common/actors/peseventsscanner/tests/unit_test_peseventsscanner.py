@@ -492,6 +492,10 @@ def test_get_events(monkeypatch):
     assert reporting.create_report.called == 1
     assert 'inhibitor' in reporting.create_report.report_fields['flags']
 
+    with open(os.path.join(CUR_DIR, 'files/sample04.json')) as f:
+        events = parse_pes_events(f.read())
+    assert len(events) == 0
+
 
 def test_pes_data_not_found(monkeypatch):
     def read_or_fetch_mocked(filename, directory="/etc/leapp/files", service=None, allow_empty=False):
