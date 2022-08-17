@@ -8,9 +8,9 @@ import six
 
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.common import dnfconfig, guards, mounting, overlaygen, rhsm, utils
-from leapp.libraries.common.config.version import get_target_major_version, get_source_major_version
-from leapp.libraries.stdlib import CalledProcessError, api, config
-
+from leapp.libraries.common.config.version import get_target_major_version, get_target_version
+from leapp.libraries.stdlib import api, CalledProcessError, config
+from leapp.models import DNFWorkaround
 
 DNF_PLUGIN_NAME = 'rhel_upgrade.py'
 
@@ -26,7 +26,7 @@ class _DnfPluginPathStr(str):
 
     def _feed(self):
         major = get_target_major_version()
-        if major not in _DnfPluginPathStr._PATHS.keys():  # pylint: disable=W1655
+        if major not in _DnfPluginPathStr._PATHS:
             raise KeyError('{} is not a supported target version of RHEL'.format(major))
         self.data = _DnfPluginPathStr._PATHS[major]
 
@@ -86,7 +86,8 @@ def build_plugin_data(target_repoids, debug, test, tasks, on_aws):
             'local_rpms': [os.path.join('/installroot', pkg.lstrip('/')) for pkg in tasks.local_rpms],
             'to_install': tasks.to_install,
             'to_remove': tasks.to_remove,
-            'to_upgrade': tasks.to_upgrade
+            'to_upgrade': tasks.to_upgrade,
+            'modules_to_enable': ['{}:{}'.format(m.name, m.stream) for m in tasks.modules_to_enable],
         },
         'dnf_conf': {
             'allow_erasing': True,
@@ -96,7 +97,7 @@ def build_plugin_data(target_repoids, debug, test, tasks, on_aws):
             'enable_repos': target_repoids,
             'gpgcheck': False,
             'platform_id': 'platform:el{}'.format(get_target_major_version()),
-            'releasever': api.current_actor().configuration.version.target,
+            'releasever': get_target_version(),
             'installroot': '/installroot',
             'test_flag': test
         },
@@ -148,7 +149,7 @@ def _transaction(context, stage, target_repoids, tasks, plugin_info, test=False,
     """
 
     # we do not want
-    if stage != 'upgrade':
+    if stage not in ['dry-run', 'upgrade']:
         create_config(
             context=context,
             target_repoids=target_repoids,
@@ -160,29 +161,51 @@ def _transaction(context, stage, target_repoids, tasks, plugin_info, test=False,
 
     # FIXME: rhsm
     with guards.guarded_execution(guards.connection_guard(), guards.space_guard()):
+        cmd_prefix = cmd_prefix or []
+        common_params = []
+        if config.is_verbose():
+            common_params.append('-v')
+        if rhsm.skip_rhsm():
+            common_params += ['--disableplugin', 'subscription-manager']
+        if plugin_info:
+            for info in plugin_info:
+                if stage in info.disable_in:
+                    common_params += ['--disableplugin', info.name]
+        env = {}
+        if get_target_major_version() == '9':
+            # allow handling new RHEL 9 syscalls by systemd-nspawn
+            env = {'SYSTEMD_SECCOMP': '0'}
+
+            # We need to reset modules twice, once before we check, and the second time before we actually perform
+            # the upgrade. Not more often as the modules will be reset already.
+            if stage in ('check', 'upgrade') and tasks.modules_to_reset:
+                # We shall only reset modules that are not going to be enabled
+                # This will make sure it is so
+                modules_to_reset = {(module.name, module.stream) for module in tasks.modules_to_reset}
+                modules_to_enable = {(module.name, module.stream) for module in tasks.modules_to_enable}
+                module_reset_list = [module[0] for module in modules_to_reset - modules_to_enable]
+                # Perform module reset
+                cmd = ['/usr/bin/dnf', 'module', 'reset', '--enabled', ] + module_reset_list
+                cmd += ['--disablerepo', '*', '-y', '--installroot', '/installroot']
+                try:
+                    context.call(
+                        cmd=cmd_prefix + cmd + common_params,
+                        callback_raw=utils.logging_handler,
+                        env=env
+                    )
+                except (CalledProcessError, OSError):
+                    api.current_logger().debug('Failed to reset modules via dnf with an error. Ignoring.',
+                                               exc_info=True)
+
         cmd = [
             '/usr/bin/dnf',
             'rhel-upgrade',
             stage,
             DNF_PLUGIN_DATA_PATH
         ]
-        if config.is_verbose():
-            cmd.append('-v')
-        if rhsm.skip_rhsm():
-            cmd += ['--disableplugin', 'subscription-manager']
-        if plugin_info:
-            for info in plugin_info:
-                if stage in info.disable_in:
-                    cmd += ['--disableplugin', info.name]
-        if cmd_prefix:
-            cmd = cmd_prefix + cmd
-        env = {}
-        if get_target_major_version() == '9':
-            # allow handling new RHEL 9 syscalls by systemd-nspawn
-            env = {'SYSTEMD_SECCOMP': '0'}
         try:
             context.call(
-                cmd=cmd,
+                cmd=cmd_prefix + cmd + common_params,
                 callback_raw=utils.logging_handler,
                 env=env
             )
@@ -217,12 +240,20 @@ def _prepare_transaction(used_repos, target_userspace_info, binds=()):
         yield context, list(target_repoids), target_userspace_info
 
 
-def _apply_yum_workaround(context):
+def apply_workarounds(context=None):
     """
-    Apply the yum workaround in the given context environment if on RHEL 7.
+    Apply registered workarounds in the given context environment
     """
-    if get_source_major_version() == '7':
-        utils.apply_yum_workaround(context)
+    context = context or mounting.NotIsolatedActions(base_dir='/')
+    for workaround in api.consume(DNFWorkaround):
+        try:
+            api.show_message('Applying transaction workaround - {}'.format(workaround.display_name))
+            context.call(['/bin/bash', '-c', workaround.script_path])
+        except (OSError, CalledProcessError) as e:
+            raise StopActorExecutionError(
+                message=('Failed to exceute script to apply transaction workaround {display_name}.'
+                         ' Message: {error}'.format(error=str(e), display_name=workaround.display_name))
+            )
 
 
 def install_initramdisk_requirements(packages, target_userspace_info, used_repos):
@@ -317,36 +348,52 @@ def perform_transaction_install(target_userspace_info, storage_info, used_repos,
         dnfconfig.exclude_leapp_rpms(mounting.NotIsolatedActions(base_dir='/'))
 
 
-def perform_transaction_check(target_userspace_info, used_repos, tasks, xfs_info, storage_info, plugin_info):
-    """
-    Perform DNF transaction check using our plugin
-    """
+@contextlib.contextmanager
+def _prepare_perform(used_repos, target_userspace_info, xfs_info, storage_info):
     with _prepare_transaction(used_repos=used_repos,
                               target_userspace_info=target_userspace_info
                               ) as (context, target_repoids, userspace_info):
         with overlaygen.create_source_overlay(mounts_dir=userspace_info.mounts, scratch_dir=userspace_info.scratch,
                                               xfs_info=xfs_info, storage_info=storage_info,
                                               mount_target=os.path.join(context.base_dir, 'installroot')) as overlay:
-            _apply_yum_workaround(overlay.nspawn())
-            dnfconfig.exclude_leapp_rpms(context)
-            _transaction(
-                context=context, stage='check', target_repoids=target_repoids, plugin_info=plugin_info, tasks=tasks
-            )
+            yield context, overlay, target_repoids
+
+
+def perform_transaction_check(target_userspace_info, used_repos, tasks, xfs_info, storage_info, plugin_info):
+    """
+    Perform DNF transaction check using our plugin
+    """
+    with _prepare_perform(used_repos=used_repos, target_userspace_info=target_userspace_info, xfs_info=xfs_info,
+                          storage_info=storage_info) as (context, overlay, target_repoids):
+        apply_workarounds(overlay.nspawn())
+        dnfconfig.exclude_leapp_rpms(context)
+        _transaction(
+            context=context, stage='check', target_repoids=target_repoids, plugin_info=plugin_info, tasks=tasks
+        )
 
 
 def perform_rpm_download(target_userspace_info, used_repos, tasks, xfs_info, storage_info, plugin_info, on_aws=False):
     """
     Perform RPM download including the transaction test using dnf with our plugin
     """
-    with _prepare_transaction(used_repos=used_repos,
-                              target_userspace_info=target_userspace_info
-                              ) as (context, target_repoids, userspace_info):
-        with overlaygen.create_source_overlay(mounts_dir=userspace_info.mounts, scratch_dir=userspace_info.scratch,
-                                              xfs_info=xfs_info, storage_info=storage_info,
-                                              mount_target=os.path.join(context.base_dir, 'installroot')) as overlay:
-            _apply_yum_workaround(overlay.nspawn())
-            dnfconfig.exclude_leapp_rpms(context)
-            _transaction(
-                context=context, stage='download', target_repoids=target_repoids, plugin_info=plugin_info, tasks=tasks,
-                test=True, on_aws=on_aws
-            )
+    with _prepare_perform(used_repos=used_repos, target_userspace_info=target_userspace_info, xfs_info=xfs_info,
+                          storage_info=storage_info) as (context, overlay, target_repoids):
+        apply_workarounds(overlay.nspawn())
+        dnfconfig.exclude_leapp_rpms(context)
+        _transaction(
+            context=context, stage='download', target_repoids=target_repoids, plugin_info=plugin_info, tasks=tasks,
+            test=True, on_aws=on_aws
+        )
+
+
+def perform_dry_run(target_userspace_info, used_repos, tasks, xfs_info, storage_info, plugin_info, on_aws=False):
+    """
+    Perform the dnf transaction test / dry-run using only cached data.
+    """
+    with _prepare_perform(used_repos=used_repos, target_userspace_info=target_userspace_info, xfs_info=xfs_info,
+                          storage_info=storage_info) as (context, overlay, target_repoids):
+        apply_workarounds(overlay.nspawn())
+        _transaction(
+            context=context, stage='dry-run', target_repoids=target_repoids, plugin_info=plugin_info, tasks=tasks,
+            test=True, on_aws=on_aws
+        )

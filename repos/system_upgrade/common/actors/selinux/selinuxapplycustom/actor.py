@@ -1,30 +1,34 @@
 import os
 import shutil
 
+from leapp import reporting
 from leapp.actors import Actor
-from leapp.models import SELinuxModules, SELinuxCustom, SELinuxRequestRPMs
+from leapp.libraries.actor import selinuxapplycustom
+from leapp.libraries.actor.selinuxapplycustom import BACKUP_DIRECTORY
+from leapp.libraries.stdlib import CalledProcessError, run
+from leapp.models import SELinuxCustom, SELinuxModules
 from leapp.tags import ApplicationsPhaseTag, IPUWorkflowTag
-from leapp.libraries.stdlib import run, CalledProcessError
-
 
 WORKING_DIRECTORY = '/tmp/selinux/'
 
 
 class SELinuxApplyCustom(Actor):
     """
-    Re-apply SELinux customizations from RHEL-7 installation
+    Re-apply SELinux customizations from the original RHEL installation
 
     Re-apply SELinux policy customizations (custom policy modules and changes
-    introduced by semanage). Any changes (due to incompatiblity with RHEL-8
-    SELinux policy) are reported to user.
+    introduced by semanage). Any changes (due to incompatiblity with
+    SELinux policy in the upgraded system) are reported to user.
     """
     name = 'selinuxapplycustom'
     consumes = (SELinuxCustom, SELinuxModules)
-    produces = ()
+    produces = (reporting.Report,)
     tags = (ApplicationsPhaseTag, IPUWorkflowTag)
 
     def process(self):
-        # cil module files need to be extracted to disk in order to be installed
+        # save progress for repoting purposes
+        failed_modules = []
+        failed_custom = []
 
         # clear working directory
         shutil.rmtree(WORKING_DIRECTORY, ignore_errors=True)
@@ -32,71 +36,156 @@ class SELinuxApplyCustom(Actor):
         try:
             os.mkdir(WORKING_DIRECTORY)
         except OSError:
-            self.log.warning("Failed to create working directory! Aborting.")
+            self.log.warning('Failed to create working directory! Aborting.')
             return
+
+        # get list of policy modules after the upgrade
+        installed_modules = set(
+            [module[0] for module in selinuxapplycustom.list_selinux_modules()]
+        )
 
         # import custom SElinux modules
         for semodules in self.consume(SELinuxModules):
-            self.log.info("Processing custom SELinux policy modules. Count: %d.", len(semodules.modules))
+            self.log.info(
+                'Processing custom SELinux policy modules. Count: {}.'.format(len(semodules.modules))
+            )
+            # check for presence of udica templates and make sure to install their latest versions
+            selinuxapplycustom.install_udica_templates(semodules.templates)
+
+            if not semodules.modules:
+                continue
+
+            command = ['semodule']
             for module in semodules.modules:
-                cil_filename = os.path.join(WORKING_DIRECTORY, "{}.cil".format(module.name))
-                self.log.info("Installing module %s on priority %d.", module.name, module.priority)
+                # Skip modules that are already installed. This prevents DSP modules installed with wrong
+                # priority (usually 400) from being overwritten by an older version
+                if module.name in installed_modules:
+                    self.log.info(
+                        'Skipping module {} on priority {} because it is already installed.'.format(
+                            module.name,
+                            module.priority
+                        )
+                    )
+                    continue
+
+                # cil module files need to be extracted to disk in order to be installed
+                cil_filename = os.path.join(
+                    WORKING_DIRECTORY, '{}.cil'.format(module.name)
+                )
+                self.log.info(
+                    'Installing module {} on priority {}.'.format(module.name, module.priority)
+                )
                 if module.removed:
-                    self.log.warning("The following lines where removed because of incompatibility: \n%s",
-                                     '\n'.join(module.removed))
+                    self.log.warning(
+                        '{}: The following lines where removed because of incompatibility:\n{}'.format(
+                            module.name,
+                            '\n'.join(module.removed)
+                        )
+                    )
                 # write module content to disk
                 try:
                     with open(cil_filename, 'w') as cil_file:
                         cil_file.write(module.content)
                 except OSError as e:
-                    self.log.warning("Error writing %s : %s", cil_filename, str(e))
+                    self.log.warning('Error writing {} : {}'.format(cil_filename, e))
                     continue
 
-                try:
-                    run(['semodule',
-                         '-X', str(module.priority),
-                         '-i', cil_filename
-                         ]
-                        )
-                except CalledProcessError as e:
-                    self.log.warning("Error installing module: %s", str(e.stderr))
-                    # TODO - save the failed module to /etc/selinux ?
-                    # currently it is still left in the old policy store
-                try:
-                    os.remove(cil_filename)
-                except OSError as e:
-                    self.log.warning("Error removing module file: %s", str(e))
+                command.extend(['-X', str(module.priority), '-i', cil_filename])
+
+            try:
+                run(command)
+            except CalledProcessError as e:
+                self.log.warning(
+                    'Error installing modules in a single transaction:'
+                    '{}\nRetrying -- now each module will be installed separately.'.format(e.stderr)
+                )
+                # Retry, but install each module separately
+                for module in semodules.modules:
+                    cil_filename = os.path.join(
+                        WORKING_DIRECTORY, '{}.cil'.format(module.name)
+                    )
+                    self.log.info(
+                        'Installing module {} on priority {}.'.format(module.name, module.priority)
+                    )
+                    try:
+                        run(['semodule',
+                             '-X', str(module.priority),
+                             '-i', cil_filename
+                             ]
+                            )
+                    except CalledProcessError as e:
+                        self.log.warning('Error installing module: {}'.format(e.stderr))
+                        failed_modules.append(module.name)
+                        selinuxapplycustom.back_up_failed(cil_filename)
+                        continue
+
         # import SELinux customizations collected by "semanage export"
         for custom in self.consume(SELinuxCustom):
-            self.log.info('Importing the following SELinux customizations collected by "semanage export": \n%s',
-                          '\n'.join(custom.commands))
-            semanage_filename = os.path.join(WORKING_DIRECTORY, "semanage")
+            self.log.info(
+                'Importing the following SELinux customizations collected by "semanage export":\n{}'.format(
+                    '\n'.join(custom.commands)
+                )
+            )
+            semanage_filename = os.path.join(WORKING_DIRECTORY, 'semanage')
             # save SELinux customizations to disk
             try:
                 with open(semanage_filename, 'w') as s_file:
                     s_file.write('\n'.join(custom.commands))
             except OSError as e:
-                self.log.warning("Error writing SELinux customizations: %s", str(e))
+                self.log.warning(
+                    'Error writing SELinux customizations to disk: {}'.format(e)
+                )
+                failed_custom.extend(custom.commands)
             # import customizations
             try:
                 run(['semanage', 'import', '-f', semanage_filename])
             except CalledProcessError as e:
-                self.log.warning("Failed to import SELinux customizations: %s", str(e.stderr))
+                self.log.warning(
+                    'Failed to import SELinux customizations: {}'.format(e.stderr)
+                )
+                failed_custom.extend(custom.commands)
                 continue
             # clean-up
             try:
                 os.remove(semanage_filename)
             except OSError as e:
-                self.log.warning("Failed to remove temporary file %s: %s", semanage_filename, str(e))
+                self.log.warning(
+                    'Failed to remove temporary file {}: {}'.format(semanage_filename, e)
+                )
                 continue
 
         # clean-up
         shutil.rmtree(WORKING_DIRECTORY, ignore_errors=True)
 
-        # TODO - Verify that all RPM packages reqested by selinux actors are installed
-        self.log.info("Verifying selinux-related RPMs requested before upgrade.")
-        for rpms in self.consume(SELinuxRequestRPMs):
-            self.log.info("To keep: %s \n To install: %s", ", ".join(rpms.to_keep), ", ".join(rpms.to_install))
+        if failed_modules or failed_custom:
+            summary = ''
+            if failed_modules:
+                summary = (
+                    'The following policy modules couldn\'t be installed: {}.\n'
+                    'You can review their content in {}.'.format(
+                        ', '.join(failed_modules), BACKUP_DIRECTORY
+                    )
+                )
+            if failed_custom:
+                if summary:
+                    summary = '{}\n\n'.format(summary)
+                summary = '{}The following commands couldn\'t be applied:\n{}'.format(
+                    summary, '\n'.join(['semanage {}'.format(x) for x in failed_custom])
+                )
 
-        # TODO - summarize all changes after LEAPP team rewrites reporting
-        # from leapp.reporting import Report
+            reporting.create_report(
+                [
+                    reporting.Title(
+                        'SELinux failed to reapply some customizations after the upgrade.'
+                    ),
+                    reporting.Summary(summary),
+                    reporting.Severity(reporting.Severity.MEDIUM),
+                    reporting.Tags([reporting.Tags.SECURITY, reporting.Tags.SELINUX]),
+                ]
+                + [
+                    reporting.RelatedResource(
+                        'file', os.path.join(BACKUP_DIRECTORY, '{}.cil'.format(x))
+                    )
+                    for x in failed_modules
+                ]
+            )

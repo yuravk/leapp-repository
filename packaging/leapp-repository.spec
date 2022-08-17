@@ -41,7 +41,7 @@ py2_byte_compile "%1" "%2"}
 # RHEL 8+ packages to be consistent with other leapp projects in future.
 
 Name:           leapp-repository
-Version:        0.14.0
+Version:        0.16.0
 Release:        1%{?dist}
 Summary:        Repositories for leapp
 
@@ -49,6 +49,8 @@ License:        ASL 2.0
 URL:            https://oamg.github.io/leapp/
 Source0:        https://github.com/oamg/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        deps-pkgs.tar.gz
+
+# NOTE: Our packages must be noarch. Do no drop this in any way.
 BuildArch:      noarch
 
 %description
@@ -94,7 +96,7 @@ Requires:       leapp-repository-dependencies = %{leapp_repo_deps}
 
 # IMPORTANT: this is capability provided by the leapp framework rpm.
 # Check that 'version' instead of the real framework rpm version.
-Requires:       leapp-framework >= 2.0, leapp-framework < 3
+Requires:       leapp-framework >= 2.2, leapp-framework < 3
 
 # Since we provide sub-commands for the leapp utility, we expect the leapp
 # tool to be installed as well.
@@ -186,6 +188,7 @@ install -m 0644 etc/leapp/transaction/* %{buildroot}%{_sysconfdir}/leapp/transac
 # install CLI commands for the leapp utility on the expected path
 install -m 0755 -d %{buildroot}%{leapp_python_sitelib}/leapp/cli/
 cp -r commands %{buildroot}%{leapp_python_sitelib}/leapp/cli/
+rm -rf %{buildroot}%{leapp_python_sitelib}/leapp/cli/commands/tests
 
 # Remove irrelevant repositories - We don't want to ship them for the particular
 # RHEL version

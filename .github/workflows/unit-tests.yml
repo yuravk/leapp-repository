@@ -12,14 +12,37 @@ jobs:
     name: Run unit tests in containers
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python:
-          - python3.6
-          - python2.7
+        scenarios:
+          - name: Run unit tests for el8toel9 and common repositories on python 3.9
+            python: python3.9
+            repos: 'el8toel9,common'
+            container: ubi8
+          - name: Run unit tests for el7toel8 and common repositories on python 3.6
+            python: python3.6
+            repos: 'el7toel8,common'
+            container: ubi8
+          - name: Run unit tests for el8toel9 and common repositories on python 3.6
+            python: python3.6
+            repos: 'el8toel9,common'
+            container: ubi8
+          - name: Run unit tests for el7toel8 and common repositories on python 2.7
+            python: python2.7
+            repos: 'el7toel8,common'
+            container: ubi7
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Run tests @ ${{matrix.python}}
-        run: script -e -c /bin/bash -c 'TERM=xterm docker build -t leapp-tests -f utils/docker-tests/Dockerfile utils/docker-tests && PYTHON_VENV=${{matrix.python}}  docker run --rm -ti -v ${PWD}:/payload --env=PYTHON_VENV leapp-tests'
+        with:
+          # NOTE(ivasilev) fetch-depth 0 is critical here as leapp deps discovery depends on specific substring in
+          # commit message and default 1 option will get us just merge commit which has an unrelevant message.
+          fetch-depth: '0'
+      # NOTE(ivasilev) master -> origin/master is used for leapp deps discovery in Makefile via git log master..HEAD
+      - name: Set master to origin/master
+        if: github.ref != 'refs/heads/master'
+        run: |
+          git branch -f master origin/master
+      - name: ${{matrix.scenarios.name}}
+        run: script -e -c /bin/bash -c 'TERM=xterm podman build --security-opt=seccomp=unconfined -t leapp-tests -f utils/container-tests/Containerfile.${{matrix.scenarios.container}} utils/container-tests && PYTHON_VENV=${{matrix.scenarios.python}} REPOSITORIES=${{matrix.scenarios.repos}} podman run --security-opt=seccomp=unconfined --rm -ti -v ${PWD}:/payload --env=PYTHON_VENV --env=REPOSITORIES leapp-tests'

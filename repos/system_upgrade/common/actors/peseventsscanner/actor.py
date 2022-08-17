@@ -4,11 +4,14 @@ import os.path
 from leapp.actors import Actor
 from leapp.libraries.actor.peseventsscanner import pes_events_scanner
 from leapp.models import (
+    EnabledModules,
     InstalledRedHatSignedRPM,
     PESRpmTransactionTasks,
-    RepositoriesMap,
     RepositoriesBlacklisted,
+    RepositoriesFacts,
+    RepositoriesMapping,
     RepositoriesSetupTasks,
+    RHUIInfo,
     RpmTransactionTasks,
     ActiveVendorList,
 )
@@ -21,17 +24,20 @@ VENDORS_DIR = "/etc/leapp/files/vendors.d"
 
 class PesEventsScanner(Actor):
     """
-    Provides data about packages events from Package Evolution Service.
+    Provides data about package events from Package Evolution Service.
 
     After collecting data from a provided JSON file containing Package Evolution Service events, a
     message with relevant data will be produced to help DNF Upgrade transaction calculation.
     """
 
-    name = "pes_events_scanner"
+    name = 'pes_events_scanner'
     consumes = (
+        EnabledModules,
         InstalledRedHatSignedRPM,
         RepositoriesBlacklisted,
-        RepositoriesMap,
+        RepositoriesFacts,
+        RepositoriesMapping,
+        RHUIInfo,
         RpmTransactionTasks,
         ActiveVendorList,
     )

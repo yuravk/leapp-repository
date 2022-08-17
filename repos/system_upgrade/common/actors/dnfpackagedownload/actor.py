@@ -2,12 +2,13 @@ from leapp.actors import Actor
 from leapp.libraries.common import dnfplugin
 from leapp.models import (
     DNFPluginTask,
+    DNFWorkaround,
     FilteredRpmTransactionTasks,
     RHUIInfo,
     StorageInfo,
     TargetUserSpaceInfo,
     UsedTargetRepositories,
-    XFSPresence,
+    XFSPresence
 )
 from leapp.tags import DownloadPhaseTag, IPUWorkflowTag
 
@@ -23,6 +24,7 @@ class DnfPackageDownload(Actor):
     name = 'dnf_package_download'
     consumes = (
         DNFPluginTask,
+        DNFWorkaround,
         FilteredRpmTransactionTasks,
         RHUIInfo,
         StorageInfo,
@@ -41,7 +43,8 @@ class DnfPackageDownload(Actor):
         tasks = next(self.consume(FilteredRpmTransactionTasks), FilteredRpmTransactionTasks())
         target_userspace_info = next(self.consume(TargetUserSpaceInfo), None)
         rhui_info = next(self.consume(RHUIInfo), None)
-        on_aws = bool(rhui_info and rhui_info.provider == 'aws')
+        # there are several "variants" related to the *AWS* provider (aws, aws-sap)
+        on_aws = bool(rhui_info and rhui_info.provider.startswith('aws'))
 
         dnfplugin.perform_rpm_download(
             tasks=tasks, used_repos=used_repos, target_userspace_info=target_userspace_info,

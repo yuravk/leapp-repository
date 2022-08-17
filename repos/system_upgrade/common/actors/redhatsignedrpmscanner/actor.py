@@ -1,12 +1,7 @@
 from leapp.actors import Actor
-from leapp.models import (
-    InstalledRedHatSignedRPM,
-    InstalledRPM,
-    InstalledUnsignedRPM,
-    VendorSignatures,
-)
-from leapp.tags import FactsPhaseTag, IPUWorkflowTag
 from leapp.libraries.common import rhui
+from leapp.models import InstalledRedHatSignedRPM, InstalledRPM, InstalledUnsignedRPM, VendorSignatures
+from leapp.tags import FactsPhaseTag, IPUWorkflowTag
 
 
 VENDOR_SIGS = {
@@ -86,11 +81,13 @@ class VendorSignedRpmScanner(Actor):
 
         def is_azure_pkg(pkg):
             """Whitelist Azure config package."""
-            arch = self.configuration.architecture
+            upg_path = rhui.get_upg_path()
 
-            el7_pkg = rhui.RHUI_CLOUD_MAP[arch]["azure"]["el7_pkg"]
-            el8_pkg = rhui.RHUI_CLOUD_MAP[arch]["azure"]["el8_pkg"]
-            return pkg.name in [el7_pkg, el8_pkg]
+            src_pkg = rhui.RHUI_CLOUD_MAP[upg_path].get('azure', {}).get('src_pkg')
+            src_pkg_sap = rhui.RHUI_CLOUD_MAP[upg_path].get('azure-sap', {}).get('src_pkg')
+            target_pkg = rhui.RHUI_CLOUD_MAP[upg_path].get('azure', {}).get('target_pkg')
+            target_pkg_sap = rhui.RHUI_CLOUD_MAP[upg_path].get('azure-sap', {}).get('target_pkg')
+            return pkg.name in [src_pkg, src_pkg_sap, target_pkg, target_pkg_sap]
 
         for rpm_pkgs in self.consume(InstalledRPM):
             for pkg in rpm_pkgs.items:

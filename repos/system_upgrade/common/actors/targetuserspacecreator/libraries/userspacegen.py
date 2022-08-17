@@ -4,31 +4,23 @@ import os
 from leapp import reporting
 from leapp.exceptions import StopActorExecution, StopActorExecutionError
 from leapp.libraries.actor import constants
-from leapp.libraries.common import (
-    dnfplugin,
-    mounting,
-    overlaygen,
-    repofileutils,
-    rhsm,
-    rhui,
-    utils,
-)
-from leapp.libraries.common.config import get_product_type, get_env
+from leapp.libraries.common import dnfplugin, mounting, overlaygen, repofileutils, rhsm, rhui, utils
+from leapp.libraries.common.config import get_env, get_product_type
 from leapp.libraries.common.config.version import get_target_major_version
-from leapp.libraries.stdlib import CalledProcessError, api, config, run
+from leapp.libraries.stdlib import api, CalledProcessError, config, run
+from leapp.models import RequiredTargetUserspacePackages  # deprecated
+from leapp.models import TMPTargetRepositoriesFacts  # deprecated
 from leapp.models import (
     CustomTargetRepositoryFile,
-    RHUIInfo,
     RHSMInfo,
-    RequiredTargetUserspacePackages,  # deprecated
+    RHUIInfo,
     StorageInfo,
     TargetRepositories,
-    TargetUserSpacePreupgradeTasks,
     TargetUserSpaceInfo,
-    TMPTargetRepositoriesFacts,  # deprecated
+    TargetUserSpacePreupgradeTasks,
     UsedTargetRepositories,
     UsedTargetRepository,
-    XFSPresence,
+    XFSPresence
 )
 from leapp.utils.deprecation import suppress_deprecation
 
@@ -180,17 +172,101 @@ def prepare_target_userspace(context, userspace_dir, enabled_repos, packages):
             )
 
 
+def _get_all_rhui_pkgs():
+    """
+    Return the list of rhui packages
+
+    Currently, do not care about what rhui we have, release, etc.
+    Just take all packages. We need them just for the purpose of filtering
+    what files we have to remove (see _prep_repository_access) and it's ok
+    for us to use whatever rhui rpms (the relevant rpms catch the problem,
+    the others are just taking bytes in memory...). It's a hot-fix. We are going
+    to refactor the library later completely..
+    """
+    upg_path = rhui.get_upg_path()
+    pkgs = []
+    for rhui_map in rhui.RHUI_CLOUD_MAP[upg_path].values():
+        for key in rhui_map.keys():
+            if not key.endswith('pkg'):
+                continue
+            pkgs.append(rhui_map[key])
+    return pkgs
+
+
+def _get_files_owned_by_rpms(context, dirpath, pkgs=None):
+    """
+    Return the list of file names inside dirpath owned by RPMs.
+
+    This is important e.g. in case of RHUI which installs specific repo files
+    in the yum.repos.d directory.
+
+    In case the pkgs param is None or empty, do not filter any specific rpms.
+    Otherwise return filenames that are owned by any pkg in the given list.
+    """
+    files_owned_by_rpms = []
+    for fname in os.listdir(context.full_path(dirpath)):
+        try:
+            result = context.call(['rpm', '-qf', os.path.join(dirpath, fname)])
+        except CalledProcessError:
+            api.current_logger().debug('SKIP the {} file: not owned by any rpm'.format(fname))
+            continue
+        if pkgs and not [pkg for pkg in pkgs if pkg in result['stdout']]:
+            api.current_logger().debug('SKIP the {} file: not owned by any searched rpm:'.format(fname))
+            continue
+        api.current_logger().debug('Found the file owned by an rpm: {}.'.format(fname))
+        files_owned_by_rpms.append(fname)
+    return files_owned_by_rpms
+
+
 def _prep_repository_access(context, target_userspace):
     """
     Prepare repository access by copying all relevant certificates and configuration files to the userspace
     """
+    target_etc = os.path.join(target_userspace, 'etc')
+    target_yum_repos_d = os.path.join(target_etc, 'yum.repos.d')
+    backup_yum_repos_d = os.path.join(target_etc, 'yum.repos.d.backup')
     if not rhsm.skip_rhsm():
-        run(['rm', '-rf', os.path.join(target_userspace, 'etc', 'pki')])
-        run(['rm', '-rf', os.path.join(target_userspace, 'etc', 'rhsm')])
-        context.copytree_from('/etc/pki', os.path.join(target_userspace, 'etc', 'pki'))
-        context.copytree_from('/etc/rhsm', os.path.join(target_userspace, 'etc', 'rhsm'))
-    run(['rm', '-rf', os.path.join(target_userspace, 'etc', 'yum.repos.d')])
-    context.copytree_from('/etc/yum.repos.d', os.path.join(target_userspace, 'etc', 'yum.repos.d'))
+        run(['rm', '-rf', os.path.join(target_etc, 'pki')])
+        run(['rm', '-rf', os.path.join(target_etc, 'rhsm')])
+        context.copytree_from('/etc/pki', os.path.join(target_etc, 'pki'))
+        context.copytree_from('/etc/rhsm', os.path.join(target_etc, 'rhsm'))
+    # NOTE: we cannot just remove the original target yum.repos.d dir
+    # as e.g. in case of RHUI a special RHUI repofiles are installed by a pkg
+    # when the target userspace container is created. Removing these files we loose
+    # RHUI target repositories. So ...->
+    # -> detect such a files...
+    with mounting.NspawnActions(base_dir=target_userspace) as target_context:
+        files_owned_by_rpms = _get_files_owned_by_rpms(target_context, '/etc/yum.repos.d')
+
+    # -> backup the orig dir & install the new one
+    run(['mv', target_yum_repos_d, backup_yum_repos_d])
+    context.copytree_from('/etc/yum.repos.d', target_yum_repos_d)
+
+    # -> find old rhui repo files (we have to remove these as they cause duplicates)
+    rhui_pkgs = _get_all_rhui_pkgs()
+    old_files_owned_by_rhui_rpms = _get_files_owned_by_rpms(context, '/etc/yum.repos.d', rhui_pkgs)
+    for fname in old_files_owned_by_rhui_rpms:
+        api.current_logger().debug('Remove the old repofile: {}'.format(fname))
+        run(['rm', '-f', os.path.join(target_yum_repos_d, fname)])
+    # .. continue: remove our leapp rhui repo file (do not care if we are on rhui or not)
+    for rhui_map in rhui.gen_rhui_files_map().values():
+        for item in rhui_map:
+            if item[1] != rhui.YUM_REPOS_PATH:
+                continue
+            target_leapp_repofile = os.path.join(target_yum_repos_d, item[0])
+            if not os.path.isfile(target_leapp_repofile):
+                continue
+            # we found it!!
+            run(['rm', '-f', target_leapp_repofile])
+            break
+
+    # -> copy expected files back
+    for fname in files_owned_by_rpms:
+        api.current_logger().debug('Copy the backed up repo file: {}'.format(fname))
+        run(['mv', os.path.join(backup_yum_repos_d, fname), os.path.join(target_yum_repos_d, fname)])
+
+    # -> remove the backed up dir
+    run(['rm', '-rf', backup_yum_repos_d])
 
 
 def _get_product_certificate_path():
@@ -202,27 +278,26 @@ def _get_product_certificate_path():
     target_product_type = get_product_type('target')
     certs_dir = api.get_common_folder_path(PROD_CERTS_FOLDER)
 
-    # TODO: do we need EUS/... here or is it ga one enough to get eus repos?
+    # We do not need any special certificates to reach repos from non-ga channels, only beta requires special cert.
+    if target_product_type != 'beta':
+        target_product_type = 'ga'
+
     prod_certs = {
         'x86_64': {
             'ga': '479.pem',
             'beta': '486.pem',
-            'htb': '230.pem',
         },
         'aarch64': {
             'ga': '419.pem',
             'beta': '363.pem',
-            'htb': '489.pem',
         },
         'ppc64le': {
             'ga': '279.pem',
             'beta': '362.pem',
-            'htb': '233.pem',
         },
         's390x': {
             'ga': '72.pem',
             'beta': '433.pem',
-            'htb': '232.pem',
         }
     }
 
@@ -233,21 +308,30 @@ def _get_product_certificate_path():
 
     cert_path = os.path.join(certs_dir, target_version, cert)
     if not os.path.isfile(cert_path):
-        details = {'missing certificate': cert, 'path': cert_path}
+        additional_summary = ''
         if target_product_type != 'ga':
-            details['hint'] = (
-                'You chose to upgrade to beta or htb system but probably'
-                ' chose version for which beta/htb certificates are not'
-                ' attached (e.g. because the GA has been released already).'
-                ' Set the target os version for which the {} certificate'
-                ' is provided using the LEAPP_DEVEL_TARGET_RELEASE envar.'
-                .format(cert)
+            additional_summary = (
+                ' This can happen when upgrading a beta system and the chosen target version does not have'
+                ' beta certificates attached (for example, because the GA has been released already).'
+
             )
-            details['search cmd'] = 'find {} | grep {}'.format(certs_dir, cert)
-        raise StopActorExecutionError(
-            message='Cannot find the product certificate file for the chosen target system.',
-            details=details
-        )
+
+        reporting.create_report([
+            reporting.Title('Cannot find the product certificate file for the chosen target system.'),
+            reporting.Summary(
+                'Expected certificate: {cert} with path {path} but it could not be found.{additional}'.format(
+                    cert=cert, path=cert_path, additional=additional_summary)
+            ),
+            reporting.Tags([reporting.Tags.REPOSITORY]),
+            reporting.Flags([reporting.Flags.INHIBITOR]),
+            reporting.Severity(reporting.Severity.HIGH),
+            reporting.Remediation(hint=(
+                'Set the corresponding target os version in the LEAPP_DEVEL_TARGET_RELEASE environment variable for'
+                'which the {cert} certificate is provided'.format(cert=cert)
+            )),
+        ])
+        raise StopActorExecution()
+
     return cert_path
 
 
@@ -332,19 +416,32 @@ def _get_rhsm_available_repoids(context):
     #
     repoids = rhsm.get_available_repo_ids(context)
     if not repoids or len(repoids) < 2:
-        raise StopActorExecutionError(
-            message='Cannot find required basic RHEL {} repositories.'.format(target_major_version),
-            details={
-                'hint': ('It is required to have RHEL repositories on the system'
-                         ' provided by the subscription-manager unless the --no-rhsm'
-                         ' options is specified. Possibly you'
-                         ' are missing a valid SKU for the target system or network'
-                         ' connection failed. Check whether your system is attached'
-                         ' to a valid SKU providing RHEL {} repositories.'
-                         ' In case the Satellite is used, read the upgrade documentation'
-                         ' to setup the satellite and the system properly.'.format(target_major_version))
-            }
-        )
+        reporting.create_report([
+            reporting.Title('Cannot find required basic RHEL target repositories.'),
+            reporting.Summary(
+                'This can happen when a repository ID was entered incorrectly either while using the --enablerepo'
+                ' option of leapp or in a third party actor that produces a CustomTargetRepositoryMessage.'
+            ),
+            reporting.Tags([reporting.Tags.REPOSITORY]),
+            reporting.Severity(reporting.Severity.HIGH),
+            reporting.Flags([reporting.Flags.INHIBITOR]),
+            reporting.Remediation(hint=(
+                'It is required to have RHEL repositories on the system'
+                ' provided by the subscription-manager unless the --no-rhsm'
+                ' option is specified. You might be missing a valid SKU for'
+                ' the target system or have a failed network connection.'
+                ' Check whether your system is attached to a valid SKU that is'
+                ' providing RHEL {} repositories.'
+                ' If you are using Red Hat Satellite, read the upgrade documentation'
+                ' to set up Satellite and the system properly.'
+
+            ).format(target_major_version)),
+            reporting.ExternalLink(
+                # TODO: How to handle different documentation links for each version?
+                url='https://red.ht/preparing-for-upgrade-to-rhel8',
+                title='Preparing for the upgrade')
+            ])
+        raise StopActorExecution()
     return set(repoids)
 
 
@@ -368,13 +465,13 @@ def _get_rh_available_repoids(context, indata):
     RHUI special packages (every cloud provider has itw own rpm).
     """
 
-    arch = api.current_actor().configuration.architecture
+    upg_path = rhui.get_upg_path()
 
     rh_repoids = _get_rhsm_available_repoids(context)
 
     if indata and indata.rhui_info:
         cloud_repo = os.path.join(
-            '/etc/yum.repos.d/', rhui.RHUI_CLOUD_MAP[arch][indata.rhui_info.provider]['leapp_pkg_repo']
+            '/etc/yum.repos.d/', rhui.RHUI_CLOUD_MAP[upg_path][indata.rhui_info.provider]['leapp_pkg_repo']
         )
         rhui_repoids = _get_rhui_available_repoids(context, cloud_repo)
         rh_repoids.update(rhui_repoids)
@@ -425,36 +522,59 @@ def gather_target_repositories(context, indata):
                 missing_custom_repoids.append(custom_repo.repoid)
     api.current_logger().debug("Gathered target repositories: {}".format(', '.join(target_repoids)))
     if not target_repoids:
-        raise StopActorExecutionError(
-            message='There are no enabled target repositories for the upgrade process to proceed.',
-            details={'hint': (
-                'Ensure your system is correctly registered with the subscription manager and that'
-                ' your current subscription is entitled to install the requested target version {version}.'
-                ' In case the --no-rhsm option (or the LEAPP_NO_RHSM=1 environment variable is set)'
-                ' ensure the custom repository file is provided regarding the documentation with'
-                ' properly defined repositories or in case repositories are already defined'
-                ' in any repofiles under /etc/yum.repos.d/ directory, use the --enablerepo option'
-                ' for leapp. Also make sure "/etc/leapp/files/repomap.csv" file is up-to-date.'
-                ).format(version=api.current_actor().configuration.version.target)
-            }
-        )
+        reporting.create_report([
+            reporting.Title('There are no enabled target repositories'),
+            reporting.Summary(
+                'This can happen when a system is not correctly registered with the subscription manager'
+                ' or, when the leapp --no-rhsm option has been used, no custom repositories have been'
+                ' passed on the command line.'
+            ),
+            reporting.Tags([reporting.Tags.REPOSITORY]),
+            reporting.Flags([reporting.Flags.INHIBITOR]),
+            reporting.Severity(reporting.Severity.HIGH),
+            reporting.Remediation(hint=(
+                'Ensure the system is correctly registered with the subscription manager and that'
+                ' the current subscription is entitled to install the requested target version {version}.'
+                ' If you used the --no-rhsm option (or the LEAPP_NO_RHSM=1 environment variable is set),'
+                ' ensure the custom repository file is provided with'
+                ' properly defined repositories and that the --enablerepo option for leapp is set if the'
+                ' repositories are defined in any repofiles under the /etc/yum.repos.d/ directory.'
+                ' For more information on custom repository files, see the documentation.'
+                ' Finally, verify that the "/etc/leapp/files/repomap.json" file is up-to-date.'
+            ).format(version=api.current_actor().configuration.version.target)),
+            reporting.ExternalLink(
+                # TODO: How to handle different documentation links for each version?
+                url='https://red.ht/preparing-for-upgrade-to-rhel8',
+                title='Preparing for the upgrade'),
+            reporting.RelatedResource("file", "/etc/leapp/files/repomap.json"),
+            reporting.RelatedResource("file", "/etc/yum.repos.d/")
+        ])
+        raise StopActorExecution()
     if missing_custom_repoids:
-        raise StopActorExecutionError(
-            message='Some required custom target repositories are not available.',
-            details={'hint': (
-                ' The most probably you are using custom or third party actor'
-                ' that produces CustomTargetRepository message or you did a typo'
-                ' in one of repoids specified on command line for the leapp --enablerepo'
-                ' option.'
-                ' Inside the upgrade container, we are not able to find such'
-                ' repository inside any repository file. Consider use of the'
-                ' custom repository file regarding the official upgrade'
-                ' documentation or check whether you did not do a typo in any'
-                ' repoids you specified for the --enablerepo option of leapp.'
-                )
-            }
-        )
-
+        reporting.create_report([
+            reporting.Title('Some required custom target repositories have not been found'),
+            reporting.Summary(
+                'This can happen when a repository ID was entered incorrectly either'
+                ' while using the --enablerepo option of leapp, or in a third party actor that produces a'
+                ' CustomTargetRepositoryMessage.\n'
+                'The following repositories IDs could not be found in the target configuration:\n'
+                '- {}\n'.format('\n- '.join(missing_custom_repoids))
+            ),
+            reporting.Tags([reporting.Tags.REPOSITORY]),
+            reporting.Flags([reporting.Flags.INHIBITOR]),
+            reporting.Severity(reporting.Severity.HIGH),
+            reporting.ExternalLink(
+                # TODO: How to handle different documentation links for each version?
+                url='https://access.redhat.com/articles/4977891',
+                title='Customizing your Red Hat Enterprise Linux in-place upgrade'),
+            reporting.Remediation(hint=(
+                'Consider using the custom repository file, which is documented in the official'
+                ' upgrade documentation. Check whether a repository ID has been'
+                ' entered incorrectly with the --enablerepo option of leapp.'
+                ' Check the leapp logs to see the list of all available repositories.'
+            ))
+        ])
+        raise StopActorExecution()
     return set(target_repoids)
 
 

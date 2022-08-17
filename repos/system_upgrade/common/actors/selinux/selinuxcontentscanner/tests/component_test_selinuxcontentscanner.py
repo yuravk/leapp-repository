@@ -2,17 +2,21 @@ import os
 
 import pytest
 
-from leapp.snactor.fixture import current_actor_context
-from leapp.models import SELinuxModule, SELinuxModules, SELinuxCustom, SELinuxFacts, SELinuxRequestRPMs
-from leapp.libraries.stdlib import api, run, CalledProcessError
+from leapp.libraries.common.config import mock_configs
+from leapp.libraries.stdlib import api, CalledProcessError, run
+from leapp.models import SELinuxCustom, SELinuxFacts, SELinuxModule, SELinuxModules, SELinuxRequestRPMs
 from leapp.reporting import Report
+from leapp.snactor.fixture import current_actor_context
 
+# compat module ensures compatibility with newer systems and is not part of testing
 TEST_MODULES = [
     ["400", "mock1"],
     ["99", "mock1"],
     ["200", "mock1"],
     ["400", "mock2"],
-    ["999", "mock3"]
+    ["999", "mock3"],
+    ["100", "compat"],
+    ["200", "base_container"]
 ]
 
 SEMANAGE_COMMANDS = [
@@ -32,7 +36,7 @@ def _run_cmd(cmd, logmsg="", split=False):
         # Only report issues when they are explicitly described.
         # This way expected failures are not reported.
         if logmsg:
-            api.current_logger().warning("%s: %s", logmsg, str(e.stderr))
+            api.current_logger().warning("{}: {}".format(logmsg, e.stderr))
     return None
 
 
@@ -63,6 +67,11 @@ def find_module(selinuxmodules, name, priority):
                 if (module.name == name and module.priority == int(priority))), None)
 
 
+def find_template(selinuxmodules, name, priority):
+    return next((module for module in selinuxmodules.templates
+                if (module.name == name and module.priority == int(priority))), None)
+
+
 def find_semanage_rule(rules, rule):
     return next((r for r in rules if all(word in r for word in rule)), None)
 
@@ -78,26 +87,26 @@ def test_SELinuxContentScanner(current_actor_context, destructive_selinux_env):
                      'static_mode': 'enforcing'}
 
     current_actor_context.feed(SELinuxFacts(**expected_data))
-    current_actor_context.run()
+    current_actor_context.run(config_model=mock_configs.CONFIG)
 
     modules = current_actor_context.consume(SELinuxModules)[0]
-    api.current_logger().warning("Modules: %s", str(modules))
     assert modules
     # check that all modules installed during test setup where reported
     for priority, name in TEST_MODULES:
         if priority not in ('100', '200'):
             assert find_module(modules, name, priority)
+    # check that udica template was reported
+    assert find_template(modules, TEST_MODULES[-1][1], TEST_MODULES[-1][0])
 
     rpms = current_actor_context.consume(SELinuxRequestRPMs)[0]
     assert rpms
-    # modules with priority 200 should only originate in "<module_name>-selinux" rpms
-    assert "mock1-selinux" in rpms.to_keep
+
     # mock1 contains container related type
     assert "container-selinux" in rpms.to_install
 
     custom = current_actor_context.consume(SELinuxCustom)[0]
     assert custom
-    # the second command contains removed type and should be discarded
+    # The second command contains removed type and should be discarded (in either upgrade path)
     assert find_semanage_rule(custom.removed, SEMANAGE_COMMANDS[1])
     # the rest of the commands should be reported (except for the last which will show up in modules)
     assert find_semanage_rule(custom.commands, SEMANAGE_COMMANDS[0])
