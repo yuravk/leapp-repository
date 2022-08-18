@@ -92,10 +92,4 @@ class RepositoriesMapping(Model):
 
     mapping = fields.List(fields.Model(RepoMapEntry), default=[])
     repositories = fields.List(fields.Model(PESIDRepositoryEntry), default=[])
-    file = fields.String(default="repomap.csv")
 
-
-class VendorRepositoriesMapCollection(Model):
-    topic = TransactionTopic
-
-    maps = fields.List(fields.Model(RepositoriesMapping))
