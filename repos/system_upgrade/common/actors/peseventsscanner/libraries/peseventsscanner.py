@@ -138,19 +138,26 @@ def _get_repositories_mapping(target_pesids):
     :return: Dictionary with all repositories mapped.
     """
 
-    repositories_map_msgs = api.consume(RepositoriesMapping)
-    repositories_map_msg = next(repositories_map_msgs, None)
-    if list(repositories_map_msgs):
-        api.current_logger().warning('Unexpectedly received more than one RepositoriesMapping message.')
-    if not repositories_map_msg:
-        raise StopActorExecutionError(
-            'Cannot parse RepositoriesMapping data properly',
-            details={'Problem': 'Did not receive a message with mapped repositories'}
-        )
+    composite_mapping = []
+    composite_repos = []
+
+    for repomap_msg in api.consume(RepositoriesMapping):
+        if not repomap_msg:
+            raise StopActorExecutionError(
+                'Cannot parse RepositoriesMapping data properly',
+                details={'Problem': 'Received a blank message with mapped repositories'}
+            )
+        composite_mapping.extend(repomap_msg.mapping)
+        composite_repos.extend(repomap_msg.repositories)
+
+    composite_map_msg = RepositoriesMapping(
+        mapping=composite_mapping,
+        repositories=composite_repos
+    )
 
     rhui_info = next(api.consume(RHUIInfo), RHUIInfo(provider=''))
 
-    repomap = peseventsscanner_repomap.RepoMapDataHandler(repositories_map_msg, cloud_provider=rhui_info.provider)
+    repomap = peseventsscanner_repomap.RepoMapDataHandler(composite_map_msg, cloud_provider=rhui_info.provider)
     # NOTE: We have to calculate expected target repositories
     # like in the setuptargetrepos actor. It's planned to handle this in different
     # way in future...

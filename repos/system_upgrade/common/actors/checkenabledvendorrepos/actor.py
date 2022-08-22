@@ -2,7 +2,7 @@ from leapp.actors import Actor
 from leapp.libraries.stdlib import api
 from leapp.models import (
     RepositoriesFacts,
-    VendorRepositoriesMapCollection,
+    VendorSourceRepos,
     ActiveVendorList,
 )
 from leapp.tags import FactsPhaseTag, IPUWorkflowTag
@@ -16,20 +16,18 @@ class CheckEnabledVendorRepos(Actor):
     """
 
     name = "check_enabled_vendor_repos"
-    consumes = (RepositoriesFacts, VendorRepositoriesMapCollection)
+    consumes = (RepositoriesFacts, VendorSourceRepos)
     produces = (ActiveVendorList)
     tags = (IPUWorkflowTag, FactsPhaseTag.Before)
 
     def process(self):
         vendor_mapping_data = {}
-        active_vendors = []
+        active_vendors = set()
 
         # Make a dict for easy lookup of repoid -> vendor name.
-        for map_coll in api.consume(VendorRepositoriesMapCollection):
-            for map in map_coll.maps:
-                for repo in map.repositories:
-                    # Cut the .csv, keep only the vendor name.
-                    vendor_mapping_data[repo.from_repoid] = map.file[:-4]
+        for vendor_src_repodata in api.consume(VendorSourceRepos):
+            for vendor_src_repo in vendor_src_repodata.source_repoids:
+                vendor_mapping_data[vendor_src_repo] = vendor_src_repodata.vendor
 
         # Is the repo listed in the vendor map as from_repoid present on the system?
         for repos in api.consume(RepositoriesFacts):
@@ -46,10 +44,10 @@ class CheckEnabledVendorRepos(Actor):
                                 repo.repoid, new_vendor
                             )
                         )
-                        active_vendors.append(new_vendor)
+                        active_vendors.add(new_vendor)
 
         if active_vendors:
             self.log.debug("Active vendor list: {}".format(active_vendors))
-            api.produce(ActiveVendorList(data=active_vendors))
+            api.produce(ActiveVendorList(data=list(active_vendors)))
         else:
             self.log.info("No active vendors found, vendor list not generated")
