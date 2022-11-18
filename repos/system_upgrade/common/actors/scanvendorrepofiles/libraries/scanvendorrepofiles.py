@@ -2,7 +2,12 @@ import os
 
 from leapp.libraries.common import repofileutils
 from leapp.libraries.stdlib import api
-from leapp.models import CustomTargetRepository, CustomTargetRepositoryFile, ActiveVendorList
+from leapp.models import (
+    CustomTargetRepository,
+    CustomTargetRepositoryFile,
+    ActiveVendorList,
+    VendorCustomTargetRepositoryList,
+)
 
 
 VENDORS_DIR = "/etc/leapp/files/vendors.d/"
@@ -33,9 +38,7 @@ def process():
         for vendor_list in api.consume(ActiveVendorList):
             active_vendors.extend(vendor_list.data)
 
-        api.current_logger().debug(
-            "Active vendor list: {}".format(active_vendors)
-        )
+        api.current_logger().debug("Active vendor list: {}".format(active_vendors))
 
         if vendor_name not in active_vendors:
             api.current_logger().debug(
@@ -50,18 +53,19 @@ def process():
         repofile = repofileutils.parse_repofile(full_repo_path)
 
         api.produce(CustomTargetRepositoryFile(file=full_repo_path))
-        for repo in repofile.data:
-            api.current_logger().debug(
-                "Loaded repository {} from file {}".format(repo.repoid, reponame)
-            )
-            api.produce(
-                CustomTargetRepository(
-                    repoid=repo.repoid,
-                    name=repo.name,
-                    baseurl=repo.baseurl,
-                    enabled=repo.enabled,
-                )
-            )
+
+        custom_vendor_repos = [
+            CustomTargetRepository(
+                repoid=repo.repoid,
+                name=repo.name,
+                baseurl=repo.baseurl,
+                enabled=repo.enabled,
+            ) for repo in repofile.data
+        ]
+
+        api.produce(
+            VendorCustomTargetRepositoryList(vendor=vendor_name, repos=custom_vendor_repos)
+        )
 
     api.current_logger().info(
         "The {} directory exists, vendor repositories loaded.".format(VENDORS_DIR)
