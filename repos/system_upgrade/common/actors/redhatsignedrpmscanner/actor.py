@@ -17,14 +17,28 @@ class RedHatSignedRpmScanner(Actor):
     tags = (IPUWorkflowTag, FactsPhaseTag)
 
     def process(self):
-        RH_SIGS = ['199e2f91fd431d51',
+        RH_SIGS = ['199e2f91fd431d51', # rhel
                    '5326810137017186',
                    '938a80caf21541eb',
                    'fd372689897da07a',
                    '45689c882fa658e0',
-                   '24c6a8a7f4a80eb5',
-                   '51d6647ec21ad6ea',
-                   '4eb84e71f2ee9d55']
+                   '24c6a8a7f4a80eb5', # centos
+                   '05b555b38483c65d',
+                   '4eb84e71f2ee9d55',
+                   'a963bbdbf533f4fa',
+                   '6c7cb6ef305d49d6',
+                   '8c55a6628608cb71', # cloudlinux
+                   '51d6647ec21ad6ea', # almalinux
+                   'd36cb86cb86b3716',
+                   '15af5dac6d745a60', # rockylinux
+                   '702d426d350d275d',
+                   '72f97b74ec551f03', # ol
+                   '82562ea9ad986da3',
+                   'bc4d06a08d8b756f',
+                   '75c333f418cd4a9e', # eurolinux
+                   'b413acad6275f250',
+                   'f7ad3e5a1c9fd080',
+                   'b0b4183f192a7d7d'] # scientific
 
         signed_pkgs = InstalledRedHatSignedRPM()
         unsigned_pkgs = InstalledUnsignedRPM()
@@ -49,7 +63,13 @@ class RedHatSignedRpmScanner(Actor):
             """
             return (    # pylint: disable-msg=consider-using-ternary
                     pkg.name == 'gpg-pubkey'
-                    and (pkg.packager.startswith('Red Hat, Inc.') or pkg.packager.startswith('CentOS') or pkg.packager.startswith('AlmaLinux'))
+                    and (pkg.packager.startswith('Red Hat, Inc.')
+                    or pkg.packager.startswith('CentOS')
+                    or pkg.packager.startswith('CloudLinux')
+                    or pkg.packager.startswith('AlmaLinux')
+                    or pkg.packager.startswith('infrastructure@rockylinux.org')
+                    or pkg.packager.startswith('EuroLinux')
+                    or pkg.packager.startswith('Scientific Linux'))
                     or all_signed
             )
 
