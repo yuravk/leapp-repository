@@ -190,14 +190,39 @@ To add new rules to the list, add a new entry to the `packageinfo` array.
 Required fields:
 
 - action: what action to perform on the listed package
-- 0 - present
-- 1 - removed
-- 2 - deprecated
-- 3 - replaced
-- 4 - split
-- 5 - merged
-- 6 - moved to new repository
-- 7 - renamed
+    - 0 - present
+        - keep the packages in `in_packageset` to make sure the repo they're in on the target system gets enabled
+        - additional behaviour present, see below
+    - 1 - removed
+        - remove all packages in `in_packageset`
+    - 2 - deprecated
+        - keep the packages in `in_packageset` to make sure the repo they're in on the target system gets enabled
+    - 3 - replaced
+        - remove all packages in `in_packageset`
+        - install parts of the `out_packageset` that are not present on the system
+        - keep the packages from `out_packageset` that are already installed
+    - 4 - split
+        - install parts of the `out_packageset` that are not present on the system
+        - keep the present `out_packageset`
+        - remove packages from `in_packageset` that are not present in `out_packageset`
+            - in case of package X being split to Y and Z, package X will be removed
+            - in case of package X being split to X and Y, package X will **not** be removed
+    - 5 - merged
+        - same as `split`
+        - additional behaviour present, see below
+    - 6 - moved to new repository
+        - keep the package to make sure the repo it's in on the target system gets enabled
+        - nothing is done to `in_packageset` as it always contains one package - the same as the "out" package
+    - 7 - renamed
+        - remove the `in_packageset` and install the `out_packageset` if not installed
+        - if already installed, keep the `out_packageset` as-is
+    - 8 - reinstalled
+        - reinstall the `in_packageset` package during the upgrade transaction
+        - mostly useful for packages that have the same version string between major versions, and thus won't be upgraded automatically
+    - Additional notes:
+        - any event except `present` is ignored if any of packages in `in_packageset` are marked for removal
+        - any event except `merged` is ignored if any of packages in `in_packageset` are neither installed nor marked for installation
+            - for `merged` events it is sufficient to have at least one package from `in_packageset` are either installed or marked for installation
 - arches: what system architectures the listed entry relates to
 - id: entry ID, must be unique
 - in_packageset: set of packages on the old system
