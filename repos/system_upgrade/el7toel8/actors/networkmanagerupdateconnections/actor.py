@@ -28,7 +28,13 @@ class NetworkManagerUpdateConnections(Actor):
 
             try:
                 r = run(['/usr/bin/python3', 'tools/nm-update-client-ids.py'])
-                if r['exit_code'] == 79:
+
+                self.log.info('Updated client-ids: {}'.format(r['stdout']))
+            except OSError as e:
+                self.log.warning('OSError calling nm-update-client-ids script: {}'.format(e))
+            except CalledProcessError as e:
+                self.log.warning('CalledProcessError calling nm-update-client-ids script: {}'.format(e))
+                if e.exit_code == 79:
                     title = 'NetworkManager connection update failed - PyGObject bindings for NetworkManager not found.'
                     summary = 'When using dhcp=dhclient on Red Hat Enterprise Linux 7, a non-hexadecimal ' \
                         'client-id (a string) is sent on the wire as is. On Red Hat Enterprise Linux 8, a zero ' \
@@ -40,10 +46,5 @@ class NetworkManagerUpdateConnections(Actor):
                         reporting.Severity(reporting.Severity.MEDIUM),
                         reporting.Tags([reporting.Tags.NETWORK])
                     ])
-                    continue
-
-                self.log.info('Updated client-ids: {}'.format(r['stdout']))
-            except (OSError, CalledProcessError) as e:
-                self.log.warning('Error calling nm-update-client-ids script: {}'.format(e))
 
             break
