@@ -364,9 +364,10 @@ def get_pesid_to_repoid_map(target_pesids):
         )
     repositories_map_msg = combine_repomap_messages(repositories_map_msgs)
 
-    rhui_info = next(api.consume(RHUIInfo), RHUIInfo(provider=''))
+    rhui_info = next(api.consume(RHUIInfo), None)
+    cloud_provider = rhui_info.provider if rhui_info else ''
 
-    repomap = peseventsscanner_repomap.RepoMapDataHandler(repositories_map_msg, cloud_provider=rhui_info.provider)
+    repomap = peseventsscanner_repomap.RepoMapDataHandler(repositories_map_msg, cloud_provider=cloud_provider)
 
     # NOTE: We have to calculate expected target repositories like in the setuptargetrepos actor.
     # It's planned to handle this in different a way in future...
