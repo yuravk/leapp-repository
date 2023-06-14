@@ -21,8 +21,6 @@ from leapp.utils.report import fetch_upgrade_report_messages, generate_report_fi
 from leapp.models import ErrorModel
 
 
-
-
 def disable_database_sync():
     def disable_db_sync_decorator(f):
         @functools.wraps(f)
@@ -293,20 +291,18 @@ def pretty_block_log(string, logger_level, width=60):
 
 
 @contextmanager
-def format_actor_exceptions(logger):
+def format_actor_exceptions(logger, sentry):
     try:
         try:
             yield
-        except LeappRuntimeError as e:
-            # TODO: This only reports the actor that raised an exception
-            # and the return code.
-            # The traceback gets eaten on the framework level, and is only
-            # seen in stderr. Changing that will require modifying the framework
-            # code itself.
-            msg = '{} - Please check the above details'.format(e.message)
+        except LeappRuntimeError as err:
+            msg = f'{err.message} - Please check the above details'
             sys.stderr.write("\n")
             sys.stderr.write(pretty_block_text(msg, color="", width=len(msg)))
-            logger.error(e.message)
+            logger.error(err.message)
+            if sentry:
+                sent_code = sentry.captureException()
+                logger.info("Error \"{}\" sent to Sentry with code {}".format(err, sent_code))
     finally:
         pass
 
@@ -333,7 +329,7 @@ def log_errors(errors, logger):
                         v=details[detail].rstrip().replace('\n', '\n' + ' ' * (6 + len(detail)))))
 
 
-def log_inhibitors(context_id, logger):
+def log_inhibitors(context_id, logger, sentry):
     from leapp.reporting import Flags  # pylint: disable=import-outside-toplevel
     reports = fetch_upgrade_report_messages(context_id)
     inhibitors = [report for report in reports if Flags.INHIBITOR in report.get('flags', [])]
@@ -343,3 +339,16 @@ def log_inhibitors(context_id, logger):
         for position, report in enumerate(inhibitors, start=1):
             logger.error('{idx:5}. Inhibitor: {title}'.format(idx=position, title=report['title']))
         logger.info('Consult the pre-upgrade report for details and possible remediation.')
+
+        if sentry:
+            for inhibitor in inhibitors:
+                sentry.captureMessage(
+                    "Inhibitor: {}\n"
+                    "Severity: {}\n"
+                    "{}".format(
+                        inhibitor['title'],
+                        inhibitor['severity'],
+                        inhibitor['summary']
+                    )
+                )
+                logger.info("Inhibitor \"{}\" sent to Sentry".format(inhibitor['title']))
