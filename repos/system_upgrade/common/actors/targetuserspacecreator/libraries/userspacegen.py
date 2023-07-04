@@ -9,6 +9,7 @@ from leapp.libraries.actor import constants
 from leapp.libraries.common import dnfplugin, mounting, overlaygen, repofileutils, rhsm, utils
 from leapp.libraries.common.config import get_env, get_product_type
 from leapp.libraries.common.config.version import get_target_major_version
+from leapp.libraries.common.gpg import get_path_to_gpg_certs, is_nogpgcheck_set
 from leapp.libraries.stdlib import api, CalledProcessError, config, run
 from leapp.models import RequiredTargetUserspacePackages  # deprecated
 from leapp.models import TMPTargetRepositoriesFacts  # deprecated all the time
@@ -54,7 +55,6 @@ from leapp.utils.deprecation import suppress_deprecation
 # Issue: #486
 
 PROD_CERTS_FOLDER = 'prod-certs'
-GPG_CERTS_FOLDER = 'rpm-gpg'
 PERSISTENT_PACKAGE_CACHE_DIR = '/var/lib/leapp/persistent_package_cache'
 DEDICATED_LEAPP_PART_URL = 'https://access.redhat.com/solutions/7011704'
 
@@ -147,27 +147,15 @@ def _backup_to_persistent_package_cache(userspace_dir):
             shutil.move(src_cache, PERSISTENT_PACKAGE_CACHE_DIR)
 
 
-def _the_nogpgcheck_option_used():
-    return get_env('LEAPP_NOGPGCHECK', False) == '1'
-
-
-def _get_path_to_gpg_certs(target_major_version):
-    target_product_type = get_product_type('target')
-    certs_dir = target_major_version
-    # only beta is special in regards to the GPG signing keys
-    if target_product_type == 'beta':
-        certs_dir = '{}beta'.format(target_major_version)
-    return os.path.join(api.get_common_folder_path(GPG_CERTS_FOLDER), certs_dir)
-
-
 def _import_gpg_keys(context, install_root_dir, target_major_version):
-    certs_path = _get_path_to_gpg_certs(target_major_version)
+    certs_path = get_path_to_gpg_certs()
     # Import the RHEL X+1 GPG key to be able to verify the installation of initial packages
     try:
         # Import also any other keys provided by the customer in the same directory
-        for certname in os.listdir(certs_path):
-            cmd = ['rpm', '--root', install_root_dir, '--import', os.path.join(certs_path, certname)]
-            context.call(cmd, callback_raw=utils.logging_handler)
+        for trusted_dir in certs_path:
+            for certname in os.listdir(trusted_dir):
+                cmd = ['rpm', '--root', install_root_dir, '--import', os.path.join(trusted_dir, certname)]
+                context.call(cmd, callback_raw=utils.logging_handler)
     except CalledProcessError as exc:
         raise StopActorExecutionError(
             message=(
@@ -238,13 +226,13 @@ def prepare_target_userspace(context, userspace_dir, enabled_repos, packages):
     install_root_dir = '/el{}target'.format(target_major_version)
     with mounting.BindMount(source=userspace_dir, target=os.path.join(context.base_dir, install_root_dir.lstrip('/'))):
         _restore_persistent_package_cache(userspace_dir)
-        if not _the_nogpgcheck_option_used():
+        if not is_nogpgcheck_set():
             _import_gpg_keys(context, install_root_dir, target_major_version)
 
         repos_opt = [['--enablerepo', repo] for repo in enabled_repos]
         repos_opt = list(itertools.chain(*repos_opt))
         cmd = ['dnf', 'install', '-y']
-        if _the_nogpgcheck_option_used():
+        if is_nogpgcheck_set():
             cmd.append('--nogpgcheck')
         cmd += [
             '--setopt=module_platform_id=platform:el{}'.format(target_major_version),
