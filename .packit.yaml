@@ -123,6 +123,7 @@ jobs:
   manual_trigger: True
   labels:
     - minimal-beaker
+    - minimal-beaker-7.9to8.6
   targets:
     epel-7-x86_64:
       distros: [RHEL-7.9-ZStream]
@@ -181,6 +182,7 @@ jobs:
   manual_trigger: True
   labels:
     - minimal-beaker
+    - minimal-beaker-7.9to8.8
   targets:
     epel-7-x86_64:
       distros: [RHEL-7.9-ZStream]
@@ -239,6 +241,7 @@ jobs:
   manual_trigger: True
   labels:
     - minimal-beaker
+    - minimal-beaker-7.9to8.9
   targets:
     epel-7-x86_64:
       distros: [RHEL-7.9-ZStream]
@@ -328,6 +331,7 @@ jobs:
   manual_trigger: True
   labels:
     - minimal-beaker
+    - minimal-beaker-8.6to9.0
   targets:
     epel-8-x86_64:
       distros: [RHEL-8.6.0-Nightly]
@@ -389,6 +393,7 @@ jobs:
   manual_trigger: True
   labels:
     - minimal-beaker
+    - minimal-beaker-8.8to9.2
   targets:
     epel-8-x86_64:
       distros: [RHEL-8.8.0-Nightly]
@@ -451,6 +456,7 @@ jobs:
   manual_trigger: True
   labels:
     - minimal-beaker
+    - minimal-beaker-8.9to9.3
   targets:
     epel-8-x86_64:
       distros: [RHEL-8.9.0-Nightly]
