@@ -6,21 +6,24 @@ from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.common import rhui
 from leapp.libraries.common.config import get_env
 from leapp.libraries.stdlib import api
-from leapp.models import DistributionSignedRPM, InstalledRedHatSignedRPM, InstalledRPM, InstalledUnsignedRPM
+from leapp.models import DistributionSignedRPM, InstalledRedHatSignedRPM, InstalledRPM, InstalledUnsignedRPM, VendorSignatures
 from leapp.tags import FactsPhaseTag, IPUWorkflowTag
 from leapp.utils.deprecation import suppress_deprecation
 
 
 @suppress_deprecation(InstalledRedHatSignedRPM)
 class DistributionSignedRpmScanner(Actor):
-    """Provide data about installed RPM Packages signed by the distribution.
+    """Provide data about installed RPM Packages signed by the distribution and by vendors.
+
+    The "Distribution" in the name of the actor is a historical artifact - the actor
+    is used for both  distribution and all vendors present in the config.
 
     After filtering the list of installed RPM packages by signature, a message
     with relevant data will be produced.
     """
 
     name = 'distribution_signed_rpm_scanner'
-    consumes = (InstalledRPM,)
+    consumes = (InstalledRPM, VendorSignatures)
     produces = (DistributionSignedRPM, InstalledRedHatSignedRPM, InstalledUnsignedRPM,)
     tags = (IPUWorkflowTag, FactsPhaseTag)
 
@@ -43,6 +46,9 @@ class DistributionSignedRpmScanner(Actor):
             raise StopActorExecutionError(
                 'Cannot find distribution signature configuration.',
                 details={'Problem': 'Distribution {} was not found in {}.'.format(distribution, distributions_path)})
+
+        for siglist in self.consume(VendorSignatures):
+            distribution_keys.extend(siglist.sigs)
 
         signed_pkgs = DistributionSignedRPM()
         rh_signed_pkgs = InstalledRedHatSignedRPM()
