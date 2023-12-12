@@ -8,6 +8,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.ssh.disable_deprecated_algorithms = true
+  config.vm.boot_timeout = 3600
 
   config.vm.provider 'libvirt' do |v|
     v.uri = 'qemu:///system'
