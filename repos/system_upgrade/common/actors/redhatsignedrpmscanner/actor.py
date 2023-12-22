@@ -27,7 +27,6 @@ class RedHatSignedRpmScanner(Actor):
                    '4eb84e71f2ee9d55',
                    'a963bbdbf533f4fa',
                    '6c7cb6ef305d49d6',
-                   '8c55a6628608cb71', # cloudlinux
                    '51d6647ec21ad6ea', # almalinux
                    'd36cb86cb86b3716',
                    '15af5dac6d745a60', # rockylinux
@@ -65,7 +64,6 @@ class RedHatSignedRpmScanner(Actor):
                     pkg.name == 'gpg-pubkey'
                     and (pkg.packager.startswith('Red Hat, Inc.')
                     or pkg.packager.startswith('CentOS')
-                    or pkg.packager.startswith('CloudLinux')
                     or pkg.packager.startswith('AlmaLinux')
                     or pkg.packager.startswith('infrastructure@rockylinux.org')
                     or pkg.packager.startswith('EuroLinux')
