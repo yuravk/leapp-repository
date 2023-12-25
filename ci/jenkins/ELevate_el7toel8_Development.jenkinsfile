@@ -12,6 +12,8 @@ pipeline {
     parameters {
         choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-8', 'centos-stream-8', 'eurolinux-8', 'oraclelinux-8', 'rocky-8', 'all'], description: 'Select a target distro or all for ELevation')
         choice(name: 'CONF_FILTER', choices: ['minimal', 'docker-ce'], description: 'Select a configuration')
+        string(name: 'LEAPP_SRC_GIT_USER', defaultValue: 'AlmaLinux', description: 'Input name of Git user of LEAPP source', trim: true)
+        string(name: 'LEAPP_SRC_GIT_BRANCH', defaultValue: 'almalinux', description: 'Input name of Git branch of LEAPP source', trim: true)
         string(name: 'RETRY', defaultValue: '3', description: 'Input count of retry', trim: true)
         string(name: 'TIMEOUT', defaultValue: '60', description: 'Input timeout value in minutes', trim: true)
     }
@@ -91,7 +93,7 @@ pipeline {
                                             label: 'Install testing version of ELevate'
                                         sh script: "vagrant upload ci/scripts/install_elevate_dev.sh install_elevate_dev.sh $targetDistro.vmName",
                                             label: 'Upload installer script to VMs'
-                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo bash install_elevate_dev.sh\"",
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo bash install_elevate_dev.sh -u ${LEAPP_SRC_GIT_USER} -b ${LEAPP_SRC_GIT_BRANCH}\"",
                                             label: 'Install development version of ELevate',
                                             returnStatus: true
                                         sh script: "vagrant upload leapp-data/ leapp-data/ --compress $targetDistro.vmName",
