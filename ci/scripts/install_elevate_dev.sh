@@ -1,9 +1,43 @@
 #!/usr/bin/env bash
 
+USER='AlmaLinux'
+BRANCH='almalinux'
+
+show_usage() {
+    echo 'Usage: sync_cloudlinux [OPTION]...'
+    echo ''
+    echo '  -h, --help           show this message and exit'
+    echo '  -u, --user           github user name (default: AlmaLinux)'
+    echo '  -b, --branch         github branch name (default: almalinux)'
+}
+
+while [[ $# -gt 0 ]]; do
+    opt="$1"
+    case ${opt} in
+        -h|--help)
+            show_usage
+            exit 0
+            ;;
+        -u|--user)
+            USER="$2"
+            shift
+            shift
+            ;;
+        -b|--branch)
+            BRANCH="$2"
+            shift
+            shift
+            ;;
+        *)
+            echo -e "Error: unknown option ${opt}" >&2
+            exit 2
+            ;;
+    esac
+done
 
 RHEL_MAJOR_VERSION=$(rpm --eval %rhel)
 WORK_DIR="$HOME"
-NEW_LEAPP_NAME='leapp-repository-almalinux'
+NEW_LEAPP_NAME="leapp-repository-$BRANCH"
 NEW_LEAPP_DIR="$WORK_DIR/$NEW_LEAPP_NAME/"
 LEAPP_PATH='/usr/share/leapp-repository/repositories/'
 EXCLUDE_PATH='
@@ -39,8 +73,8 @@ do
     fi
 done
 
-echo 'Download new tarball'
-curl -s -L https://github.com/AlmaLinux/leapp-repository/archive/almalinux/leapp-repository-almalinux.tar.gz | tar -xz -C $WORK_DIR/
+echo "Download new tarball from https://github.com/$USER/leapp-repository/archive/$BRANCH/leapp-repository-$BRANCH.tar.gz" 
+curl -s -L https://github.com/$USER/leapp-repository/archive/$BRANCH/leapp-repository-$BRANCH.tar.gz | tar -xz -C $WORK_DIR/
 
 echo 'Deleting files as in spec file'
 rm -rf $NEW_LEAPP_DIR/repos/common/actors/testactor
