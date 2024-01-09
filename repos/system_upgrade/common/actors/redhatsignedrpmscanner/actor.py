@@ -29,6 +29,7 @@ class RedHatSignedRpmScanner(Actor):
                    '6c7cb6ef305d49d6',
                    '51d6647ec21ad6ea', # almalinux
                    'd36cb86cb86b3716',
+                   '2ae81e8aced7258b',
                    '15af5dac6d745a60', # rockylinux
                    '702d426d350d275d',
                    '72f97b74ec551f03', # ol
