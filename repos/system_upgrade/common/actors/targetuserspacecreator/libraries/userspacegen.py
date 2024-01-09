@@ -400,9 +400,9 @@ def _prep_repository_access(context, target_userspace):
     target_yum_repos_d = os.path.join(target_etc, 'yum.repos.d')
     backup_yum_repos_d = os.path.join(target_etc, 'yum.repos.d.backup')
 
-    _copy_certificates(context, target_userspace)
 
     if not rhsm.skip_rhsm():
+        _copy_certificates(context, target_userspace)
         run(['rm', '-rf', os.path.join(target_etc, 'rhsm')])
         context.copytree_from('/etc/rhsm', os.path.join(target_etc, 'rhsm'))
     # NOTE: we cannot just remove the original target yum.repos.d dir
