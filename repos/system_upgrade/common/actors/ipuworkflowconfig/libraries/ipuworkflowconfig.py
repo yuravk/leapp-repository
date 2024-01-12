@@ -47,6 +47,7 @@ def get_os_release(path):
     :return: `OSRelease` model if the file can be parsed
     :raises: `IOError`
     """
+    os_version = '.'.join(platform.dist()[1].split('.')[:2])
     try:
         with open(path) as f:
             data = dict(l.strip().split('=', 1) for l in f.readlines() if '=' in l)
@@ -55,7 +56,7 @@ def get_os_release(path):
                 name=data.get('NAME', '').strip('"'),
                 pretty_name=data.get('PRETTY_NAME', '').strip('"'),
                 version=data.get('VERSION', '').strip('"'),
-                version_id=data.get('VERSION_ID', '').strip('"'),
+                version_id=os_version,
                 variant=data.get('VARIANT', '').strip('"') or None,
                 variant_id=data.get('VARIANT_ID', '').strip('"') or None
             )
