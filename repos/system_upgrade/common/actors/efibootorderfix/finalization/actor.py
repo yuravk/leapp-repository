@@ -32,6 +32,7 @@ class EfiFinalizationFix(Actor):
                 'Red Hat Enterprise Linux': 'redhat',
                 'Rocky Linux': 'rocky',
                 'Scientific Linux': 'redhat',
+                'EuroLinux': 'eurolinux',
         }
 
         efi_shimname_dict = {
