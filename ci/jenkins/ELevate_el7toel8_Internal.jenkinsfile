@@ -83,10 +83,10 @@ pipeline {
                                     script {
                                         def targetDistro = targetDistroSpec(TARGET_DISTRO)
 
-                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y https://repo.almalinux.org/elevate/elevate-release-latest-el7.noarch.rpm\"",
-                                            label: 'Install the elevate-release-latest rpm packages for EL7'
-                                        sh script: "vagrant ssh $targetDistro.vmName -c \"wget https://build.almalinux.org/pulp/content/copr/eabdullin1-leapp-data-internal-almalinux-8-x86_64-dr/config.repo -O /etc/yum.repos.d/internal-leapp.repo\"",
-                                            label: 'Add pulp repository'
+                                        // sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y https://repo.almalinux.org/elevate/elevate-release-latest-el7.noarch.rpm\"",
+                                        //     label: 'Install the elevate-release-latest rpm packages for EL7'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo wget https://build.almalinux.org/pulp/content/copr/yuravk-elevate-ng-centos7-x86_64-dr/config.repo -O /etc/yum.repos.d/elevate-ng.repo\"",
+                                            label: 'Add ELevate NG (pulp internal) repository'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y leapp-upgrade\"",
                                             label: 'Install the leap rpm package'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y $targetDistro.leappData\"",
