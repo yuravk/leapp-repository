@@ -85,7 +85,7 @@ pipeline {
 
                                         // sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y https://repo.almalinux.org/elevate/elevate-release-latest-el7.noarch.rpm\"",
                                         //     label: 'Install the elevate-release-latest rpm packages for EL7'
-                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo wget https://build.almalinux.org/pulp/content/copr/yuravk-elevate-ng-centos7-x86_64-dr/config.repo -O /etc/yum.repos.d/elevate-ng.repo\"",
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo wget https://build.almalinux.org/pulp/content/copr/yuravk-leapp-repository-internal-centos7-x86_64-dr/config.repo -O /etc/yum.repos.d/elevate-ng.repo\"",
                                             label: 'Add ELevate NG (pulp internal) repository'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y leapp-upgrade\"",
                                             label: 'Install the leap rpm package'
