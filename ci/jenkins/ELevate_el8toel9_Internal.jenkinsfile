@@ -10,8 +10,7 @@ pipeline {
         parallelsAlwaysFailFast()
     }
     parameters {
-        // choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'centos-stream-9', 'eurolinux-9', 'rocky-9', 'all'], description: 'Select a target distro or all for ELevation')
-        choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'rocky-9', 'eurolinux-9', 'all'], description: 'Select a target distro or all for ELevation')
+        choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'centos-stream-9', 'eurolinux-9', 'rocky-9', 'all'], description: 'Select a target distro or all for ELevation')
         choice(name: 'CONF_FILTER', choices: ['minimal', 'docker-ce'], description: 'Select a configuration')
         string(name: 'RETRY', defaultValue: '3', description: 'Input count of retry', trim: true)
         string(name: 'TIMEOUT', defaultValue: '60', description: 'Input timeout value in minutes', trim: true)
@@ -73,8 +72,7 @@ pipeline {
                 axes {
                     axis {
                         name 'TARGET_DISTRO'
-                        // values 'almalinux-9', 'centos-stream-9', 'eurolinux-9', 'rocky-9'
-                        values 'almalinux-9', 'rocky-9', 'eurolinux-9'
+                        values 'almalinux-9', 'centos-stream-9', 'eurolinux-9', 'rocky-9'
                     }
                 }
                 stages {
@@ -85,10 +83,12 @@ pipeline {
                                     script {
                                         def targetDistro = targetDistroSpec(TARGET_DISTRO)
 
-                                        // sh script: "vagrant ssh $targetDistro.vmName -c \"sudo dnf install -y https://repo.almalinux.org/elevate/elevate-release-latest-el8.noarch.rpm\"",
-                                        //     label: 'Install the elevate-release-latest rpm packages for EL8'
-                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo curl -o /etc/yum.repos.d/elevate-ng.repo https://build.almalinux.org/pulp/content/copr/yuravk-leapp-repository-internal-almalinux-8-x86_64-dr/config.repo\"",
-                                            label: 'Add pulp repository'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum -y install dnf-plugins-core\"",
+                                            label: 'Install dnf-plugins-core package'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo rpm --import https://repo.almalinux.org/elevate/RPM-GPG-KEY-ELevate\"",
+                                            label: 'Install ELevate key'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo dnf copr --assumeyes --hub build.almalinux.org enable yuravk/leapp-repository-internal\"",
+                                            label: 'Add yuravk/leapp-repository-internal repository'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo dnf install -y leapp-upgrade\"",
                                             label: 'Install the leap rpm package'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo dnf install -y $targetDistro.leappData\"",
@@ -208,6 +208,15 @@ def targetDistroSpec(distro) {
         case 'rocky-9':
             vm = 'rocky_9'
             ldata = 'leapp-data-rocky'
+
+            spec = [
+                vmName: vm,
+                leappData: ldata
+            ]
+            break
+        case 'centos-stream-9':
+            vm = 'centosstream_9'
+            ldata = 'leapp-data-centos'
 
             spec = [
                 vmName: vm,

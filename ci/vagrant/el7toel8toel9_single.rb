@@ -34,7 +34,7 @@ Vagrant.configure('2') do |config|
   # EL8toEL9
   target_distros_el9 = {
     almalinux: 'almalinux/8',
-    # centosstream: 'generic/centos8s',
+    centosstream: 'generic/centos8s',
     eurolinux: 'eurolinux-vagrant/eurolinux-8',
     rocky: 'generic/rocky8'
   }
