@@ -40,6 +40,8 @@ pipeline {
                 script {
                     def targetDistro = targetDistroSpec(TARGET_DISTRO_FILTER)
 
+                    sh script: 'bash ci/scripts/refresh_vagrant_boxes.sh',
+                        label: 'Refresh and cleanup vagrant boxes'
                     sh script: 'cp ci/vagrant/el7toel8toel9_single.rb Vagrantfile',
                         label: 'Generate Vagrantfile'
                     sh script: "vagrant up $targetDistro.vmName",
@@ -55,6 +57,8 @@ pipeline {
                 CONFIG = "${CONF_FILTER}"
             }
             steps {
+                    sh script: 'bash ci/scripts/refresh_vagrant_boxes.sh',
+                        label: 'Refresh and cleanup vagrant boxes'
                     sh script: 'cp ci/vagrant/el7toel8_multi.rb Vagrantfile',
                         label: 'Generate Vagrantfile'
                     sh script: 'vagrant up',
@@ -83,8 +87,10 @@ pipeline {
                                     script {
                                         def targetDistro = targetDistroSpec(TARGET_DISTRO)
 
-                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum-config-manager --add-repo https://repo.almalinux.org/elevate/testing/elevate-testing.repo\"",
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y https://repo.almalinux.org/elevate/elevate-release-latest-el7.noarch.rpm\"",
                                             label: 'Install the elevate-release-latest rpm packages for EL7'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum-config-manager --add-repo https://repo.almalinux.org/elevate/testing/elevate-testing.repo\"",
+                                            label: 'Install the elevate-testing repository'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y leapp-upgrade\"",
                                             label: 'Install the leap rpm package'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y $targetDistro.leappData\"",
