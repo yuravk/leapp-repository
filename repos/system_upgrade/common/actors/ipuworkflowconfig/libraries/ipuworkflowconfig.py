@@ -53,7 +53,7 @@ def get_os_release(path):
             data = dict(l.strip().split('=', 1) for l in f.readlines() if '=' in l)
             release_id = data.get('ID', '').strip('"')
             version_id = data.get('VERSION_ID', '').strip('"')
-            if release_id == 'centos' and '.' not in version_id:
+            if release_id == 'centos' and '.' not in os_version:
                 os_version = "{}.999".format(version_id)
             return OSRelease(
                 release_id=release_id,
