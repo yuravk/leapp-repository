@@ -3,107 +3,110 @@ TIMEOUT = params.TIMEOUT
 
 pipeline {
     agent {
-        label params.AGENT
+        label 'x86_64 && bm'
     }
     options {
         timestamps()
+        parallelsAlwaysFailFast()
     }
     parameters {
-        string(name: 'AGENT', defaultValue: 'almalinux-8-vagrant-libvirt-x86_64', description: 'Input label of the Jenkins Agent', trim: true)
+        choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'eurolinux-9', 'rocky-9', 'all'], description: 'Select a target distro or all for ELevation')
+        choice(name: 'CONF_FILTER', choices: ['minimal', 'docker-ce'], description: 'Select a configuration')
         string(name: 'RETRY', defaultValue: '3', description: 'Input count of retry', trim: true)
         string(name: 'TIMEOUT', defaultValue: '60', description: 'Input timeout value in minutes', trim: true)
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/LKHN/el-test-auto-dev.git', description: 'URL of the pipeline repository', trim: true)
-        string(name: 'REPO_BRANCH', defaultValue: 'main', description: 'Branch of the pipeline repository', trim: true)
-        choice(name: 'SOURCE_DISTRO_FILTER', choices: ['almalinux-8', 'centos-stream-8', 'eurolinux-8', 'oraclelinux-8', 'rocky-8', 'all'], description: 'Select a source distro or all for ELevation')
-        choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'centos-stream-9', 'eurolinux-9', 'oraclelinux-9', 'rocky-9', 'all'], description: 'Select a target distro or all to ELevation')
-        choice(name: 'CONF_FILTER', choices: ['minimal', 'docker-ce'], description: 'Select a configuration')
+    }
+    environment {
+        VAGRANT_NO_COLOR = '1'
     }
     stages {
-        stage('Source') {
+        stage('Prepare') {
             steps {
-                git url: REPO_URL,
-                    branch: REPO_BRANCH,
-                    credentialsId: 'github-almalinuxautobot'
+                sh script: 'ansible-galaxy install -r ci/ansible/requirements.yaml',
+                    label: 'Install Ansible collections'
+                sh script: 'python3.11 -m venv .venv',
+                    label: 'Create Python virtual environment'
+                sh script: '. .venv/bin/activate && pip install --no-color pip pytest-testinfra paramiko',
+                    label: 'Install Testinfra'
             }
         }
-        stage('Prepare Build and Test enviroment') {
+        stage('CreateSingleMachine') {
+            when {
+                expression { params.TARGET_DISTRO_FILTER != 'all' }
+            }
+            environment {
+                CONFIG = "${CONF_FILTER}"
+            }
             steps {
-                sh script: 'cp Vagrantfile.el8toel9 Vagrantfile',
-                    label: 'Generate the el8toel9 Vagrantfile'
-                sh script: 'sudo dnf -y install python39-devel python39-wheel',
-                    label: 'Install Python 3.9, PIP and Wheel'
-                sh script: 'sudo python3 -m pip install --no-cache-dir --upgrade -r requirements.txt',
-                    label: 'Install TestInfra'
+                script {
+                    def targetDistro = targetDistroSpec(TARGET_DISTRO_FILTER)
+
+                    sh script: 'bash ci/scripts/refresh_vagrant_boxes.sh',
+                        label: 'Refresh and cleanup vagrant boxes'
+                    sh script: 'cp ci/vagrant/el7toel8toel9_single.rb Vagrantfile',
+                        label: 'Generate Vagrantfile'
+                    sh script: "vagrant up $targetDistro.vmName",
+                        label: 'Create source VM'
+                }
             }
         }
-        stage('ELevation') {
+        stage('CreateMultiMachine') {
+            when {
+                expression { params.TARGET_DISTRO_FILTER == 'all' }
+            }
+            environment {
+                CONFIG = "${CONF_FILTER}"
+            }
+            steps {
+                    sh script: 'bash ci/scripts/refresh_vagrant_boxes.sh',
+                        label: 'Refresh and cleanup vagrant boxes'
+                    sh script: 'cp ci/vagrant/el8toel9_multi.rb Vagrantfile',
+                        label: 'Generate Vagrantfile'
+                    sh script: 'vagrant up',
+                        label: 'Create source VM'
+            }
+        }
+        stage('ELevationAndTest') {
             matrix {
                 when {
-                    allOf {
-                        anyOf {
-                            expression { params.SOURCE_DISTRO_FILTER == 'all' }
-                            expression { params.SOURCE_DISTRO_FILTER == env.SOURCE_DISTRO }
-                        }
-                        anyOf {
-                            expression { params.TARGET_DISTRO_FILTER == 'all' }
-                            expression { params.TARGET_DISTRO_FILTER == env.TARGET_DISTRO }
-                        }
+                    anyOf {
+                        expression { params.TARGET_DISTRO_FILTER == 'all' }
+                        expression { params.TARGET_DISTRO_FILTER == env.TARGET_DISTRO }
                     }
                 }
                 axes {
                     axis {
-                        name 'SOURCE_DISTRO'
-                        values 'almalinux-8', 'centos-stream-8', 'eurolinux-8', 'oraclelinux-8', 'rocky-8'
-                    }
-                    axis {
                         name 'TARGET_DISTRO'
-                        values 'almalinux-9', 'centos-stream-9', 'eurolinux-9', 'oraclelinux-9', 'rocky-9'
+                        values 'almalinux-9', 'eurolinux-9', 'rocky-9'
                     }
                 }
-               stages {
-                    stage('Create and Configure Machines') {
-                        environment {
-                            CONFIG = "${CONF_FILTER}"
-                        }
+                stages {
+                    stage('ELevate') {
                         steps {
                             retry(RETRY) {
                                 timeout(time: TIMEOUT, unit: 'MINUTES') {
-                                    sh script: 'vagrant destroy -f $SOURCE_DISTRO',
-                                        label: 'Make sure no machine present from the last retry'
-                                    sh script: 'vagrant up $SOURCE_DISTRO',
-                                        label: 'Create the source machines'
-                                }
-                            }
-                        }
-                    }
-                    stage('ELevate to the all target distros') {
-                       steps {
-                            retry(RETRY) {
-                                timeout(time: TIMEOUT, unit: 'MINUTES') {
-                                    sh script: 'vagrant ssh $SOURCE_DISTRO -c \"sudo dnf config-manager --add-repo https://repo.almalinux.org/elevate/testing/elevate-testing.repo\"',
-                                        label: 'Add the ELevate Testing RPM repository'
-                                    sh script: 'vagrant ssh $SOURCE_DISTRO -c \"sudo dnf -y install leapp-upgrade\"',
-                                        label: 'Install the leap rpm package'
                                     script {
-                                        def LEAPP_DATA = getLeappDataDistro(TARGET_DISTRO)
-                                        sh(script:"vagrant ssh $SOURCE_DISTRO -c \"sudo dnf -y install leapp-data-$LEAPP_DATA\"",
-                                            label:'Install the LEAP migration data rpm packages')
-                                        sh(script:'vagrant ssh $SOURCE_DISTRO -c \"sudo dnf -y install tree && sudo tree -ha /etc/leapp\"',
-                                            label:'Debug: Data paths')
+                                        def targetDistro = targetDistroSpec(TARGET_DISTRO)
+
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo dnf config-manager --add-repo https://repo.almalinux.org/elevate/testing/elevate-testing.repo\"",
+                                            label: 'Install the elevate-release-latest rpm packages for EL8'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo dnf install -y leapp-upgrade\"",
+                                            label: 'Install the leap rpm package'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo dnf install -y $targetDistro.leappData\"",
+                                            label: 'Install the LEAP migration data rpm packages'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo leapp preupgrade\"",
+                                            label: 'Start the Pre-Upgrade check',
+                                            returnStatus: true
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo sed -i \'s/^AllowZoneDrifting=.*/AllowZoneDrifting=no/\' /etc/firewalld/firewalld.conf\"",
+                                            label: 'TODO'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo leapp answer --section check_vdo.no_vdo_devices=True\"",
+                                            label: 'TODO'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo leapp upgrade\"",
+                                            label: 'Start the Upgrade'
+                                        sh script: "vagrant reload $targetDistro.vmName",
+                                            label: 'Reboot to the ELevate initramfs'
+                                        sh script: "vagrant ssh-config $targetDistro.vmName >> .vagrant/ssh-config",
+                                            label: 'Generate the ssh-config file'
                                     }
-                                    sh script: 'vagrant ssh $SOURCE_DISTRO -c \"sudo leapp preupgrade\"',
-                                        label: 'Start the Pre-Upgrade check',
-                                        returnStatus: true
-                                    sh script: 'vagrant ssh $SOURCE_DISTRO -c \"echo PermitRootLogin yes | sudo tee -a /etc/ssh/sshd_config\"',
-                                        label: 'Permit ssh as root login'
-                                    sh script: 'vagrant ssh $SOURCE_DISTRO -c \"sudo leapp answer --section remove_pam_pkcs11_module_check.confirm=True\"',
-                                        label: 'Answer the LEAP question'
-                                    sh script: 'vagrant ssh $SOURCE_DISTRO -c \"sudo leapp upgrade\"',
-                                        label: 'Start the Upgrade'
-                                    sh script: 'vagrant reload $SOURCE_DISTRO',
-                                        label: 'Reboot to the ELevate initramfs'
-                                    sh script: 'vagrant ssh-config $SOURCE_DISTRO >> .vagrant/ssh-config',
-                                        label: 'Generate the ssh-config file'
                                 }
                             }
                         }
@@ -111,15 +114,27 @@ pipeline {
                     stage('Distro Tests') {
                         when {
                             anyOf {
-                                expression { params.CONF_FILTER == 'minimal'}
-                                expression { params.CONF_FILTER == 'docker-ce'}
+                                expression { params.CONF_FILTER == 'minimal' }
+                                expression { params.CONF_FILTER == 'docker-ce' }
                             }
                         }
                         steps {
                             retry(RETRY) {
                                 timeout(time: TIMEOUT, unit: 'MINUTES') {
-                                    sh script: 'py.test -v --hosts=$SOURCE_DISTRO --ssh-config=.vagrant/ssh-config --junit-xml tests/distro/test_osinfo_$TARGET_DISTRO-junit.xml tests/distro/test_osinfo_$TARGET_DISTRO.py',
-                                        label: 'Run the distro specific tests'
+                                    script {
+                                        def targetDistro = targetDistroSpec(TARGET_DISTRO)
+
+                                        sh script: 'rm -f conftest.py pytest.ini',
+                                            label: 'Delete root conftest.py file'
+                                        sh script: """
+                                        . .venv/bin/activate \
+                                        && py.test -v --hosts=${targetDistro.vmName} \
+                                        --ssh-config=.vagrant/ssh-config \
+                                        --junit-xml ci/tests/tests/distro/test_osinfo_${targetDistro.vmName}_junit.xml \
+                                        ci/tests/tests/distro/test_osinfo_${targetDistro.vmName}.py
+                                        """,
+                                            label: 'Run the distro specific tests'
+                                    }
                                 }
                             }
                         }
@@ -127,14 +142,24 @@ pipeline {
                     stage('Docker Tests') {
                         when {
                             anyOf {
-                                expression { params.CONF_FILTER == 'docker-ce'}
+                                expression { params.CONF_FILTER == 'docker-ce' }
                             }
                         }
                         steps {
                             retry(RETRY) {
                                 timeout(time: TIMEOUT, unit: 'MINUTES') {
-                                    sh script: 'py.test -v --hosts=$SOURCE_DISTRO --ssh-config=.vagrant/ssh-config --junit-xml tests/docker/test_docker_ce_$SOURCE_DISTRO-junit.xml tests/docker/test_docker_ce.py',
-                                        label: 'Run the distro specific tests'
+                                    script {
+                                        def targetDistro = targetDistroSpec(TARGET_DISTRO)
+
+                                        sh script: """
+                                        . .venv/bin/activate \
+                                        && py.test -v --hosts=${targetDistro.vmName} \
+                                        --ssh-config=.vagrant/ssh-config \
+                                        --junit-xml ci/tests/tests/docker/test_docker_ce_${targetDistro.vmName}_junit.xml \
+                                        ci/tests/tests/docker/test_docker_ce.py
+                                        """,
+                                            label: 'Run the docker specific tests'
+                                    }
                                 }
                             }
                         }
@@ -145,47 +170,54 @@ pipeline {
     }
     post {
         success {
-            junit testResults: '**/tests/**/**-junit.xml',
+            junit testResults: 'ci/tests/tests/**/**_junit.xml',
                 skipPublishingChecks: true
         }
         cleanup {
-            sh script: 'vagrant destroy -f',
-                label: 'Destroy All Machines'
+            sh script: 'vagrant destroy -f --no-parallel -g',
+                label: 'Destroy VMs'
             cleanWs()
         }
     }
 }
 
-/*
-* Common Functions
-*/
-def getLeappDataDistro(TARGET_DISTRO) {
-    def leapp_data = ""
+def targetDistroSpec(distro) {
+    def spec = [:]
 
-    switch(TARGET_DISTRO) {
-        case "almalinux-9":
-            leapp_data = TARGET_DISTRO.substring(0, 9)
+    switch (distro) {
+        case 'almalinux-9':
+            vm = 'almalinux_9'
+            ldata = 'leapp-data-almalinux'
+
+            spec = [
+                vmName: vm,
+                leappData: ldata
+            ]
             break
+        case 'eurolinux-9':
+            vm = 'eurolinux_9'
+            ldata = 'leapp-data-eurolinux'
 
-        case "centos-stream-9":
-            leapp_data = TARGET_DISTRO.substring(0, 6)
+            spec = [
+                vmName: vm,
+                leappData: ldata
+            ]
             break
+        case 'rocky-9':
+            vm = 'rocky_9'
+            ldata = 'leapp-data-rocky'
 
-        case "eurolinux-9":
-            leapp_data = TARGET_DISTRO.substring(0, 9)
+            spec = [
+                vmName: vm,
+                leappData: ldata
+            ]
             break
-
-        case "oraclelinux-9":
-            leapp_data = TARGET_DISTRO.substring(0, 11)
-            break
-
-        case "rocky-9":
-            leapp_data = TARGET_DISTRO.substring(0, 5)
-            break
-
         default:
-            leap_data = "Error: Target Distro Not Supported"
+            spec = [
+                vmName: 'unknown',
+                leappData: 'unknown'
+            ]
             break
     }
-    return leapp_data
+    return spec
 }

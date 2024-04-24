@@ -10,8 +10,7 @@ pipeline {
         parallelsAlwaysFailFast()
     }
     parameters {
-        // choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'centos-stream-9', 'eurolinux-9', 'rocky-9', 'all'], description: 'Select a target distro or all for ELevation')
-        choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'rocky-9', 'all'], description: 'Select a target distro or all for ELevation')
+        choice(name: 'TARGET_DISTRO_FILTER', choices: ['almalinux-9', 'eurolinux-9', 'rocky-9', 'all'], description: 'Select a target distro or all for ELevation')
         choice(name: 'CONF_FILTER', choices: ['minimal', 'docker-ce'], description: 'Select a configuration')
         string(name: 'RETRY', defaultValue: '3', description: 'Input count of retry', trim: true)
         string(name: 'TIMEOUT', defaultValue: '60', description: 'Input timeout value in minutes', trim: true)
@@ -41,6 +40,8 @@ pipeline {
                 script {
                     def targetDistro = targetDistroSpec(TARGET_DISTRO_FILTER)
 
+                    sh script: 'bash ci/scripts/refresh_vagrant_boxes.sh',
+                        label: 'Refresh and cleanup vagrant boxes'
                     sh script: 'cp ci/vagrant/el7toel8toel9_single.rb Vagrantfile',
                         label: 'Generate Vagrantfile'
                     sh script: "vagrant up $targetDistro.vmName",
@@ -56,6 +57,8 @@ pipeline {
                 CONFIG = "${CONF_FILTER}"
             }
             steps {
+                    sh script: 'bash ci/scripts/refresh_vagrant_boxes.sh',
+                        label: 'Refresh and cleanup vagrant boxes'
                     sh script: 'cp ci/vagrant/el8toel9_multi.rb Vagrantfile',
                         label: 'Generate Vagrantfile'
                     sh script: 'vagrant up',
@@ -73,8 +76,7 @@ pipeline {
                 axes {
                     axis {
                         name 'TARGET_DISTRO'
-                        // values 'almalinux-9', 'centos-stream-9', 'eurolinux-9', 'rocky-9'
-                        values 'almalinux-9', 'rocky-9'
+                        values 'almalinux-9', 'eurolinux-9', 'rocky-9'
                     }
                 }
                 stages {
