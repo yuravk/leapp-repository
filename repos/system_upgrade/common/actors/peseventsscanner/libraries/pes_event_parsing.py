@@ -58,6 +58,7 @@ class Action(IntEnum):
     MERGED = 5
     MOVED = 6
     RENAMED = 7
+    REINSTALLED = 8
 
 
 def get_pes_events(pes_json_directory, pes_json_filename):
@@ -69,6 +70,7 @@ def get_pes_events(pes_json_directory, pes_json_filename):
     try:
         events_data = fetch.load_data_asset(api.current_actor(),
                                             pes_json_filename,
+                                            asset_directory=pes_json_directory,
                                             asset_fulltext_name='PES events file',
                                             docs_url='',
                                             docs_title='')
