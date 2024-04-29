@@ -87,8 +87,10 @@ pipeline {
                                     script {
                                         def targetDistro = targetDistroSpec(TARGET_DISTRO)
 
-                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum-config-manager --add-repo https://repo.almalinux.org/elevate/testing/elevate-testing.repo\"",
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y https://repo.almalinux.org/elevate/elevate-release-latest-el7.noarch.rpm\"",
                                             label: 'Install the elevate-release-latest rpm packages for EL7'
+                                        sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum-config-manager --add-repo https://repo.almalinux.org/elevate/testing/elevate-testing.repo\"",
+                                            label: 'Install the elevate-testing repository'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y leapp-upgrade\"",
                                             label: 'Install the leap rpm package'
                                         sh script: "vagrant ssh $targetDistro.vmName -c \"sudo yum install -y $targetDistro.leappData\"",
