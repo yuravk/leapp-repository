@@ -1,6 +1,7 @@
 
 from leapp.libraries.actor import setuptargetrepos_repomap
 from leapp.libraries.common.config.version import get_source_major_version
+from leapp.libraries.common.repomaputils import combine_repomap_messages
 from leapp.libraries.stdlib import api
 from leapp.models import (
     CustomTargetRepository,
@@ -13,7 +14,8 @@ from leapp.models import (
     RHUIInfo,
     SkippedRepositories,
     TargetRepositories,
-    UsedRepositories
+    UsedRepositories,
+    VendorCustomTargetRepositoryList
 )
 
 
@@ -75,16 +77,65 @@ def _get_mapped_repoids(repomap, src_repoids):
     return mapped_repoids
 
 
+def _get_vendor_custom_repos(enabled_repos, mapping_list):
+    # Look at what source repos from the vendor mapping were enabled.
+    # If any of them are in beta, include vendor's custom repos in the list.
+    # Otherwise skip them.
+
+    result = []
+
+    # Build a dict of vendor mappings for easy lookup.
+    map_dict = {mapping.vendor: mapping for mapping in mapping_list if mapping.vendor}
+
+    for vendor_repolist in api.consume(VendorCustomTargetRepositoryList):
+        vendor_repomap = map_dict[vendor_repolist.vendor]
+
+        # Find the beta channel repositories for the vendor.
+        beta_repos = [
+            x.repoid for x in vendor_repomap.repositories if x.channel == "beta"
+        ]
+        api.current_logger().debug(
+            "Vendor {} beta repos: {}".format(vendor_repolist.vendor, beta_repos)
+        )
+
+        # Are any of the beta repos present and enabled on the system?
+        if any(rep in beta_repos for rep in enabled_repos):
+            # If so, use all repos including beta in the upgrade.
+            vendor_repos = vendor_repolist.repos
+        else:
+            # Otherwise filter beta repos out.
+            vendor_repos = [repo for repo in vendor_repolist.repos if repo.repoid not in beta_repos]
+
+        result.extend([CustomTargetRepository(
+            repoid=repo.repoid,
+            name=repo.name,
+            baseurl=repo.baseurl,
+            enabled=repo.enabled,
+        ) for repo in vendor_repos])
+
+    return result
+
+
 def process():
     # Load relevant data from messages
     used_repoids_dict = _get_used_repo_dict()
     enabled_repoids = _get_enabled_repoids()
     excluded_repoids = _get_blacklisted_repoids()
+
+    # Remember that we can't just grab one message, each vendor can have its own mapping.
+    repo_mapping_list = list(api.consume(RepositoriesMapping))
+
     custom_repos = _get_custom_target_repos()
     repoids_from_installed_packages = _get_repoids_from_installed_packages()
+    vendor_repos = _get_vendor_custom_repos(enabled_repoids, repo_mapping_list)
+    custom_repos.extend(vendor_repos)
+
+    api.current_logger().debug(
+        "Vendor repolist: {}".format([repo.repoid for repo in vendor_repos])
+    )
 
     # Setup repomap handler
-    repo_mappig_msg = next(api.consume(RepositoriesMapping), RepositoriesMapping())
+    repo_mappig_msg = combine_repomap_messages(repo_mapping_list)
     rhui_info = next(api.consume(RHUIInfo), RHUIInfo(provider=''))
     repomap = setuptargetrepos_repomap.RepoMapDataHandler(repo_mappig_msg, cloud_provider=rhui_info.provider)
 
@@ -139,6 +190,10 @@ def process():
     rhel_repos = [RHELTargetRepository(repoid=repoid) for repoid in sorted(target_rhel_repoids)]
     custom_repos = [repo for repo in custom_repos if repo.repoid not in excluded_repoids]
     custom_repos = sorted(custom_repos, key=lambda x: x.repoid)
+
+    api.current_logger().debug(
+        "Final repolist: {}".format([repo.repoid for repo in custom_repos])
+    )
 
     # produce message about skipped repositories
     enabled_repoids_with_mapping = _get_mapped_repoids(repomap, enabled_repoids)
