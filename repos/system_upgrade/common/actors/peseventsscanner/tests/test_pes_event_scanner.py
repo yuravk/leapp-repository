@@ -17,8 +17,8 @@ from leapp.libraries.actor.pes_events_scanner import (
 )
 from leapp.libraries.common.testutils import create_report_mocked, CurrentActorMocked, produce_mocked
 from leapp.models import (
+    DistributionSignedRPM,
     EnabledModules,
-    InstalledRedHatSignedRPM,
     PESIDRepositoryEntry,
     PESRpmTransactionTasks,
     RepoMapEntry,
@@ -229,7 +229,7 @@ def test_actor_performs(monkeypatch):
 
     _RPM = partial(RPM, epoch='', packager='', version='', release='', arch='', pgpsig='')
 
-    installed_pkgs = InstalledRedHatSignedRPM(items=[
+    installed_pkgs = DistributionSignedRPM(items=[
         _RPM(name='split-in'), _RPM(name='moved-in'), _RPM(name='removed')
     ])
 
@@ -402,3 +402,67 @@ def test_pkgs_are_demodularized_when_crossing_major_version(monkeypatch):
     }
     assert demodularized_pkgs == {Package('demodularized', 'repo', ('module-demodularized', 'stream'))}
     assert target_pkgs == expected_target_pkgs
+
+
+def test_remove_leapp_related_events(monkeypatch):
+    # NOTE(ivasilev) That's required to use leapp library functions that rely on calls to
+    # get_source/target_system_version functions
+    monkeypatch.setattr(api, 'current_actor', CurrentActorMocked(arch='x86_64', src_ver='7.9', dst_ver='8.8'))
+    # these are just hypothetical and not necessarily correct
+    package_set_two_leapp = {Package('leapp-upgrade-el7toel8', 'repoid-rhel7', None),
+                             Package('leapp-upgrade-el7toel8-deps', 'repoid-rhel7', None)}
+    package_set_one_leapp = {Package('leapp-upgrade-el7toel8', 'repoid-rhel7', None),
+                             Package('other', 'repoid-rhel7', None)}
+    in_events = [
+        Event(1, Action.PRESENT, {Package('leapp', 'repoid-rhel7', None)},
+              {Package('leapp', 'repoid-rhel8', None)}, (7, 0), (8, 0), []),
+
+        Event(1, Action.RENAMED, {Package('leapp-deps', 'repoid-rhel7', None)},
+              {Package('leapp-deps', 'repoid-rhel8', None)}, (7, 0), (8, 0), []),
+        Event(1, Action.RENAMED, {Package('leapp-upgrade-el7toel8', 'repoid-rhel7', None)},
+              {Package('leapp-upgrade-el8toel9', 'repoid-rhel8', None)}, (7, 0), (8, 0), []),
+        Event(2, Action.RENAMED, {Package('leapp-upgrade-el7toel8-deps', 'repoid-rhel7', None)},
+              {Package('leapp-upgrade-el8toel9-deps', 'repoid-rhel8', None)}, (7, 0), (8, 0), []),
+        Event(2, Action.PRESENT, {Package('snactor', 'repoid-rhel7', None)},
+              {Package('snactor', 'repoid-rhel8', None)}, (7, 0), (8, 0), []),
+        Event(2, Action.REPLACED, {Package('python2-leapp', 'repoid-rhel7', None)},
+              {Package('python3-leapp', 'repoid-rhel8', None)},
+              (7, 0), (8, 0), []),
+
+        Event(1, Action.DEPRECATED, {Package('leapp-upgrade-el8toel9', 'repoid-rhel8', None)},
+              {Package('leapp-upgrade-el8toel9', 'repoid-rhel9', None)}, (8, 0), (9, 0), []),
+        Event(2, Action.REMOVED, {Package('leapp-upgrade-el8toel9-deps', 'repoid-rhel8', None)},
+              {}, (8, 0), (9, 0), []),
+        Event(1, Action.RENAMED, {Package('leapp-deps', 'repoid-rhel8', None)},
+              {Package('leapp-deps', 'repoid-rhel9', None)}, (8, 0), (9, 0), []),
+        Event(2, Action.PRESENT, {Package('snactor', 'repoid-rhel8', None)},
+              {Package('snactor', 'repoid-rhel9', None)}, (8, 0), (9, 0), []),
+        Event(2, Action.REMOVED, {Package('python3-leapp', 'repoid-rhel8', None)},
+              {Package('snactor', 'repoid-rhel9', None)}, (8, 0), (9, 0), []),
+
+        Event(2, Action.PRESENT, {Package('other-pkg', 'repoid-rhel8', None)},
+              {Package('other-pkg', 'repoid-rhel9', None)}, (7, 0), (8, 0), []),
+        Event(2, Action.PRESENT, {Package('other-pkg-with-leapp-in-the-name', 'repoid-rhel7', None)},
+              {Package('other-pkg-with-leapp-in-the-name', 'repoid-rhel8', None)}, (7, 0), (8, 0), []),
+
+        # multiple leapp packages in in_pkgs
+        Event(1, Action.MERGED, package_set_two_leapp, {Package('leapp-upgrade-el7toel8', 'repoid-rhel8', None)},
+              (7, 0), (8, 0), []),
+
+        # multiple leapp packages in out_pkgs
+        Event(1, Action.SPLIT, {Package('leapp-upgrade-el7toel8', 'repoid-rhel7', None)},
+              package_set_two_leapp, (7, 0), (8, 0), []),
+
+        # leapp and other pkg in in_pkgs
+        Event(1, Action.MERGED, package_set_one_leapp, {Package('leapp', 'repoid-rhel8', None)},
+              (7, 0), (8, 0), []),
+    ]
+    expected_out_events = [
+        Event(2, Action.PRESENT, {Package('other-pkg', 'repoid-rhel8', None)},
+              {Package('other-pkg', 'repoid-rhel9', None)}, (7, 0), (8, 0), []),
+        Event(2, Action.PRESENT, {Package('other-pkg-with-leapp-in-the-name', 'repoid-rhel7', None)},
+              {Package('other-pkg-with-leapp-in-the-name', 'repoid-rhel8', None)}, (7, 0), (8, 0), []),
+    ]
+
+    out_events = pes_events_scanner.remove_leapp_related_events(in_events)
+    assert out_events == expected_out_events

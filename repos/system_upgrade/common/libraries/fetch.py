@@ -7,7 +7,7 @@ import requests
 from leapp import models
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.common.config import get_consumed_data_stream_id, get_env
-from leapp.libraries.common.config.version import get_source_major_version, get_target_major_version
+from leapp.libraries.common.rpms import get_leapp_packages, LeappComponents
 from leapp.libraries.stdlib import api
 
 SERVICE_HOST_DEFAULT = "https://cert.cloud.redhat.com"
@@ -16,15 +16,18 @@ MAX_ATTEMPTS = 3
 ASSET_PROVIDED_DATA_STREAMS_FIELD = 'provided_data_streams'
 
 
-def _get_hint():
-    rpmname = 'leapp-upgrade-el{}toel{}'.format(get_source_major_version(), get_target_major_version())
+def _get_hint(local_path):
     hint = (
-        'All official data files are nowadays part of the installed rpms.'
+        'All official data files are part of the installed rpms these days.'
+        ' The rpm is the only official source of the official data files for in-place upgrades.'
         ' This issue is usually encountered when the data files are incorrectly customized, replaced, or removed'
         ' (e.g. by custom scripts).'
-        ' In case you want to recover the original file, remove it (if still exists)'
-        ' and reinstall the {} rpm.'
-        .format(rpmname)
+        ' In case you want to recover the original {lp} file, remove the current one (if it still exists)'
+        ' and reinstall the following packages: {rpms}.'
+        .format(
+            lp=local_path,
+            rpms=', '.join(get_leapp_packages(component=LeappComponents.REPOSITORY))
+        )
     )
     return hint
 
@@ -34,7 +37,8 @@ def _raise_error(local_path, details):
     If the file acquisition fails in any way, throw an informative error to stop the actor.
     """
     summary = 'Data file {lp} is missing or invalid.'.format(lp=local_path)
-    raise StopActorExecutionError(summary, details={'details': details, 'hint': _get_hint()})
+
+    raise StopActorExecutionError(summary, details={'details': details, 'hint': _get_hint(local_path)})
 
 
 def _request_data(service_path, cert, proxies, timeout=REQUEST_TIMEOUT):
@@ -146,6 +150,7 @@ def load_data_asset(actor_requesting_asset,
                     asset_directory="/etc/leapp/files"):
     """
     Load the content of the data asset with given asset_filename
+    and produce :class:`leapp.model.ConsumedDataAsset` message.
 
     :param Actor actor_requesting_asset: The actor instance requesting the asset file. It is necessary for the actor
                                          to be able to produce ConsumedDataAsset message in order for leapp to be able
@@ -155,6 +160,10 @@ def load_data_asset(actor_requesting_asset,
     :param str docs_url: Docs url to provide if an asset is malformed or outdated.
     :param str docs_title: Title of the documentation to where `docs_url` points to.
     :returns: A dict with asset contents (a parsed JSON), or None if the asset was outdated.
+    :raises StopActorExecutionError: In following cases:
+        * ConsumedDataAsset is not specified in the produces tuple of the actor_requesting_asset actor
+        * The content of the required data file is not valid JSON format
+        * The required data cannot be obtained (e.g. due to missing file)
     """
 
     # Check that the actor that is attempting to obtain the asset meets the contract to call this function
@@ -165,7 +174,7 @@ def load_data_asset(actor_requesting_asset,
         error_hint = {'hint': ('Read documentation at the following link for more information about how to retrieve '
                                'the valid file: {0}'.format(docs_url))}
     else:
-        error_hint = {'hint': _get_hint()}
+        error_hint = {'hint': _get_hint(os.path.join('/etc/leapp/files', asset_filename))}
 
     data_stream_id = get_consumed_data_stream_id()
     data_stream_major = data_stream_id.split('.', 1)[0]
@@ -175,7 +184,7 @@ def load_data_asset(actor_requesting_asset,
 
     try:
         # The asset family ID has the form (major, minor), include only `major` in the URL
-        raw_asset_contents = read_or_fetch(asset_filename, directory=asset_directory, data_stream=data_stream_major)
+        raw_asset_contents = read_or_fetch(asset_filename, directory=asset_directory, data_stream=data_stream_major, allow_download=False)
         asset_contents = json.loads(raw_asset_contents)
     except ValueError:
         msg = 'The {0} file (at {1}) does not contain a valid JSON object.'.format(asset_fulltext_name, asset_filename)

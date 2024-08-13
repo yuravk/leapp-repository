@@ -9,6 +9,7 @@ from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.common import dnfconfig, guards, mounting, overlaygen, rhsm, utils
 from leapp.libraries.common.config import get_env
 from leapp.libraries.common.config.version import get_target_major_version, get_target_version
+from leapp.libraries.common.gpg import is_nogpgcheck_set
 from leapp.libraries.stdlib import api, CalledProcessError, config
 from leapp.models import DNFWorkaround
 
@@ -77,10 +78,6 @@ def _rebuild_rpm_db(context, root=None):
     context.call(cmd)
 
 
-def _the_nogpgcheck_option_used():
-    return get_env('LEAPP_NOGPGCHECK', '0') == '1'
-
-
 def build_plugin_data(target_repoids, debug, test, tasks, on_aws):
     """
     Generates a dictionary with the DNF plugin data.
@@ -101,7 +98,7 @@ def build_plugin_data(target_repoids, debug, test, tasks, on_aws):
             'debugsolver': debug,
             'disable_repos': True,
             'enable_repos': target_repoids,
-            'gpgcheck': not _the_nogpgcheck_option_used(),
+            'gpgcheck': not is_nogpgcheck_set(),
             'platform_id': 'platform:el{}'.format(get_target_major_version()),
             'releasever': get_target_version(),
             'installroot': '/installroot',
@@ -179,8 +176,30 @@ def _handle_transaction_err_msg(stage, xfs_info, err, is_container=False):
         return  # not needed actually as the above function raises error, but for visibility
     NO_SPACE_STR = 'more space needed on the'
     message = 'DNF execution failed with non zero exit code.'
-    details = {'STDOUT': err.stdout, 'STDERR': err.stderr}
     if NO_SPACE_STR not in err.stderr:
+        # if there was a problem reaching repos and proxy is configured in DNF/YUM configs, the
+        # proxy is likely the problem.
+        # NOTE(mmatuska): We can't consistently detect there was a problem reaching some repos,
+        # because it isn't clear what are all the possible DNF error messages we can encounter,
+        # such as: "Failed to synchronize cache for repo ..." or "Errors during downloading
+        # metadata for # repository" or "No more mirrors to try - All mirrors were already tried
+        # without success"
+        # NOTE(mmatuska): We could check PkgManagerInfo to detect if proxy is indeed configured,
+        # however it would be pretty ugly to pass it all the way down here
+        proxy_hint = (
+            "If there was a problem reaching remote content (see stderr output) and proxy is "
+            "configured in the YUM/DNF configuration file, the proxy configuration is likely "
+            "causing this error. "
+            "Make sure the proxy is properly configured in /etc/dnf/dnf.conf. "
+            "It's also possible the proxy settings in the DNF configuration file are "
+            "incompatible with the target system. A compatible configuration can be "
+            "placed in /etc/leapp/files/dnf.conf which, if present, it will be used during "
+            "some parts of the upgrade instead of original /etc/dnf/dnf.conf. "
+            "In such case the configuration will also be applied to the target system. "
+            "Note that /etc/dnf/dnf.conf needs to be still configured correctly "
+            "for your current system to pass the early phases of the upgrade process."
+        )
+        details = {'STDOUT': err.stdout, 'STDERR': err.stderr, 'hint': proxy_hint}
         raise StopActorExecutionError(message=message, details=details)
 
     # Disk Requirements:
@@ -335,8 +354,9 @@ def install_initramdisk_requirements(packages, target_userspace_info, used_repos
     """
     Performs the installation of packages into the initram disk
     """
-    with _prepare_transaction(used_repos=used_repos,
-                              target_userspace_info=target_userspace_info) as (context, target_repoids, _unused):
+    mount_binds = ['/:/installroot']
+    with _prepare_transaction(used_repos=used_repos, target_userspace_info=target_userspace_info,
+                              binds=mount_binds) as (context, target_repoids, _unused):
         if get_target_major_version() == '9':
             _rebuild_rpm_db(context)
         repos_opt = [['--enablerepo', repo] for repo in target_repoids]
@@ -345,7 +365,7 @@ def install_initramdisk_requirements(packages, target_userspace_info, used_repos
             'dnf',
             'install',
             '-y']
-        if _the_nogpgcheck_option_used():
+        if is_nogpgcheck_set():
             cmd.append('--nogpgcheck')
         cmd += [
             '--setopt=module_platform_id=platform:el{}'.format(get_target_major_version()),

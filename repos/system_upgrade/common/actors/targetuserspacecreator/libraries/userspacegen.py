@@ -6,9 +6,10 @@ import shutil
 from leapp import reporting
 from leapp.exceptions import StopActorExecution, StopActorExecutionError
 from leapp.libraries.actor import constants
-from leapp.libraries.common import dnfplugin, mounting, overlaygen, repofileutils, rhsm, rhui, utils
+from leapp.libraries.common import dnfplugin, mounting, overlaygen, repofileutils, rhsm, utils
 from leapp.libraries.common.config import get_env, get_product_type
 from leapp.libraries.common.config.version import get_target_major_version
+from leapp.libraries.common.gpg import get_path_to_gpg_certs, is_nogpgcheck_set
 from leapp.libraries.stdlib import api, CalledProcessError, config, run
 from leapp.models import RequiredTargetUserspacePackages  # deprecated
 from leapp.models import TMPTargetRepositoriesFacts  # deprecated all the time
@@ -54,7 +55,6 @@ from leapp.utils.deprecation import suppress_deprecation
 # Issue: #486
 
 PROD_CERTS_FOLDER = 'prod-certs'
-GPG_CERTS_FOLDER = 'rpm-gpg'
 PERSISTENT_PACKAGE_CACHE_DIR = '/var/lib/leapp/persistent_package_cache'
 DEDICATED_LEAPP_PART_URL = 'https://access.redhat.com/solutions/7011704'
 
@@ -71,6 +71,10 @@ def _check_deprecated_rhsm_skip():
             ' leapp. as well custom repofile has not been defined.'
             ' Please read documentation about new "skip rhsm" solution.'
         )
+
+
+class BrokenSymlinkError(Exception):
+    """Raised when we encounter a broken symlink where we weren't expecting it."""
 
 
 class _InputData(object):
@@ -143,27 +147,15 @@ def _backup_to_persistent_package_cache(userspace_dir):
             shutil.move(src_cache, PERSISTENT_PACKAGE_CACHE_DIR)
 
 
-def _the_nogpgcheck_option_used():
-    return get_env('LEAPP_NOGPGCHECK', False) == '1'
-
-
-def _get_path_to_gpg_certs(target_major_version):
-    target_product_type = get_product_type('target')
-    certs_dir = target_major_version
-    # only beta is special in regards to the GPG signing keys
-    if target_product_type == 'beta':
-        certs_dir = '{}beta'.format(target_major_version)
-    return os.path.join(api.get_common_folder_path(GPG_CERTS_FOLDER), certs_dir)
-
-
 def _import_gpg_keys(context, install_root_dir, target_major_version):
-    certs_path = _get_path_to_gpg_certs(target_major_version)
+    certs_path = get_path_to_gpg_certs()
     # Import the RHEL X+1 GPG key to be able to verify the installation of initial packages
     try:
         # Import also any other keys provided by the customer in the same directory
-        for certname in os.listdir(certs_path):
-            cmd = ['rpm', '--root', install_root_dir, '--import', os.path.join(certs_path, certname)]
-            context.call(cmd, callback_raw=utils.logging_handler)
+        for trusted_dir in certs_path:
+            for certname in os.listdir(trusted_dir):
+                cmd = ['rpm', '--root', install_root_dir, '--import', os.path.join(trusted_dir, certname)]
+                context.call(cmd, callback_raw=utils.logging_handler)
     except CalledProcessError as exc:
         raise StopActorExecutionError(
             message=(
@@ -234,13 +226,13 @@ def prepare_target_userspace(context, userspace_dir, enabled_repos, packages):
     install_root_dir = '/el{}target'.format(target_major_version)
     with mounting.BindMount(source=userspace_dir, target=os.path.join(context.base_dir, install_root_dir.lstrip('/'))):
         _restore_persistent_package_cache(userspace_dir)
-        if not _the_nogpgcheck_option_used():
+        if not is_nogpgcheck_set():
             _import_gpg_keys(context, install_root_dir, target_major_version)
 
         repos_opt = [['--enablerepo', repo] for repo in enabled_repos]
         repos_opt = list(itertools.chain(*repos_opt))
         cmd = ['dnf', 'install', '-y']
-        if _the_nogpgcheck_option_used():
+        if is_nogpgcheck_set():
             cmd.append('--nogpgcheck')
         cmd += [
             '--setopt=module_platform_id=platform:el{}'.format(target_major_version),
@@ -269,38 +261,34 @@ def prepare_target_userspace(context, userspace_dir, enabled_repos, packages):
             # failed since leapp does not support updates behind proxy yet.
             for manager_info in api.consume(PkgManagerInfo):
                 if manager_info.configured_proxies:
-                    details['details'] = ("DNF failed to install userspace packages, likely due to the proxy "
-                                          "configuration detected in the YUM/DNF configuration file.")
+                    details['details'] = (
+                        "DNF failed to install userspace packages, likely due to the proxy "
+                        "configuration detected in the YUM/DNF configuration file. "
+                        "Make sure the proxy is properly configured in /etc/dnf/dnf.conf. "
+                        "It's also possible the proxy settings in the DNF configuration file are "
+                        "incompatible with the target system. A compatible configuration can be "
+                        "placed in /etc/leapp/files/dnf.conf which, if present, will be used during "
+                        "the upgrade instead of /etc/dnf/dnf.conf. "
+                        "In such case the configuration will also be applied to the target system."
+                    )
 
             # Similarly if a proxy was set specifically for one of the repositories.
             for repo_facts in api.consume(RepositoriesFacts):
                 for repo_file in repo_facts.repositories:
                     if any(repo_data.proxy and repo_data.enabled for repo_data in repo_file.data):
-                        details['details'] = ("DNF failed to install userspace packages, likely due to the proxy "
-                                              "configuration detected in a repository configuration file.")
+                        details['details'] = (
+                            "DNF failed to install userspace packages, likely due to the proxy "
+                            "configuration detected in a repository configuration file."
+                        )
 
             raise StopActorExecutionError(message=message, details=details)
 
 
-def _get_all_rhui_pkgs():
-    """
-    Return the list of rhui packages
-
-    Currently, do not care about what rhui we have, release, etc.
-    Just take all packages. We need them just for the purpose of filtering
-    what files we have to remove (see _prep_repository_access) and it's ok
-    for us to use whatever rhui rpms (the relevant rpms catch the problem,
-    the others are just taking bytes in memory...). It's a hot-fix. We are going
-    to refactor the library later completely..
-    """
-    upg_path = rhui.get_upg_path()
-    pkgs = []
-    for rhui_map in rhui.RHUI_CLOUD_MAP[upg_path].values():
-        for key in rhui_map.keys():
-            if not key.endswith('pkg'):
-                continue
-            pkgs.append(rhui_map[key])
-    return pkgs
+def _query_rpm_for_pkg_files(context, pkgs):
+    files_owned_by_rpm = set()
+    rpm_query_result = context.call(['rpm', '-ql'] + pkgs, split=True)
+    files_owned_by_rpm.update(rpm_query_result['stdout'])
+    return files_owned_by_rpm
 
 
 def _get_files_owned_by_rpms(context, dirpath, pkgs=None, recursive=False):
@@ -345,12 +333,223 @@ def _get_files_owned_by_rpms(context, dirpath, pkgs=None, recursive=False):
     return files_owned_by_rpms
 
 
+def _mkdir_with_copied_mode(path, mode_from):
+    """
+    Create directories with a file to copy the mode from.
+
+    :param path: The directory path to create.
+    :param mode_from: A file or directory whose mode we will copy to the
+        newly created directory.
+    :raises subprocess.CalledProcessError: mkdir or chmod fails. For instance,
+        the directory already exists, the file to get permissions from does
+        not exist, a parent directory does not exist.
+    """
+    # Create with maximally restrictive permissions
+    run(['mkdir', '-m', '0', '-p', path])
+    run(['chmod', '--reference={}'.format(mode_from), path])
+
+
+def _choose_copy_or_link(symlink, srcdir):
+    """
+    Determine whether to copy file contents or create a symlink depending on where the pointee resides.
+
+    :param symlink: The source symlink to follow.  This must be an absolute path.
+    :param srcdir: The root directory that every piece of content must be present in.
+    :returns: A tuple of action and sourcefile.  Action is one of 'copy' or 'link' and means that
+        the caller should either copy the sourcefile to the target location or create a symlink from
+        the sourcefile to the target location.  sourcefile is the path to the file that should be
+        the source of the operation.  It is either a real file outside of the srcdir hierarchy or
+        a file (real, directory, symlink or otherwise) inside of the srcdir hierarchy.
+    :raises ValueError: if the arguments are not correct
+    :raises BrokenSymlinkError: if the symlink is invalid
+
+    Determine whether the file pointed to by the symlink chain is within srcdir.  If it is within,
+    then create a synlink that points from symlink to it.
+
+    If it is not within, then walk the symlink chain until we find something that is within srcdir
+    and return that. This means we will omit any symlinks that are outside of srcdir from
+    the symlink chain.
+
+    If we reach a real file and it is outside of srcdir, then copy the file instead.
+    """
+    if not symlink.startswith('/'):
+        raise ValueError('File{} must be an absolute path!'.format(symlink))
+
+    # os.path.exists follows symlinks
+    if not os.path.exists(symlink):
+        raise BrokenSymlinkError('File {} is a broken symlink!'.format(symlink))
+
+    # If srcdir is a symlink, then we need a name for it that we can compare
+    # with other paths.
+    canonical_srcdir = os.path.realpath(srcdir)
+
+    pointee_as_abspath = symlink
+    seen = set([pointee_as_abspath])
+
+    # The goal of this while loop is to find the next link in a possible
+    # symlink chain that either points to a symlink inside of srcdir or to
+    # a file or directory that we can copy.
+    while os.path.islink(pointee_as_abspath):
+        # Advance pointee to the target of the previous link
+        pointee = os.readlink(pointee_as_abspath)
+
+        # Note: os.path.join()'s behaviour if the pointee is an absolute path
+        # essentially ignores the first argument (which is what we want).
+        pointee_as_abspath = os.path.normpath(os.path.join(os.path.dirname(pointee_as_abspath), pointee))
+
+        # Make sure we aren't in a circular set of references.
+        # On Linux, this should not happen as the os.path.exists() call
+        # before the loop should catch it but we don't want to enter an
+        # infinite loop if that code changes later.
+        if pointee_as_abspath in seen:
+            if symlink == pointee_as_abspath:
+                error_msg = ('File {} is a broken symlink that references'
+                             ' itself!'.format(pointee_as_abspath))
+            else:
+                error_msg = ('File {} references {} which is a broken symlink'
+                             ' that references itself!'.format(symlink, pointee_as_abspath))
+
+            raise BrokenSymlinkError(error_msg)
+
+        seen.add(pointee_as_abspath)
+
+        # To make comparisons, we need to resolve all symlinks in the directory
+        # structure leading up to pointee.  However, we can't include pointee
+        # itself otherwise it will resolve to the file that it points to in the
+        # end (which would be wrong if pointee_filename is a symlink).
+        canonical_pointee_dir, pointee_filename = os.path.split(pointee_as_abspath)
+        canonical_pointee_dir = os.path.realpath(canonical_pointee_dir)
+
+        if canonical_pointee_dir.startswith(canonical_srcdir):
+            # Absolute path inside of the correct dir so we need to link to it
+            # But we need to determine what the link path should be before
+            # returning.
+
+            # Construct a relative path that points from the symlinks directory
+            # to the pointee.
+            link_to = os.readlink(symlink)
+            canonical_symlink_dir = os.path.realpath(os.path.dirname(symlink))
+            relative_path = os.path.relpath(canonical_pointee_dir, canonical_symlink_dir)
+
+            if link_to.startswith('/'):
+                # The original symlink was an absolute path so we will set this
+                # one to absolute too
+                # Note: Because absolute paths are constructed inside of
+                # srcdir, the relative path that we need to join here has to be
+                # relative to srcdir, not the directory that the symlink is
+                # being created in.
+                relative_to_srcdir = os.path.relpath(canonical_pointee_dir, canonical_srcdir)
+                corrected_path = os.path.normpath(os.path.join(srcdir, relative_to_srcdir, pointee_filename))
+
+            else:
+                # If the original link is a relative link, then we want the new
+                # link to be relative as well
+                corrected_path = os.path.normpath(os.path.join(relative_path, pointee_filename))
+
+            return ("link", corrected_path)
+
+        # pointee is a symlink that points outside of the srcdir so continue to
+        # the next symlink in the chain.
+
+    # The file is not a link so copy it
+    return ('copy', pointee_as_abspath)
+
+
+def _copy_symlinks(symlinks_to_process, srcdir):
+    """
+    Copy file contents or create a symlink depending on where the pointee resides.
+
+    :param symlinks_to_process: List of 2-tuples of (src_path, target_path).  Each src_path
+        should be an absolute path to the symlink.  target_path is the path to where we
+        need to create either a link or a copy.
+    :param srcdir: The root directory that every piece of content must be present in.
+    :raises ValueError: if the arguments are not correct
+    """
+    for source_linkpath, target_linkpath in symlinks_to_process:
+        try:
+            action, source_path = _choose_copy_or_link(source_linkpath, srcdir)
+        except BrokenSymlinkError as e:
+            # Skip and report broken symlinks
+            api.current_logger().warning('{} Will not copy the file!'.format(str(e)))
+            continue
+
+        if action == "copy":
+            # Note: source_path could be a directory, so '-a' or '-r' must be
+            # given to cp.
+            run(['cp', '-a', source_path, target_linkpath])
+        elif action == 'link':
+            run(["ln", "-s", source_path, target_linkpath])
+        else:
+            # This will not happen unless _copy_or_link() has a bug.
+            raise RuntimeError("Programming error: _copy_or_link() returned an unknown action:{}".format(action))
+
+
+def _copy_decouple(srcdir, dstdir):
+    """
+    Copy files inside of `srcdir` to `dstdir` while decoupling symlinks.
+
+    What we mean by decoupling the `srcdir` is that any symlinks pointing
+    outside the directory will be copied as regular files. This means that the
+    directory will become independent from its surroundings with respect to
+    symlinks. Any symlink (or symlink chains) within the directory will be
+    preserved.
+
+    .. warning::
+        `dstdir` must already exist.
+    """
+    for root, directories, files in os.walk(srcdir):
+        # relative path from srcdir because srcdir is replaced with dstdir for
+        # the copy.
+        relpath = os.path.relpath(root, srcdir)
+
+        # Create all directories with proper permissions for security
+        # reasons (Putting private data into directories that haven't had their
+        # permissions set appropriately may leak the private information.)
+        symlinks_to_process = []
+        for directory in directories:
+            source_dirpath = os.path.join(root, directory)
+            target_dirpath = os.path.join(dstdir, relpath, directory)
+
+            # Defer symlinks until later because we may end up having to copy
+            # the file contents and the directory may not exist yet.
+            if os.path.islink(source_dirpath):
+                symlinks_to_process.append((source_dirpath, target_dirpath))
+                continue
+
+            _mkdir_with_copied_mode(target_dirpath, source_dirpath)
+
+        # Link or create all directories that were pointed to by symlinks and
+        # then reset symlinks_to_process for use by files.
+        _copy_symlinks(symlinks_to_process, srcdir)
+        symlinks_to_process = []
+
+        for filename in files:
+            source_filepath = os.path.join(root, filename)
+            target_filepath = os.path.join(dstdir, relpath, filename)
+
+            # Defer symlinks until later because we may end up having to copy
+            # the file contents and the directory may not exist yet.
+            if os.path.islink(source_filepath):
+                symlinks_to_process.append((source_filepath, target_filepath))
+                continue
+
+            # Not a symlink so we can copy it now too
+            run(['cp', '-a', source_filepath, target_filepath])
+
+        _copy_symlinks(symlinks_to_process, srcdir)
+
+
 def _copy_certificates(context, target_userspace):
     """
-    Copy the needed cetificates into the container, but preserve original ones
+    Copy certificates from source system into the container, but preserve
+    original ones
 
     Some certificates are already installed in the container and those are
     default certificates for the target OS, so we preserve these.
+
+    We respect the symlink hierarchy of the source system within the /etc/pki
+    folder. Dangling symlinks will be ignored.
+
     """
 
     target_pki = os.path.join(target_userspace, 'etc', 'pki')
@@ -360,36 +559,60 @@ def _copy_certificates(context, target_userspace):
         files_owned_by_rpms = _get_files_owned_by_rpms(target_context, '/etc/pki', recursive=True)
         api.current_logger().debug('Files owned by rpms: {}'.format(' '.join(files_owned_by_rpms)))
 
+    # Backup container /etc/pki
     run(['mv', target_pki, backup_pki])
-    context.copytree_from('/etc/pki', target_pki)
 
+    # _copy_decouple() requires we create the target_pki directory here because we don't know
+    # the mode inside of _copy_decouple().
+    _mkdir_with_copied_mode(target_pki, backup_pki)
+
+    # Copy source /etc/pki to the container
+    _copy_decouple('/etc/pki', target_pki)
+
+    # Assertion: after running _copy_decouple(), no broken symlinks exist in /etc/pki in the container
+    # So any broken symlinks created will be by the installed packages.
+
+    # Recover installed packages as they always get precedence
     for filepath in files_owned_by_rpms:
         src_path = os.path.join(backup_pki, filepath)
         dst_path = os.path.join(target_pki, filepath)
 
         # Resolve and skip any broken symlinks
         is_broken_symlink = False
-        while os.path.islink(src_path):
-            # The symlink points to a path relative to the target userspace so
-            # we need to readjust it
-            next_path = os.path.join(target_userspace, os.readlink(src_path)[1:])
-            if not os.path.exists(next_path):
-                is_broken_symlink = True
+        pointee = None
+        if os.path.islink(src_path):
+            pointee = os.path.join(target_userspace, os.readlink(src_path)[1:])
 
-                # The path original path of the broken symlink in the container
-                report_path = os.path.join(target_pki, os.path.relpath(src_path, backup_pki))
-                api.current_logger().warn('File {} is a broken symlink!'.format(report_path))
-                break
+            seen = set()
+            while os.path.islink(pointee):
+                # The symlink points to a path relative to the target userspace so
+                # we need to readjust it
+                pointee = os.path.join(target_userspace, os.readlink(src_path)[1:])
+                if not os.path.exists(pointee) or pointee in seen:
+                    is_broken_symlink = True
 
-            src_path = next_path
+                    # The path original path of the broken symlink in the container
+                    report_path = os.path.join(target_pki, os.path.relpath(src_path, backup_pki))
+                    api.current_logger().warning(
+                            'File {} is a broken symlink! Will not copy!'.format(report_path))
+                    break
+
+                seen.add(pointee)
 
         if is_broken_symlink:
             continue
 
+        # Cleanup conflicting files
         run(['rm', '-rf', dst_path])
+
+        # Ensure destination exists
         parent_dir = os.path.dirname(dst_path)
         run(['mkdir', '-p', parent_dir])
-        run(['cp', '-a', src_path, dst_path])
+
+        # Copy the new file
+        run(['cp', '-R', '--preserve=all', src_path, dst_path])
+
+    run(['rm', '-rf', backup_pki])
 
 
 def _prep_repository_access(context, target_userspace):
@@ -400,47 +623,40 @@ def _prep_repository_access(context, target_userspace):
     target_yum_repos_d = os.path.join(target_etc, 'yum.repos.d')
     backup_yum_repos_d = os.path.join(target_etc, 'yum.repos.d.backup')
 
+    _copy_certificates(context, target_userspace)
+    # NOTE(dkubek): context.call(['update-ca-trust']) seems to not be working.
+    #               I am not really sure why. The changes to files are not
+    #               being written to disk.
+    run(["chroot", target_userspace, "/bin/bash", "-c", "su - -c update-ca-trust"])
 
     if not rhsm.skip_rhsm():
         _copy_certificates(context, target_userspace)
         run(['rm', '-rf', os.path.join(target_etc, 'rhsm')])
         context.copytree_from('/etc/rhsm', os.path.join(target_etc, 'rhsm'))
-    # NOTE: we cannot just remove the original target yum.repos.d dir
-    # as e.g. in case of RHUI a special RHUI repofiles are installed by a pkg
-    # when the target userspace container is created. Removing these files we loose
-    # RHUI target repositories. So ...->
-    # -> detect such a files...
+
+    # NOTE: We cannot just remove the target yum.repos.d dir and replace it with yum.repos.d from the scratch
+    # #     that we've used to obtain the new DNF stack and install it into the target userspace. Although
+    # #     RHUI clients are being installed in both scratch and target containers, users can request their package
+    # #     to be installed into target userspace that might add some repos to yum.repos.d that are not in scratch.
+
+    # Detect files that are owned by some RPM - these cannot be deleted
     with mounting.NspawnActions(base_dir=target_userspace) as target_context:
         files_owned_by_rpms = _get_files_owned_by_rpms(target_context, '/etc/yum.repos.d')
 
-    # -> backup the orig dir & install the new one
+    # Backup the target yum.repos.d so we can always copy the files installed by some RPM back into yum.repos.d
+    # when we modify it
     run(['mv', target_yum_repos_d, backup_yum_repos_d])
+
+    # Copy the yum.repos.d from scratch - preserve any custom repositories. No need to clean-up old RHUI clients,
+    # we swap them for the new RHUI client in scratch (so the old one is not installed).
     context.copytree_from('/etc/yum.repos.d', target_yum_repos_d)
 
-    # -> find old rhui repo files (we have to remove these as they cause duplicates)
-    rhui_pkgs = _get_all_rhui_pkgs()
-    old_files_owned_by_rhui_rpms = _get_files_owned_by_rpms(context, '/etc/yum.repos.d', rhui_pkgs)
-    for fname in old_files_owned_by_rhui_rpms:
-        api.current_logger().debug('Remove the old repofile: {}'.format(fname))
-        run(['rm', '-f', os.path.join(target_yum_repos_d, fname)])
-    # .. continue: remove our leapp rhui repo file (do not care if we are on rhui or not)
-    for rhui_map in rhui.gen_rhui_files_map().values():
-        for item in rhui_map:
-            if item[1] != rhui.YUM_REPOS_PATH:
-                continue
-            target_leapp_repofile = os.path.join(target_yum_repos_d, item[0])
-            if not os.path.isfile(target_leapp_repofile):
-                continue
-            # we found it!!
-            run(['rm', '-f', target_leapp_repofile])
-            break
-
-    # -> copy expected files back
+    # Copy back files owned by some RPM
     for fname in files_owned_by_rpms:
         api.current_logger().debug('Copy the backed up repo file: {}'.format(fname))
         run(['mv', os.path.join(backup_yum_repos_d, fname), os.path.join(target_yum_repos_d, fname)])
 
-    # -> remove the backed up dir
+    # Cleanup - remove the backed up dir
     run(['rm', '-rf', backup_yum_repos_d])
 
 
@@ -615,8 +831,10 @@ def _get_rhsm_available_repoids(context):
 
             ).format(target_major_version)),
             reporting.ExternalLink(
-                # TODO: How to handle different documentation links for each version?
-                url='https://red.ht/preparing-for-upgrade-to-rhel8',
+                # https://red.ht/preparing-for-upgrade-to-rhel8
+                # https://red.ht/preparing-for-upgrade-to-rhel9
+                # https://red.ht/preparing-for-upgrade-to-rhel10
+                url='https://red.ht/preparing-for-upgrade-to-rhel{}'.format(target_major_version),
                 title='Preparing for the upgrade')
             ])
         raise StopActorExecution()
@@ -637,22 +855,71 @@ def _get_rhui_available_repoids(context, cloud_repo):
     return set(repoids)
 
 
+def get_copy_location_from_copy_in_task(context, copy_task):
+    basename = os.path.basename(copy_task.src)
+    dest_in_container = context.full_path(copy_task.dst)
+    if os.path.isdir(dest_in_container):
+        return os.path.join(copy_task.dst, basename)
+    return copy_task.dst
+
+
 def _get_rh_available_repoids(context, indata):
     """
     RH repositories are provided either by RHSM or are stored in the expected repo file provided by
     RHUI special packages (every cloud provider has itw own rpm).
     """
 
-    upg_path = rhui.get_upg_path()
-
     rh_repoids = _get_rhsm_available_repoids(context)
 
+    # If we are upgrading a RHUI system, check what repositories are provided by the (already installed) target clients
     if indata and indata.rhui_info:
-        cloud_repo = os.path.join(
-            '/etc/yum.repos.d/', rhui.RHUI_CLOUD_MAP[upg_path][indata.rhui_info.provider]['leapp_pkg_repo']
+        files_provided_by_clients = _query_rpm_for_pkg_files(context, indata.rhui_info.target_client_pkg_names)
+
+        def is_repofile(path):
+            return os.path.dirname(path) == '/etc/yum.repos.d' and os.path.basename(path).endswith('.repo')
+
+        def extract_repoid_from_line(line):
+            return line.split(':', 1)[1].strip()
+
+        target_ver = api.current_actor().configuration.version.target
+        setup_tasks = indata.rhui_info.target_client_setup_info.preinstall_tasks.files_to_copy_into_overlay
+
+        yum_repos_d = context.full_path('/etc/yum.repos.d')
+        all_repofiles = {os.path.join(yum_repos_d, path) for path in os.listdir(yum_repos_d) if path.endswith('.repo')}
+        client_repofiles = {context.full_path(path) for path in files_provided_by_clients if is_repofile(path)}
+
+        # Exclude repofiles used to setup the target rhui access as on some platforms the repos provided by
+        # the client are not sufficient to install the client into target userspace (GCP)
+        rhui_setup_repofile_tasks = [task for task in setup_tasks if task.src.endswith('repo')]
+        rhui_setup_repofiles = (
+            get_copy_location_from_copy_in_task(context, copy_task) for copy_task in rhui_setup_repofile_tasks
         )
-        rhui_repoids = _get_rhui_available_repoids(context, cloud_repo)
-        rh_repoids.update(rhui_repoids)
+        rhui_setup_repofiles = {context.full_path(repofile) for repofile in rhui_setup_repofiles}
+
+        foreign_repofiles = all_repofiles - client_repofiles - rhui_setup_repofiles
+
+        # Rename non-client repofiles so they will not be recognized when running dnf repolist
+        for foreign_repofile in foreign_repofiles:
+            os.rename(foreign_repofile, '{0}.back'.format(foreign_repofile))
+
+        try:
+            dnf_cmd = ['dnf', 'repolist', '--releasever', target_ver, '-v']
+            repolist_result = context.call(dnf_cmd)['stdout']
+            repoid_lines = [line for line in repolist_result.split('\n') if line.startswith('Repo-id')]
+            rhui_repoids = {extract_repoid_from_line(line) for line in repoid_lines}
+            rh_repoids.update(rhui_repoids)
+
+        except CalledProcessError as err:
+            details = {'err': err.stderr, 'details': str(err)}
+            raise StopActorExecutionError(
+                message='Failed to retrieve repoids provided by target RHUI clients.',
+                details=details
+            )
+
+        finally:
+            # Revert the renaming of non-client repofiles
+            for foreign_repofile in foreign_repofiles:
+                os.rename('{0}.back'.format(foreign_repofile), foreign_repofile)
 
     return rh_repoids
 
@@ -700,6 +967,7 @@ def gather_target_repositories(context, indata):
                 missing_custom_repoids.append(custom_repo.repoid)
     api.current_logger().debug("Gathered target repositories: {}".format(', '.join(target_repoids)))
     if not target_repoids:
+        target_major_version = get_target_major_version()
         reporting.create_report([
             reporting.Title('There are no enabled target repositories'),
             reporting.Summary(
@@ -721,8 +989,10 @@ def gather_target_repositories(context, indata):
                 ' Finally, verify that the "/etc/leapp/files/repomap.json" file is up-to-date.'
             ).format(version=api.current_actor().configuration.version.target)),
             reporting.ExternalLink(
-                # TODO: How to handle different documentation links for each version?
-                url='https://red.ht/preparing-for-upgrade-to-rhel8',
+                # https://red.ht/preparing-for-upgrade-to-rhel8
+                # https://red.ht/preparing-for-upgrade-to-rhel9
+                # https://red.ht/preparing-for-upgrade-to-rhel10
+                url='https://red.ht/preparing-for-upgrade-to-rhel{}'.format(target_major_version),
                 title='Preparing for the upgrade'),
             reporting.RelatedResource("file", "/etc/leapp/files/repomap.json"),
             reporting.RelatedResource("file", "/etc/yum.repos.d/")
@@ -742,7 +1012,7 @@ def gather_target_repositories(context, indata):
             reporting.Groups([reporting.Groups.INHIBITOR]),
             reporting.Severity(reporting.Severity.HIGH),
             reporting.ExternalLink(
-                # TODO: How to handle different documentation links for each version?
+                # NOTE: Article covers both RHEL 7 to RHEL 8 and RHEL 8 to RHEL 9
                 url='https://access.redhat.com/articles/4977891',
                 title='Customizing your Red Hat Enterprise Linux in-place upgrade'),
             reporting.Remediation(hint=(
@@ -790,8 +1060,7 @@ def _gather_target_repositories(context, indata, prod_cert_path):
     """
     rhsm.set_container_mode(context)
     rhsm.switch_certificate(context, indata.rhsm_info, prod_cert_path)
-    if indata.rhui_info:
-        rhui.copy_rhui_data(context, indata.rhui_info.provider)
+
     _install_custom_repofiles(context, indata.custom_repofiles)
     return gather_target_repositories(context, indata)
 
@@ -834,6 +1103,69 @@ def _create_target_userspace(context, packages, files, target_repoids):
         rhsm.set_container_mode(target_context)
 
 
+def install_target_rhui_client_if_needed(context, indata):
+    if not indata.rhui_info:
+        return
+
+    target_major_version = get_target_major_version()
+    userspace_dir = _get_target_userspace()
+    _create_target_userspace_directories(userspace_dir)
+
+    setup_info = indata.rhui_info.target_client_setup_info
+    if setup_info.preinstall_tasks:
+        preinstall_tasks = setup_info.preinstall_tasks
+
+        for file_to_remove in preinstall_tasks.files_to_remove:
+            context.remove(file_to_remove)
+
+        for copy_info in preinstall_tasks.files_to_copy_into_overlay:
+            context.makedirs(os.path.dirname(copy_info.dst), exists_ok=True)
+            context.copy_to(copy_info.src, copy_info.dst)
+
+    cmd = ['dnf', '-y']
+
+    if setup_info.enable_only_repoids_in_copied_files and setup_info.preinstall_tasks:
+        copy_tasks = setup_info.preinstall_tasks.files_to_copy_into_overlay
+        copied_repofiles = [copy.src for copy in copy_tasks if copy.src.endswith('.repo')]
+        copied_repoids = set()
+        for repofile in copied_repofiles:
+            repofile_contents = repofileutils.parse_repofile(repofile)
+            copied_repoids.update(entry.repoid for entry in repofile_contents.data)
+
+        cmd += ['--disablerepo', '*']
+        for copied_repoid in copied_repoids:
+            cmd.extend(('--enablerepo', copied_repoid))
+
+    src_client_remove_steps = ['remove {0}'.format(client) for client in indata.rhui_info.src_client_pkg_names]
+    target_client_install_steps = ['install {0}'.format(client) for client in indata.rhui_info.target_client_pkg_names]
+
+    dnf_transaction_steps = src_client_remove_steps + target_client_install_steps + ['transaction run']
+
+    cmd += [
+        '--setopt=module_platform_id=platform:el{}'.format(target_major_version),
+        '--setopt=keepcache=1',
+        '--releasever', api.current_actor().configuration.version.target,
+        '--disableplugin', 'subscription-manager',
+        'shell'
+    ]
+
+    context.call(cmd, callback_raw=utils.logging_handler, stdin='\n'.join(dnf_transaction_steps))
+
+    if setup_info.postinstall_tasks:
+        for copy_info in setup_info.postinstall_tasks.files_to_copy:
+            context.makedirs(os.path.dirname(copy_info.dst), exists_ok=True)
+            context.call(['cp', copy_info.src, copy_info.dst])
+
+    # Do a cleanup so there are not duplicit repoids
+    files_owned_by_clients = _query_rpm_for_pkg_files(context, indata.rhui_info.target_client_pkg_names)
+
+    for copy_task in setup_info.preinstall_tasks.files_to_copy_into_overlay:
+        dest = get_copy_location_from_copy_in_task(context, copy_task)
+        can_be_cleaned_up = copy_task.src not in setup_info.files_supporting_client_operation
+        if dest not in files_owned_by_clients and can_be_cleaned_up:
+            context.remove(dest)
+
+
 @suppress_deprecation(TMPTargetRepositoriesFacts)
 def perform():
     # NOTE: this one action is out of unit-tests completely; we do not use
@@ -853,6 +1185,9 @@ def perform():
             # Mount the ISO into the scratch container
             target_iso = next(api.consume(TargetOSInstallationImage), None)
             with mounting.mount_upgrade_iso_to_root_dir(overlay.target, target_iso):
+
+                install_target_rhui_client_if_needed(context, indata)
+
                 target_repoids = _gather_target_repositories(context, indata, prod_cert_path)
                 _create_target_userspace(context, indata.packages, indata.files, target_repoids)
                 # TODO: this is tmp solution as proper one needs significant refactoring

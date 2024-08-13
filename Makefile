@@ -16,9 +16,18 @@ REPOSITORIES ?= $(shell ls $(_SYSUPG_REPOS) | xargs echo | tr " " ",")
 SYSUPG_TEST_PATHS=$(shell echo $(REPOSITORIES) | sed -r "s|(,\\|^)| $(_SYSUPG_REPOS)/|g")
 TEST_PATHS:=commands repos/common $(SYSUPG_TEST_PATHS)
 
+# Several commands can take arbitrary user supplied arguments from environment
+# variables as well:
+PYTEST_ARGS ?=
+PYLINT_ARGS ?=
+FLAKE8_ARGS ?=
+
+# python version to run test with
+_PYTHON_VENV=$${PYTHON_VENV:-python2.7}
 
 ifdef ACTOR
-	TEST_PATHS=`python utils/actor_path.py $(ACTOR)`
+	TEST_PATHS=`$(_PYTHON_VENV) utils/actor_path.py $(ACTOR)`
+	APPROX_TEST_PATHS=$(shell $(_PYTHON_VENV) utils/find_actors.py -C repos $(ACTOR))  # Dev only
 endif
 
 ifeq ($(TEST_LIBS),y)
@@ -31,9 +40,6 @@ endif
 
 # needed only in case the Python2 should be used
 _USE_PYTHON_INTERPRETER=$${_PYTHON_INTERPRETER}
-
-# python version to run test with
-_PYTHON_VENV=$${PYTHON_VENV:-python2.7}
 
 # by default use values you can see below, but in case the COPR_* var is defined
 # use it instead of the default
@@ -127,13 +133,17 @@ help:
 	@echo "                              - can be changed by setting TEST_CONTAINER env"
 	@echo "  test_container_all          run lint and tests in all available containers"
 	@echo "  test_container_no_lint      run tests without linting in container, see test_container"
+	@echo "  dev_test_no_lint            (advanced users) run only tests of a single actor specified by the ACTOR variable"
 	@echo "  test_container_all_no_lint  run tests without linting in all available containers"
 	@echo "  clean_containers            clean all testing and building container images (to force a rebuild for example)"
 	@echo ""
-	@echo "Targets test, lint and test_no_lint support environment variables ACTOR and"
-	@echo "TEST_LIBS."
-	@echo "If ACTOR=<actor> is specified, targets are run against the specified actor."
-	@echo "If TEST_LIBS=y is specified, targets are run against shared libraries."
+	@echo "* Targets test, lint and test_no_lint support environment variables ACTOR and"
+	@echo "  TEST_LIBS."
+	@echo "* If ACTOR=<actor> is specified, targets are run against the specified actor."
+	@echo "  <actor> must be the name attribute defined in actor.py."
+	@echo "* If TEST_LIBS=y is specified, targets are run against shared libraries."
+	@echo "* Command line options can be added to pytest, pylint, and flake8 by setting"
+	@echo "  the PYTEST_ARGS, PYLINT_ARGS, and FLAKE8_ARGS environment variables."
 	@echo ""
 	@echo "Envars affecting actions with COPR (optional):"
 	@echo "  COPR_REPO             specify COPR repository, e,g. @oamg/leapp"
@@ -154,7 +164,7 @@ help:
 	@echo "  PR=7 SUFFIX='my_additional_suffix' make <target>"
 	@echo "  MR=6 COPR_CONFIG='path/to/the/config/copr/file' make <target>"
 	@echo "  ACTOR=<actor> TEST_LIBS=y make test"
-	@echo "  BUILD_CONTAINER=el7 make build_container"
+	@echo "  BUILD_CONTAINER=rhel7 make build_container"
 	@echo "  TEST_CONTAINER=f34 make test_container"
 	@echo "  CONTAINER_TOOL=docker TEST_CONTAINER=rhel7 make test_container_no_lint"
 	@echo ""
@@ -322,15 +332,15 @@ lint:
 	SEARCH_PATH="$(TEST_PATHS)" && \
 	echo "Using search path '$${SEARCH_PATH}'" && \
 	echo "--- Running pylint ---" && \
-	bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint -j0" && \
+	bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint -j0 $(PYLINT_ARGS)" && \
 	echo "--- Running flake8 ---" && \
-	bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && flake8 $${SEARCH_PATH}"
+	bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && flake8 $${SEARCH_PATH} $(FLAKE8_ARGS)"
 
 	if [[ "$(_PYTHON_VENV)" == "python2.7" ]] ; then \
 		. $(VENVNAME)/bin/activate; \
 		echo "--- Checking py3 compatibility ---" && \
 		SEARCH_PATH=$(REPOS_PATH) && \
-		bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint --py3k" && \
+		bash -c "[[ ! -z '$${SEARCH_PATH}' ]] && find $${SEARCH_PATH} -name '*.py' | sort -u | xargs pylint --py3k $(PYLINT_ARGS)" && \
 		echo "--- Linting done. ---"; \
 	fi
 
@@ -357,7 +367,7 @@ test_no_lint:
 	cd repos/system_upgrade/el7toel8/; \
 	snactor workflow sanity-check ipu && \
 	cd - && \
-	$(_PYTHON_VENV) -m pytest $(REPORT_ARG) $(TEST_PATHS) $(LIBRARY_PATH)
+	$(_PYTHON_VENV) -m pytest $(REPORT_ARG) $(TEST_PATHS) $(LIBRARY_PATH) $(PYTEST_ARGS)
 
 test: lint test_no_lint
 
@@ -473,18 +483,22 @@ fast_lint:
 	@. $(VENVNAME)/bin/activate; \
 	FILES_TO_LINT="$$(git diff --name-only $(MASTER_BRANCH) --diff-filter AMR | grep '\.py$$')"; \
 	if [[ -n "$$FILES_TO_LINT" ]]; then \
-		pylint -j 0 $$FILES_TO_LINT && \
-		flake8 $$FILES_TO_LINT; \
+		pylint -j 0 $$FILES_TO_LINT $(PYLINT_ARGS) && \
+		flake8 $$FILES_TO_LINT $(FLAKE8_ARG); \
 		LINT_EXIT_CODE="$$?"; \
 		if [[ "$$LINT_EXIT_CODE" != "0" ]]; then \
 			exit $$LINT_EXIT_CODE; \
 		fi; \
 		if [[ "$(_PYTHON_VENV)" == "python2.7" ]] ; then \
-			pylint --py3k $$FILES_TO_LINT; \
+			pylint --py3k $$FILES_TO_LINT $(PYLINT_ARGS); \
 		fi; \
 	else \
 		echo "No files to lint."; \
 	fi
+
+dev_test_no_lint:
+	. $(VENVNAME)/bin/activate; \
+	$(_PYTHON_VENV) -m pytest $(REPORT_ARG) $(APPROX_TEST_PATHS) $(LIBRARY_PATH) $(PYTEST_ARGS)
 
 dashboard_data:
 	. $(VENVNAME)/bin/activate; \
@@ -494,4 +508,4 @@ dashboard_data:
 	popd
 
 .PHONY: help build clean prepare source srpm copr_build _build_local build_container print_release register install-deps install-deps-fedora  lint test_no_lint test dashboard_data fast_lint
-.PHONY: test_container test_container_no_lint test_container_all test_container_all_no_lint clean_containers _build_container_image _test_container_ipu
+.PHONY: test_container test_container_no_lint test_container_all test_container_all_no_lint clean_containers _build_container_image _test_container_ipu dev_test_no_lint

@@ -6,13 +6,14 @@ from leapp import reporting
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.actor import peseventsscanner_repomap
 from leapp.libraries.actor.pes_event_parsing import Action, get_pes_events, Package
+from leapp.libraries.common import rpms
 from leapp.libraries.common.config import version
 from leapp.libraries.common.repomaputils import combine_repomap_messages
 from leapp.libraries.stdlib import api
 from leapp.libraries.stdlib.config import is_verbose
 from leapp.models import (
+    DistributionSignedRPM,
     EnabledModules,
-    InstalledRedHatSignedRPM,
     Module,
     PESIDRepositoryEntry,
     PESRpmTransactionTasks,
@@ -61,14 +62,14 @@ def get_best_pesid_candidate(candidate_a, candidate_b, cloud_provider):
 def get_installed_pkgs():
     installed_pkgs = set()
 
-    installed_rh_signed_rpm_msgs = api.consume(InstalledRedHatSignedRPM)
+    installed_rh_signed_rpm_msgs = api.consume(DistributionSignedRPM)
     installed_rh_signed_rpm_msg = next(installed_rh_signed_rpm_msgs, None)
     if list(installed_rh_signed_rpm_msgs):
-        api.current_logger().warning('Unexpectedly received more than one InstalledRedHatSignedRPM message.')
+        api.current_logger().warning('Unexpectedly received more than one DistributionSignedRPM message.')
     if not installed_rh_signed_rpm_msg:
         raise StopActorExecutionError('Cannot parse PES data properly due to missing list of installed packages',
                                       details={'Problem': 'Did not receive a message with installed Red Hat-signed '
-                                                          'packages (InstalledRedHatSignedRPM)'})
+                                                          'packages (DistributionSignedRPM)'})
 
     for pkg in installed_rh_signed_rpm_msg.items:
         modulestream = None
@@ -364,9 +365,10 @@ def get_pesid_to_repoid_map(target_pesids):
         )
     repositories_map_msg = combine_repomap_messages(repositories_map_msgs)
 
-    rhui_info = next(api.consume(RHUIInfo), RHUIInfo(provider=''))
+    rhui_info = next(api.consume(RHUIInfo), None)
+    cloud_provider = rhui_info.provider if rhui_info else ''
 
-    repomap = peseventsscanner_repomap.RepoMapDataHandler(repositories_map_msg, cloud_provider=rhui_info.provider)
+    repomap = peseventsscanner_repomap.RepoMapDataHandler(repositories_map_msg, cloud_provider=cloud_provider)
 
     # NOTE: We have to calculate expected target repositories like in the setuptargetrepos actor.
     # It's planned to handle this in different a way in future...
@@ -488,6 +490,19 @@ def apply_transaction_configuration(source_pkgs):
     return source_pkgs_with_conf_applied
 
 
+def remove_leapp_related_events(events):
+    # NOTE(ivasilev) Need to revisit this once rhel9->rhel10 upgrades become a thing
+    leapp_pkgs = rpms.get_leapp_dep_packages(
+            major_version=['7', '8']) + rpms.get_leapp_packages(major_version=['7', '8'])
+    res = []
+    for event in events:
+        if not any(pkg.name in leapp_pkgs for pkg in event.in_pkgs):
+            res.append(event)
+        else:
+            api.current_logger().debug('Filtered out leapp related event, event id: {}'.format(event.id))
+    return res
+
+
 def process():
     # Retrieve data - installed_pkgs, transaction configuration, pes events
     events = get_pes_events('/etc/leapp/files', 'pes-events.json')
@@ -515,6 +530,7 @@ def process():
     # packages of the target system, so we can distinguish what needs to be repomapped
     repoids_of_source_pkgs = {pkg.repository for pkg in source_pkgs}
 
+    events = remove_leapp_related_events(events)
     events = remove_undesired_events(events, releases)
 
     # Apply events - compute what packages should the target system have
