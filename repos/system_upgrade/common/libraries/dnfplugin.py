@@ -21,6 +21,7 @@ class _DnfPluginPathStr(str):
     _PATHS = {
         "8": os.path.join('/lib/python3.6/site-packages/dnf-plugins', DNF_PLUGIN_NAME),
         "9": os.path.join('/lib/python3.9/site-packages/dnf-plugins', DNF_PLUGIN_NAME),
+        "10": os.path.join('/lib/python3.12/site-packages/dnf-plugins', DNF_PLUGIN_NAME),
     }
 
     def __init__(self):  # noqa: W0231; pylint: disable=super-init-not-called
@@ -85,12 +86,12 @@ def build_plugin_data(target_repoids, debug, test, tasks, on_aws):
     # get list of repo IDs of target repositories that should be used for upgrade
     data = {
         'pkgs_info': {
-            'local_rpms': [os.path.join('/installroot', pkg.lstrip('/')) for pkg in tasks.local_rpms],
-            'to_install': tasks.to_install,
-            'to_remove': tasks.to_remove,
-            'to_upgrade': tasks.to_upgrade,
-            'to_reinstall': tasks.to_reinstall,
-            'modules_to_enable': ['{}:{}'.format(m.name, m.stream) for m in tasks.modules_to_enable],
+            'local_rpms': sorted(os.path.join('/installroot', pkg.lstrip('/')) for pkg in tasks.local_rpms),
+            'to_install': sorted(tasks.to_install),
+            'to_remove': sorted(tasks.to_remove),
+            'to_upgrade': sorted(tasks.to_upgrade),
+            'to_reinstall': sorted(tasks.to_reinstall),
+            'modules_to_enable': sorted(['{}:{}'.format(m.name, m.stream) for m in tasks.modules_to_enable]),
         },
         'dnf_conf': {
             'allow_erasing': True,
@@ -357,7 +358,7 @@ def install_initramdisk_requirements(packages, target_userspace_info, used_repos
     mount_binds = ['/:/installroot']
     with _prepare_transaction(used_repos=used_repos, target_userspace_info=target_userspace_info,
                               binds=mount_binds) as (context, target_repoids, _unused):
-        if get_target_major_version() == '9':
+        if int(get_target_major_version()) >= 9:
             _rebuild_rpm_db(context)
         repos_opt = [['--enablerepo', repo] for repo in target_repoids]
         repos_opt = list(itertools.chain(*repos_opt))
@@ -446,7 +447,7 @@ def perform_transaction_install(target_userspace_info, storage_info, used_repos,
         # set like that, however seatbelt is a good thing.
         dnfconfig.exclude_leapp_rpms(context, disable_plugins)
 
-        if get_target_major_version() == '9':
+        if int(get_target_major_version()) >= 9:
             _rebuild_rpm_db(context, root='/installroot')
         _transaction(
             context=context, stage='upgrade', target_repoids=target_repoids, plugin_info=plugin_info,
@@ -461,6 +462,9 @@ def perform_transaction_install(target_userspace_info, storage_info, used_repos,
 
 @contextlib.contextmanager
 def _prepare_perform(used_repos, target_userspace_info, xfs_info, storage_info, target_iso=None):
+    # noqa: W0135; pylint: disable=contextmanager-generator-missing-cleanup
+    # NOTE(pstodulk): the pylint check is not valid in this case - finally is covered
+    # implicitly
     reserve_space = overlaygen.get_recommended_leapp_free_space(target_userspace_info.path)
     with _prepare_transaction(used_repos=used_repos,
                               target_userspace_info=target_userspace_info

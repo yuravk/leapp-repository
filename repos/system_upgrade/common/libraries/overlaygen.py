@@ -1,6 +1,7 @@
 import contextlib
 import os
 import shutil
+import sys
 from collections import namedtuple
 
 from leapp.exceptions import StopActorExecutionError
@@ -274,7 +275,7 @@ def _prepare_required_mounts(scratch_dir, mounts_dir, storage_info, scratch_rese
     space_needed = scratch_reserve + _MAGICAL_CONSTANT_OVL_SIZE * len(mount_points)
     _ensure_enough_diskimage_space(space_needed, scratch_dir)
 
-    # free space required on this partition should not be affected by durin the
+    # free space required on this partition should not be affected by during the
     # upgrade transaction execution by space consumed on creation of disk images
     # as disk images are cleaned in the end of this functions,
     # but we want to reserve some space in advance.
@@ -296,6 +297,9 @@ def _prepare_required_mounts(scratch_dir, mounts_dir, storage_info, scratch_rese
 
 @contextlib.contextmanager
 def _build_overlay_mount(root_mount, mounts):
+    # noqa: W0135; pylint: disable=contextmanager-generator-missing-cleanup
+    # NOTE(pstodulk): the pylint check is not valid in this case - finally is covered
+    # implicitly
     if not root_mount:
         raise StopActorExecutionError('Root mount point has not been prepared for overlayfs.')
     if not mounts:
@@ -340,7 +344,12 @@ def cleanup_scratch(scratch_dir, mounts_dir):
         # NOTE(pstodulk): From time to time, it helps me with some experiments
         return
     api.current_logger().debug('Recursively removing scratch directory %s.', scratch_dir)
-    shutil.rmtree(scratch_dir, onerror=utils.report_and_ignore_shutil_rmtree_error)
+    if sys.version_info >= (3, 12):
+        # NOTE(mmatuska): The pylint suppressions are required because of a bug in pylint:
+        # (https://github.com/pylint-dev/pylint/issues/9622)
+        shutil.rmtree(scratch_dir, onexc=utils.report_and_ignore_shutil_rmtree_error)  # noqa: E501; pylint: disable=unexpected-keyword-arg
+    else:
+        shutil.rmtree(scratch_dir, onerror=utils.report_and_ignore_shutil_rmtree_error)  # noqa: E501; pylint: disable=deprecated-argument
     api.current_logger().debug('Recursively removed scratch directory %s.', scratch_dir)
 
 
@@ -519,6 +528,9 @@ def _mount_dnf_cache(overlay_target):
     """
     Convenience context manager to ensure bind mounted /var/cache/dnf and removal of the mount.
     """
+    # noqa: W0135; pylint: disable=contextmanager-generator-missing-cleanup
+    # NOTE(pstodulk): the pylint check is not valid in this case - finally is covered
+    # implicitly
     with mounting.BindMount(
             source='/var/cache/dnf',
             target=os.path.join(overlay_target, 'var', 'cache', 'dnf')) as cache_mount:
@@ -570,6 +582,9 @@ def create_source_overlay(mounts_dir, scratch_dir, xfs_info, storage_info, mount
     :type scratch_reserve: Optional[int]
     :rtype: mounting.BindMount or mounting.NullMount
     """
+    # noqa: W0135; pylint: disable=contextmanager-generator-missing-cleanup
+    # NOTE(pstodulk): the pylint check is not valid in this case - finally is covered
+    # implicitly
     api.current_logger().debug('Creating source overlay in {scratch_dir} with mounts in {mounts_dir}'.format(
         scratch_dir=scratch_dir, mounts_dir=mounts_dir))
     try:
@@ -589,11 +604,8 @@ def create_source_overlay(mounts_dir, scratch_dir, xfs_info, storage_info, mount
                     with _build_overlay_mount(root_overlay, mounts) as overlay:
                         with _mount_dnf_cache(overlay.target):
                             yield overlay
-    except Exception:
+    finally:
         cleanup_scratch(scratch_dir, mounts_dir)
-        raise
-    # cleanup always now
-    cleanup_scratch(scratch_dir, mounts_dir)
 
 
 # #############################################################################

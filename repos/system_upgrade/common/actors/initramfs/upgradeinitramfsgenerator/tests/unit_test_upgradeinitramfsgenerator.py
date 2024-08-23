@@ -166,13 +166,12 @@ def test_copy_boot_files(monkeypatch, arch):
                         'create_upgrade_hmac_from_target_hmac',
                         create_upgrade_hmac_from_target_hmac_mock)
 
-    upgradeinitramfsgenerator.copy_boot_files(context)
+    actual_boot_content = upgradeinitramfsgenerator.copy_boot_files(context)
     assert len(context.called_copy_from) == 2
     assert (os.path.join('/artifacts', kernel), bootc.kernel_path) in context.called_copy_from
     assert (os.path.join('/artifacts', initram), bootc.initram_path) in context.called_copy_from
 
-    assert upgradeinitramfsgenerator.api.produce.called == 1
-    assert upgradeinitramfsgenerator.api.produce.model_instances[0] == bootc
+    assert actual_boot_content == bootc
 
 
 class MockedCopyArgs(object):
@@ -354,6 +353,7 @@ def test_copy_modules_fail(monkeypatch, kind):
 
     module_class = None
     copy_fn = None
+    dst_path = None
     if kind == 'dracut':
         module_class = DracutModule
         copy_fn = upgradeinitramfsgenerator.copy_dracut_modules

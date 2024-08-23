@@ -113,6 +113,12 @@ def upgrade(args, breadcrumbs):
 
     if workflow.failure:
         sys.exit(1)
+    elif not args.resume:
+        sys.stdout.write(
+            'Reboot the system to continue with the upgrade.'
+            ' This might take a while depending on the system configuration.\n'
+            'Make sure you have console access to view the actual upgrade process.\n'
+        )
 
 
 def register(base_command):

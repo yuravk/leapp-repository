@@ -1001,7 +1001,7 @@ def test_consume_data(monkeypatch, raised, no_rhsm, testdata):
     # do not write never into testdata inside the test !!
     xfs = testdata.xfs
     custom_repofiles = testdata.custom_repofiles
-    _exp_pkgs = {'dnf', 'dnf-command(config-manager)'}
+    _exp_pkgs = {'dnf', 'dnf-command(config-manager)', 'util-linux'}
     _exp_files = []
 
     def _get_pkgs(msg):
@@ -1213,6 +1213,7 @@ def test_perform_ok(monkeypatch):
     monkeypatch.setattr(overlaygen, 'create_source_overlay', MockedMountingBase)
     monkeypatch.setattr(userspacegen, '_gather_target_repositories', lambda *x: repoids)
     monkeypatch.setattr(userspacegen, '_create_target_userspace', lambda *x: None)
+    monkeypatch.setattr(userspacegen, 'setup_target_rhui_access_if_needed', lambda *x: None)
     monkeypatch.setattr(userspacegen.api, 'current_actor', CurrentActorMocked())
     monkeypatch.setattr(userspacegen.api, 'produce', produce_mocked())
     monkeypatch.setattr(repofileutils, 'get_repodirs', lambda: ['/etc/yum.repos.d'])
