@@ -2,7 +2,7 @@
 from leapp.models import PESIDRepositoryEntry, RepoMapEntry, RepositoriesMapping
 
 class RepoMapData(object):
-    VERSION_FORMAT = '1.2.0'
+    VERSION_FORMAT = '1.2.1'
 
     def __init__(self):
         self.repositories = []
