@@ -139,7 +139,7 @@ def compute_pkg_changes_between_consequent_releases(source_installed_pkgs,
 
     release_events = [e for e in events if e.to_release == release]
 
-    for event in release_events:
+    for event in sorted(release_events, key=lambda event: event.id):
         # PRESENCE events have a different semantics than the other events - they add a package to a target state
         # only if it had been seen (installed) during the course of the overall target packages
         if event.action == Action.PRESENT:
