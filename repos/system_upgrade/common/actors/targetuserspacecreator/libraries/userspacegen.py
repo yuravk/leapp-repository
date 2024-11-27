@@ -312,6 +312,16 @@ def _get_files_owned_by_rpms(context, dirpath, pkgs=None, recursive=False):
     searchdir = context.full_path(dirpath)
     if recursive:
         for root, _, files in os.walk(searchdir):
+            if '/directory-hash/' in root:
+                # tl;dr; for the performance improvement
+                # The directory has been relatively recently added to ca-certificates
+                # rpm on EL 9+ systems and the content does not seem to be important
+                # for the IPU process. Also, it contains high number of files and
+                # their processing floods the output and slows down IPU.
+                # So skipping it entirely.
+                # This is updated solution that we drop originally: 60f500e59bb92
+                api.current_logger().debug('SKIP files in the {} directory: Not important for the IPU.'.format(root))
+                continue
             for filename in files:
                 relpath = os.path.relpath(os.path.join(root, filename), searchdir)
                 file_list.append(relpath)
@@ -1112,6 +1122,27 @@ def _get_target_userspace():
     return constants.TARGET_USERSPACE.format(get_target_major_version())
 
 
+def _remove_injected_repofiles_from_our_rhui_packages(target_userspace_ctx, rhui_setup_info):
+    target_userspace_path = _get_target_userspace()
+    for copy in rhui_setup_info.preinstall_tasks.files_to_copy_into_overlay:
+        dst_in_container = get_copy_location_from_copy_in_task(target_userspace_path, copy)
+        dst_in_container = dst_in_container.strip('/')
+        dst_in_host = os.path.join(target_userspace_path, dst_in_container)
+
+        if os.path.isfile(dst_in_host) and dst_in_host.endswith('.repo'):
+            # The repofile might have been replaced by a new one provided by the RHUI client if names collide
+            # Performance: Do the query here and not earlier, because we would be running rpm needlessly
+            try:
+                path_with_root = '/' + dst_in_container
+                target_userspace_ctx.call(['rpm', '-q', '--whatprovides', path_with_root])
+                api.current_logger().debug('Repofile {0} kept as it is owned by some RPM.'.format(dst_in_host))
+            except CalledProcessError:
+                # rpm exists with 1 if the file is not owned by any RPM. We might be catching all kinds of other
+                # problems here, but still better than always removing repofiles.
+                api.current_logger().debug('Removing repofile - not owned by any RPM: {0}'.format(dst_in_host))
+                os.remove(dst_in_host)
+
+
 def _create_target_userspace(context, indata, packages, files, target_repoids):
     """Create the target userspace."""
     target_path = _get_target_userspace()
@@ -1131,14 +1162,7 @@ def _create_target_userspace(context, indata, packages, files, target_repoids):
         )
         setup_info = indata.rhui_info.target_client_setup_info
         if not setup_info.bootstrap_target_client:
-            target_userspace_path = _get_target_userspace()
-            for copy in setup_info.preinstall_tasks.files_to_copy_into_overlay:
-                dst_in_container = get_copy_location_from_copy_in_task(target_userspace_path, copy)
-                dst_in_container = dst_in_container.strip('/')
-                dst_in_host = os.path.join(target_userspace_path, dst_in_container)
-                if os.path.isfile(dst_in_host) and dst_in_host.endswith('.repo'):
-                    api.current_logger().debug('Removing repofile: {0}'.format(dst_in_host))
-                    os.remove(dst_in_host)
+            _remove_injected_repofiles_from_our_rhui_packages(context, setup_info)
 
     # and do not forget to set the rhsm into the container mode again
     with mounting.NspawnActions(_get_target_userspace()) as target_context:

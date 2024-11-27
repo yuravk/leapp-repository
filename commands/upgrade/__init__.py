@@ -89,7 +89,13 @@ def upgrade(args, breadcrumbs):
         repositories = util.load_repositories()
     except LeappError as exc:
         raise CommandError(exc.message)
+
+    command_utils.set_resource_limits()
+
     workflow = repositories.lookup_workflow('IPUWorkflow')(auto_reboot=args.reboot)
+
+    command_utils.load_actor_configs_and_store_it_in_db(context, repositories, cfg)
+
     util.process_whitelist_experimental(repositories, workflow, configuration, logger)
     util.warn_if_unsupported(configuration)
     with beautify_actor_exception():
