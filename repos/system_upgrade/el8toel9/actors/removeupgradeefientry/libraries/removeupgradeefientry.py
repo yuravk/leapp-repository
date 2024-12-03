@@ -6,9 +6,26 @@ from leapp.libraries.common.grub import GRUB2_BIOS_ENTRYPOINT, GRUB2_BIOS_ENV_FI
 from leapp.libraries.stdlib import api, CalledProcessError, run
 from leapp.models import ArmWorkaroundEFIBootloaderInfo
 
+dirname = {
+        'AlmaLinux': 'almalinux',
+        'CentOS Linux': 'centos',
+        'CentOS Stream': 'centos',
+        'Oracle Linux Server': 'redhat',
+        'Red Hat Enterprise Linux': 'redhat',
+        'Rocky Linux': 'rocky',
+        'Scientific Linux': 'redhat',
+        'EuroLinux': 'eurolinux',
+}
+
+with open('/etc/system-release', 'r') as sr:
+    release_line = next(line for line in sr if 'release' in line)
+    distro = release_line.split(' release ', 1)[0]
+
+distro_dir = dirname.get(distro, 'default')
+
 EFI_MOUNTPOINT = '/boot/efi/'
 LEAPP_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/leapp/')
-RHEL_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/redhat/')
+RHEL_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/', distro_dir)
 
 
 def get_workaround_efi_info():
@@ -54,6 +71,8 @@ def remove_upgrade_efi_entry():
     except CalledProcessError:
         api.current_logger().warning('Unable to remove Leapp upgrade efi files.')
 
+    # Reload EFI info, boot order has changed as Leapp upgrade efi entry was removed
+    bootloader_info = get_workaround_efi_info()
     original_boot_number = bootloader_info.original_entry.boot_number
     run(['/usr/sbin/efibootmgr', '--bootnext', original_boot_number])
 
