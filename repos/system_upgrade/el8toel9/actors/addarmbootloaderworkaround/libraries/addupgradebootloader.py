@@ -15,6 +15,23 @@ from leapp.libraries.common.grub import (
 from leapp.libraries.stdlib import api, CalledProcessError, run
 from leapp.models import ArmWorkaroundEFIBootloaderInfo, EFIBootEntry, TargetUserSpaceInfo
 
+dirname = {
+        'AlmaLinux': 'almalinux',
+        'CentOS Linux': 'centos',
+        'CentOS Stream': 'centos',
+        'Oracle Linux Server': 'redhat',
+        'Red Hat Enterprise Linux': 'redhat',
+        'Rocky Linux': 'rocky',
+        'Scientific Linux': 'redhat',
+        'EuroLinux': 'eurolinux',
+}
+
+with open('/etc/system-release', 'r') as sr:
+    release_line = next(line for line in sr if 'release' in line)
+    distro = release_line.split(' release ', 1)[0]
+
+distro_dir = dirname.get(distro, 'default')
+
 UPGRADE_EFI_ENTRY_LABEL = 'Leapp Upgrade'
 
 ARM_SHIM_PACKAGE_NAME = 'shim-aa64'
@@ -22,7 +39,7 @@ ARM_GRUB_PACKAGE_NAME = 'grub2-efi-aa64'
 
 EFI_MOUNTPOINT = '/boot/efi/'
 LEAPP_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/leapp/')
-RHEL_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/redhat/')
+RHEL_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/', distro_dir)
 
 CONTAINER_DOWNLOAD_DIR = '/tmp_pkg_download_dir'
 
