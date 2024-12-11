@@ -14,7 +14,6 @@ dirname = {
         'Red Hat Enterprise Linux': 'redhat',
         'Rocky Linux': 'rocky',
         'Scientific Linux': 'redhat',
-        'EuroLinux': 'eurolinux',
 }
 
 with open('/etc/system-release', 'r') as sr:
