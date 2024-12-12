@@ -1,4 +1,5 @@
 import os
+import sys
 import platform
 
 from leapp.exceptions import StopActorExecutionError
@@ -47,7 +48,12 @@ def get_os_release(path):
     :return: `OSRelease` model if the file can be parsed
     :raises: `IOError`
     """
-    os_version = '.'.join(platform.dist()[1].split('.')[:2])
+    if sys.version_info.minor < 9:
+        os_version = platform.dist()[1]
+    else:
+        import distro
+        os_version = distro.version()
+    os_version = '.'.join(os_version.split('.')[:2])
     try:
         with open(path) as f:
             data = dict(l.strip().split('=', 1) for l in f.readlines() if '=' in l)
