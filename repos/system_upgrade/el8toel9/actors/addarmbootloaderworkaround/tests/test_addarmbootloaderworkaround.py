@@ -287,7 +287,6 @@ def test_process(monkeypatch):
     monkeypatch.setattr(addupgradebootloader.mounting, 'NspawnActions', lambda *args, **kwargs: context_mock)
 
     monkeypatch.setattr(addupgradebootloader, '_copy_grub_files', lambda optional, required: None)
-    monkeypatch.setattr(addupgradebootloader, '_link_grubenv_to_upgrade_entry', lambda: None)
 
     efibootinfo_mock = MockEFIBootInfo([TEST_RHEL_EFI_ENTRY])
     monkeypatch.setattr(addupgradebootloader, 'EFIBootInfo', lambda: efibootinfo_mock)
@@ -298,6 +297,9 @@ def test_process(monkeypatch):
     monkeypatch.setattr(addupgradebootloader, '_add_upgrade_boot_entry', mock_add_upgrade_boot_entry)
     monkeypatch.setattr(addupgradebootloader, '_set_bootnext', lambda _: None)
 
+    monkeypatch.setattr(addupgradebootloader, 'patch_efi_redhat_grubcfg_to_load_correct_grubenv',
+                        lambda: None)
+
     addupgradebootloader.process()
 
     assert api.produce.called == 1
@@ -307,6 +309,33 @@ def test_process(monkeypatch):
     expected = ArmWorkaroundEFIBootloaderInfo(
             original_entry=EFIBootEntry(**{f: getattr(TEST_RHEL_EFI_ENTRY, f) for f in efibootentry_fields}),
             upgrade_entry=EFIBootEntry(**{f: getattr(TEST_UPGRADE_EFI_ENTRY, f) for f in efibootentry_fields}),
+            upgrade_bls_dir=addupgradebootloader.UPGRADE_BLS_DIR,
+            upgrade_entry_efi_path='/boot/efi/EFI/leapp/',
         )
     actual = api.produce.model_instances[0]
     assert actual == expected
+
+
+@pytest.mark.parametrize('is_config_ok', (True, False))
+def test_patch_grubcfg(is_config_ok, monkeypatch):
+
+    expected_grubcfg_path = os.path.join(addupgradebootloader.EFI_MOUNTPOINT,
+                                         addupgradebootloader.LEAPP_EFIDIR_CANONICAL_PATH,
+                                         'grub.cfg')
+
+    def isfile_mocked(path):
+        assert expected_grubcfg_path == path
+        return True
+
+    def prepare_config_contents_mocked():
+        return 'config contents'
+
+    def write_config(path, contents):
+        assert not is_config_ok  # We should write only when the config is not OK
+        assert path == expected_grubcfg_path
+        assert contents == 'config contents'
+
+    monkeypatch.setattr(os.path, 'isfile', isfile_mocked)
+    monkeypatch.setattr(addupgradebootloader, '_will_grubcfg_read_our_grubenv', lambda cfg_path: is_config_ok)
+    monkeypatch.setattr(addupgradebootloader, '_prepare_config_contents', prepare_config_contents_mocked)
+    monkeypatch.setattr(addupgradebootloader, '_write_config', write_config)

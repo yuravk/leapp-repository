@@ -1,4 +1,5 @@
 import os
+import shutil
 from collections import namedtuple
 
 import pytest
@@ -9,7 +10,9 @@ from leapp.libraries.common.config.architecture import ARCH_S390X, ARCH_X86_64
 from leapp.libraries.common.testutils import CurrentActorMocked, produce_mocked
 from leapp.libraries.stdlib import api
 from leapp.models import (
+    ArmWorkaroundEFIBootloaderInfo,
     BootContent,
+    EFIBootEntry,
     KernelCmdline,
     KernelCmdlineArg,
     LateTargetKernelCmdlineArgTasks,
@@ -273,7 +276,7 @@ def test_get_rdlvm_arg_values(monkeypatch):
 
     args = addupgradebootentry._get_rdlvm_arg_values()
 
-    assert args == ['A', 'B']
+    assert args == ('A', 'B')
 
 
 def test_get_device_uuid(monkeypatch):
@@ -326,3 +329,61 @@ def test_get_device_uuid(monkeypatch):
     uuid = addupgradebootentry._get_device_uuid(path)
 
     assert uuid == 'MY_UUID1'
+
+
+@pytest.mark.parametrize('has_separate_boot', (True, False))
+def test_modify_grubenv_to_have_separate_blsdir(monkeypatch, has_separate_boot):
+    efi_info = ArmWorkaroundEFIBootloaderInfo(
+        original_entry=EFIBootEntry(
+            boot_number='0001',
+            label='Redhat',
+            active=True,
+            efi_bin_source="HD(.*)/File(\\EFI\\redhat\\shimx64.efi)",
+        ),
+        upgrade_entry=EFIBootEntry(
+            boot_number='0002',
+            label='Leapp',
+            active=True,
+            efi_bin_source="HD(.*)/File(\\EFI\\leapp\\shimx64.efi)",
+        ),
+        upgrade_bls_dir='/boot/upgrade-loader/entries',
+        upgrade_entry_efi_path='/boot/efi/EFI/leapp'
+    )
+
+    def is_mount_mocked(path):
+        assert path.rstrip('/') == '/boot'
+        return has_separate_boot
+
+    def list_grubenv_variables_mock():
+        blsdir = '/blsdir' if has_separate_boot else '/boot/blsdir'
+        return {
+            'blsdir': blsdir
+        }
+
+    def listdir_mock(dir_path):
+        assert dir_path == '/boot/blsdir'
+        return [
+            '4a9c76478b98444fb5e0fbf533950edf-6.12.5-200.fc41.x86_64.conf',
+            '4a9c76478b98444fb5e0fbf533950edf-upgrade.aarch64.conf',
+        ]
+
+    def assert_path_correct(path):
+        assert path == efi_info.upgrade_bls_dir
+
+    def move_mocked(src, dst):
+        assert src == '/boot/blsdir/4a9c76478b98444fb5e0fbf533950edf-upgrade.aarch64.conf'
+        assert dst == '/boot/upgrade-loader/entries/4a9c76478b98444fb5e0fbf533950edf-upgrade.aarch64.conf'
+
+    def run_mocked(cmd, *arg, **kwargs):
+        blsdir = '/upgrade-loader/entries' if has_separate_boot else '/boot/upgrade-loader/entries'
+        assert cmd == ['grub2-editenv', '/boot/efi/EFI/leapp/grubenv', 'set', 'blsdir={}'.format(blsdir)]
+
+    monkeypatch.setattr(addupgradebootentry, '_list_grubenv_variables', list_grubenv_variables_mock)
+    monkeypatch.setattr(os, 'listdir', listdir_mock)
+    monkeypatch.setattr(os.path, 'exists', assert_path_correct)
+    monkeypatch.setattr(os.path, 'ismount', is_mount_mocked)
+    monkeypatch.setattr(os, 'makedirs', assert_path_correct)
+    monkeypatch.setattr(shutil, 'move', move_mocked)
+    monkeypatch.setattr(addupgradebootentry, 'run', run_mocked)
+
+    addupgradebootentry.modify_our_grubenv_to_have_separate_blsdir(efi_info)
