@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 import platform
 
 from leapp.exceptions import StopActorExecutionError
@@ -50,25 +49,15 @@ def get_os_release(path):
     :return: `OSRelease` model if the file can be parsed
     :raises: `IOError`
     """
-    if sys.version_info.minor < 9:
-        os_version = platform.dist()[1]
-    else:
-        import distro
-        os_version = distro.version()
-    os_version = '.'.join(os_version.split('.')[:2])
     try:
         with open(path) as f:
             data = dict(l.strip().split('=', 1) for l in f.readlines() if '=' in l)
-            release_id = data.get('ID', '').strip('"')
-            version_id = data.get('VERSION_ID', '').strip('"')
-            if release_id == 'centos' and '.' not in os_version:
-                os_version = "{}.999".format(version_id)
             return OSRelease(
-                release_id=release_id,
+                release_id=data.get('ID', '').strip('"'),
                 name=data.get('NAME', '').strip('"'),
                 pretty_name=data.get('PRETTY_NAME', '').strip('"'),
                 version=data.get('VERSION', '').strip('"'),
-                version_id=os_version,
+                version_id=data.get('VERSION_ID', '').strip('"'),
                 variant=data.get('VARIANT', '').strip('"') or None,
                 variant_id=data.get('VARIANT_ID', '').strip('"') or None
             )
