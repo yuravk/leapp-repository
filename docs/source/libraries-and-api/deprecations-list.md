@@ -14,7 +14,10 @@ Only the versions in which a deprecation has been made are listed.
 
 ## Next release <span style="font-size:0.5em; font-weight:normal">(till TODO date)</span>
 
-- No new deprecation yet
+- Shared libraries
+  - **`leapp.libraries.common.config.version.SUPPORTED_VERSIONS`** - The `SUPPORTED_VERSIONS` dict has been deprecated as it is problematic with the new design. Use `leapp.libraries.common.config.version.is_supported_version()` or `IPUConfig.supported_upgrade_paths` instead.
+  - **`leapp.libraries.common.config.version.is_rhel_alt()`** - The function can return only `False` nowadays as RHEL-ALT 7 is EOL for years and future version of leapp-repository will not support RHEL 7 anymore.
+
 
 ## v0.20.0 <span style="font-size:0.5em; font-weight:normal">(till September 2024)</span>
 - Models

@@ -47,13 +47,20 @@ Set the path to the target OS ISO image that should be used for the IPU. It‘s 
 #### LEAPP_TARGET_PRODUCT_CHANNEL
 The alternative to the --channel leapp option. As a parameter accepts a channel acronym. E.g. `eus` or `e4s`. For more info, see the leapp preupgrade --help. In case the beta channel is required, use the `LEAPP_DEVEL_TARGET_PRODUCT_TYPE` envar instead.
 
+#### LEAPP_OVL_IMG_FS_EXT4
+During the execution of IPUWorkflow the process requires creation of internal
+disk images for the correct virtualisation of the host storage and creation
+of OverlayFS (OVL) layer. During that time these images are formatted with
+XFS filesystem by default. However for some system setups this could be
+problematic and could lead sometimes to issues. For these uncommon problems
+it is possible to specify `LEAPP_OVL_IMG_FS_EXT4=1` when running leapp to
+instruct the use of the EXT4 file system instead.
+
+
 ### Development variables
 ```{note}
 To use development variables, the LEAPP_UNSUPPORTED variable has to be set.
 ```
-
-#### LEAPP_DEVEL_ENABLE_LIVE_MODE
-If set to `1`, enable the use of the experimental live mode
 
 #### LEAPP_DEVEL_DM_DISABLE_UDEV
 Setting the environment variable provides a more convenient way of disabling udev support in libdevmapper, dmsetup and LVM2 tools globally without a need to modify any existing configuration settings. This is mostly useful if the system environment does not use udev.
@@ -81,11 +88,3 @@ Change the default target RHEL version. Format: `MAJOR.MINOR`.
 
 #### LEAPP_DEVEL_USE_PERSISTENT_PACKAGE_CACHE
 Caches downloaded packages when set to `1`. This will reduce the time needed by leapp when executed multiple times, because it will not have to download already downloaded packages. However, this can lead to a random issues in case the data is not up-to-date or when setting or repositories change. The environment variable is meant to be used only for the part of the upgrade before the reboot and has no effect or use otherwise.
-
-## Actor configuration
-```{warning}
-Actor configuration is currently a preview of the feature, it might change in future releases.
-```
-The actor configuration is to be placed in the `/etc/leapp/actor_conf.d/` directory. An actor configuration is a file in YAML format.
-
-To define configuration options on your own actor refer to this tutorial TODO link.
