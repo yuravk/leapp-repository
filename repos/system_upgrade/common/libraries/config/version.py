@@ -18,9 +18,9 @@ OP_MAP = {
 # These will not be supported fo IPU 9 -> 10
 _SUPPORTED_VERSIONS = {
     # Note: 'rhel-alt' is detected when on 'rhel' with kernel 4.x
-    '7': {'rhel': ['7.9'], 'rhel-alt': [], 'rhel-saphana': ['7.9'], 'centos': ['7.9'], 'ol': ['7.9'], 'scientific': ['7.9']},
-    '8': {'rhel': ['8.10'], 'rhel-saphana': ['8.10'], 'centos': ['8.5', '8'], 'almalinux': ['8.10'], 'rocky': ['8.10']},
-    '9': {'rhel': ['9.6'], 'rhel-saphana': ['9.6'], 'centos': ['9'], 'almalinux': ['9.6']},
+    '7': {'rhel': ['7.9'], 'rhel-alt': [], 'rhel-saphana': ['7.9']},
+    '8': {'rhel': ['8.10'], 'rhel-saphana': ['8.10']},
+    '9': {'rhel': ['9.6'], 'rhel-saphana': ['9.6']},
 }
 
 
