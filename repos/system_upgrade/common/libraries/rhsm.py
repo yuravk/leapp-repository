@@ -7,7 +7,7 @@ import time
 from leapp import reporting
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.common import repofileutils
-from leapp.libraries.common.config import get_env
+from leapp.libraries.common.config import get_distro_id, get_env
 from leapp.libraries.stdlib import api, CalledProcessError
 from leapp.models import RHSMInfo
 
@@ -94,7 +94,7 @@ def _handle_rhsm_exceptions(hint=None):
 
 def skip_rhsm():
     """Check whether we should skip RHSM related code."""
-    return True
+    return get_env('LEAPP_NO_RHSM', '0') == '1'
 
 
 def with_rhsm(f):
@@ -327,15 +327,41 @@ def set_container_mode(context):
     could be affected and the generated repo file in the container could be
     affected as well (e.g. when the release is set, using rhsm, on the host).
 
+    We want to put RHSM into the container mode always when /etc/rhsm and
+    /etc/pki/entitlement directories exists, even when leapp is executed with
+    --no-rhsm option. If any of these directories are missing, skip other
+    actions - most likely RHSM is not installed in such a case.
+    Note that this only true on RHEL systems, on non-RHEL (which don't use RHSM)
+    this function does nothing.
+
     :param context: An instance of a mounting.IsolatedActions class
     :type context: mounting.IsolatedActions class
     """
+    # this has to happen even with skip_rhsm, but only on RHEL
+    if get_distro_id() != 'rhel':
+        api.current_logger().info(
+            'Skipping setting RHSM into container mode on non-RHEL systems.'
+        )
+        return
+
     if not context.is_isolated():
         api.current_logger().error('Trying to set RHSM into the container mode'
                                    'on host. Skipping the action.')
         return
+    # TODO(pstodulk): check "rhsm identity" whether system is registered
+    # and the container mode should be required
+    if (not os.path.exists(context.full_path('/etc/rhsm'))
+            or not os.path.exists(context.full_path('/etc/pki/entitlement'))):
+        api.current_logger().warning(
+            'Cannot set the container mode for the subscription-manager as'
+            ' one of required directories is missing. Most likely RHSM is not'
+            ' installed. Skipping other actions.'
+        )
+        return
+
     try:
         context.call(['ln', '-s', '/etc/rhsm', '/etc/rhsm-host'])
+        context.call(['ln', '-s', '/etc/pki/entitlement', '/etc/pki/entitlement-host'])
     except CalledProcessError:
         raise StopActorExecutionError(
                 message='Cannot set the container mode for the subscription-manager.')
