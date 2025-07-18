@@ -1,5 +1,5 @@
 {
-"timestamp": "202505191506Z",
+"timestamp": "202507110905Z",
 "provided_data_streams": [
 "4.0"
 ],
@@ -71305,9 +71305,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 2129,
@@ -71318,14 +71315,14 @@ null
 null
 ],
 "name": "libasan-static",
-"repository": "rhel7-base"
+"repository": "rhel7-optional"
 }
 ],
 "set_id": 3509
 },
 "initial_release": {
 "major_version": 7,
-"minor_version": 7,
+"minor_version": 9,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
@@ -71339,7 +71336,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -71359,7 +71355,7 @@ null
 },
 "initial_release": {
 "major_version": 7,
-"minor_version": 7,
+"minor_version": 9,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
@@ -71373,7 +71369,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -71393,7 +71388,7 @@ null
 },
 "initial_release": {
 "major_version": 7,
-"minor_version": 7,
+"minor_version": 9,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
@@ -71440,7 +71435,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -71453,14 +71447,14 @@ null
 null
 ],
 "name": "libitm-static",
-"repository": "rhel7-base"
+"repository": "rhel7-optional"
 }
 ],
 "set_id": 3513
 },
 "initial_release": {
 "major_version": 7,
-"minor_version": 7,
+"minor_version": 9,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
@@ -71474,7 +71468,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -71487,14 +71480,14 @@ null
 null
 ],
 "name": "libmpc-devel",
-"repository": "rhel7-base"
+"repository": "rhel7-optional"
 }
 ],
 "set_id": 3514
 },
 "initial_release": {
 "major_version": 7,
-"minor_version": 7,
+"minor_version": 9,
 "os_name": "RHEL"
 },
 "modulestream_maps": [
@@ -71510,7 +71503,7 @@ null
 null
 ],
 "name": "libmpc-devel",
-"repository": "rhel8-AppStream"
+"repository": "rhel8-CRB"
 }
 ],
 "set_id": 13111
@@ -139243,9 +139236,7 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 3917,
@@ -139269,14 +139260,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "apache-commons-cli",
 "repository": "rhel8-AppStream"
@@ -139348,7 +139345,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -139374,14 +139370,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "apache-commons-codec",
 "repository": "rhel8-AppStream"
@@ -140187,7 +140189,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -140213,14 +140214,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "apache-commons-io",
 "repository": "rhel8-AppStream"
@@ -140578,7 +140585,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -140604,14 +140610,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "apache-commons-lang3",
 "repository": "rhel8-AppStream"
@@ -140683,7 +140695,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -140709,14 +140720,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "apache-commons-logging",
 "repository": "rhel8-AppStream"
@@ -143567,7 +143584,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -143580,7 +143596,7 @@ null
 null
 ],
 "name": "cdi-api",
-"repository": "rhel7-base"
+"repository": "rhel7-optional"
 }
 ],
 "set_id": 6494
@@ -143593,14 +143609,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "cdi-api",
 "repository": "rhel8-AppStream"
@@ -146083,7 +146105,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -146109,14 +146130,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "glassfish-el-api",
 "repository": "rhel8-AppStream"
@@ -146578,7 +146605,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -146604,14 +146630,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "google-guice",
 "repository": "rhel8-AppStream"
@@ -146859,7 +146891,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "guice-grapher",
 "repository": "rhel8-CRB"
@@ -146867,7 +146902,11 @@ null
 ],
 "set_id": 6604
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -146889,7 +146928,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "guice-jmx",
 "repository": "rhel8-CRB"
@@ -146897,7 +146939,11 @@ null
 ],
 "set_id": 6605
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -146919,7 +146965,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "guice-jndi",
 "repository": "rhel8-CRB"
@@ -146927,7 +146976,11 @@ null
 ],
 "set_id": 6606
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -147153,7 +147206,6 @@ null
 {
 "action": 3,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -147179,14 +147231,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "guava20",
 "repository": "rhel8-AppStream"
@@ -147672,7 +147730,14 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+},
+{
+"name": "scala",
+"stream": "2.10"
+}
 ],
 "name": "hawtjni-runtime",
 "repository": "rhel8-AppStream"
@@ -147680,7 +147745,11 @@ null
 ],
 "set_id": 6631
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -147823,7 +147892,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -147849,14 +147917,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "httpcomponents-client",
 "repository": "rhel8-AppStream"
@@ -147965,7 +148039,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -147991,14 +148064,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "httpcomponents-core",
 "repository": "rhel8-AppStream"
@@ -152402,7 +152481,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -152428,14 +152506,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "scala",
+"stream": "2.10"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "scala",
+"stream": "2.10"
+}
 ],
 "name": "jline",
 "repository": "rhel8-AppStream"
@@ -152964,7 +153048,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -152990,14 +153073,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "jsoup",
 "repository": "rhel8-AppStream"
@@ -153838,7 +153927,6 @@ null
 {
 "action": 3,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -153864,14 +153952,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "parfait",
+"stream": "0.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "parfait",
+"stream": "0.5"
+}
 ],
 "name": "log4j12",
 "repository": "rhel8-AppStream"
@@ -153888,7 +153982,6 @@ null
 {
 "action": 3,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -153914,14 +154007,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "parfait",
+"stream": "0.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "parfait",
+"stream": "0.5"
+}
 ],
 "name": "log4j12-javadoc",
 "repository": "rhel8-AppStream"
@@ -158469,7 +158568,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158495,14 +158593,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-annotations",
 "repository": "rhel8-CRB"
@@ -158519,7 +158623,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158545,14 +158648,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-plugin",
 "repository": "rhel8-CRB"
@@ -158569,7 +158678,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158595,14 +158703,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools",
 "repository": "rhel8-CRB"
@@ -158619,7 +158733,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158645,14 +158758,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-annotations",
 "repository": "rhel8-CRB"
@@ -158669,7 +158788,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158695,14 +158813,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-ant",
 "repository": "rhel8-CRB"
@@ -158719,7 +158843,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158745,14 +158868,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-api",
 "repository": "rhel8-CRB"
@@ -158769,7 +158898,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158795,14 +158923,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-beanshell",
 "repository": "rhel8-CRB"
@@ -158819,7 +158953,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158845,14 +158978,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-generators",
 "repository": "rhel8-CRB"
@@ -158869,7 +159008,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158895,14 +159033,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-java",
 "repository": "rhel8-CRB"
@@ -158919,7 +159063,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158945,14 +159088,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-javadoc",
 "repository": "rhel8-CRB"
@@ -158969,7 +159118,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -158995,14 +159143,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-javadocs",
 "repository": "rhel8-CRB"
@@ -159019,7 +159173,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159045,14 +159198,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugin-tools-model",
 "repository": "rhel8-CRB"
@@ -159069,7 +159228,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159095,14 +159253,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-script",
 "repository": "rhel8-CRB"
@@ -159119,7 +159283,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159145,14 +159308,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-script-ant",
 "repository": "rhel8-CRB"
@@ -159169,7 +159338,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159195,14 +159363,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-script-beanshell",
 "repository": "rhel8-CRB"
@@ -159219,7 +159393,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159245,14 +159418,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-plugins-pom",
 "repository": "rhel8-CRB"
@@ -159467,7 +159646,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159493,14 +159671,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-remote-resources-plugin",
 "repository": "rhel8-CRB"
@@ -159517,7 +159701,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159543,14 +159726,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-remote-resources-plugin-javadoc",
 "repository": "rhel8-CRB"
@@ -159567,7 +159756,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159593,14 +159781,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-reporting-api",
 "repository": "rhel8-CRB"
@@ -159705,7 +159899,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159731,14 +159924,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-reporting-impl",
 "repository": "rhel8-CRB"
@@ -159755,7 +159954,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159781,14 +159979,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-reporting-impl-javadoc",
 "repository": "rhel8-CRB"
@@ -159871,7 +160075,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159897,14 +160100,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-resources-plugin",
 "repository": "rhel8-CRB"
@@ -159921,7 +160130,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -159947,14 +160155,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-resources-plugin-javadoc",
 "repository": "rhel8-CRB"
@@ -160070,7 +160284,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -160096,14 +160309,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-script-interpreter",
 "repository": "rhel8-CRB"
@@ -160120,7 +160339,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -160146,14 +160364,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-script-interpreter-javadoc",
 "repository": "rhel8-CRB"
@@ -160225,7 +160449,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -160251,14 +160474,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "maven-shade-plugin-javadoc",
 "repository": "rhel8-CRB"
@@ -160616,7 +160845,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -160642,14 +160870,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "maven-shared-utils",
 "repository": "rhel8-AppStream"
@@ -163885,7 +164119,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -163911,14 +164144,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-archiver",
 "repository": "rhel8-CRB"
@@ -164210,7 +164449,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -164236,14 +164474,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "plexus-cipher",
 "repository": "rhel8-AppStream"
@@ -164315,7 +164559,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -164341,14 +164584,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "plexus-classworlds",
 "repository": "rhel8-AppStream"
@@ -164530,7 +164779,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -164556,14 +164804,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-compiler",
 "repository": "rhel8-CRB"
@@ -164745,7 +164999,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -164771,14 +165024,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-component-api",
 "repository": "rhel8-CRB"
@@ -164960,7 +165219,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -164986,14 +165244,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-containers",
 "repository": "rhel8-CRB"
@@ -165010,7 +165274,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165036,14 +165299,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "plexus-containers-component-annotations",
 "repository": "rhel8-AppStream"
@@ -165115,7 +165384,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165141,14 +165409,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-containers-component-metadata",
 "repository": "rhel8-CRB"
@@ -165165,7 +165439,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165191,14 +165464,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-containers-container-default",
 "repository": "rhel8-CRB"
@@ -165215,7 +165494,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165241,14 +165519,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-containers-javadoc",
 "repository": "rhel8-CRB"
@@ -165265,7 +165549,6 @@ null
 {
 "action": 3,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165291,14 +165574,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-containers-component-metadata",
 "repository": "rhel8-CRB"
@@ -165315,7 +165604,6 @@ null
 {
 "action": 3,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165341,14 +165629,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-containers-javadoc",
 "repository": "rhel8-CRB"
@@ -165431,7 +165725,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165457,14 +165750,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-i18n",
 "repository": "rhel8-CRB"
@@ -165481,7 +165780,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165507,14 +165805,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-i18n-javadoc",
 "repository": "rhel8-CRB"
@@ -165531,7 +165835,6 @@ null
 {
 "action": 4,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165557,28 +165860,40 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-interactivity",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-interactivity-api",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-interactivity-jline",
 "repository": "rhel8-CRB"
@@ -165595,7 +165910,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165621,14 +165935,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-interactivity-javadoc",
 "repository": "rhel8-CRB"
@@ -165645,7 +165965,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165671,14 +165990,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "plexus-interpolation",
 "repository": "rhel8-AppStream"
@@ -165695,7 +166020,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165721,14 +166045,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-interpolation-javadoc",
 "repository": "rhel8-CRB"
@@ -165745,7 +166075,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -165771,14 +166100,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-io",
 "repository": "rhel8-CRB"
@@ -165860,7 +166195,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-languages",
 "repository": "rhel8-CRB"
@@ -165868,7 +166206,11 @@ null
 ],
 "set_id": 7277
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -165890,7 +166232,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-languages-javadoc",
 "repository": "rhel8-CRB"
@@ -165898,7 +166243,11 @@ null
 ],
 "set_id": 7278
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -165976,7 +166325,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -166002,14 +166350,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-pom",
 "repository": "rhel8-CRB"
@@ -166026,7 +166380,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -166052,14 +166405,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-resources",
 "repository": "rhel8-CRB"
@@ -166076,7 +166435,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -166102,14 +166460,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "plexus-resources-javadoc",
 "repository": "rhel8-CRB"
@@ -166126,7 +166490,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -166152,14 +166515,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "plexus-sec-dispatcher",
 "repository": "rhel8-AppStream"
@@ -166264,7 +166633,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -166290,14 +166658,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "maven",
+"stream": "3.5"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "maven",
+"stream": "3.5"
+}
 ],
 "name": "plexus-utils",
 "repository": "rhel8-AppStream"
@@ -167870,7 +168244,6 @@ null
 {
 "action": 4,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -167896,63 +168269,90 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "jcl-over-slf4j",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "jul-to-slf4j",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "log4j-over-slf4j",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "slf4j",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "slf4j-ext",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "slf4j-jcl",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "slf4j-jdk14",
 "repository": "rhel8-CRB"
 },
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "slf4j-log4j12",
 "repository": "rhel8-CRB"
@@ -168597,9 +168997,7 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 4565,
@@ -168623,14 +169021,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "pki-deps",
+"stream": "10.6"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "pki-deps",
+"stream": "10.6"
+}
 ],
 "name": "velocity",
 "repository": "rhel8-AppStream"
@@ -168647,7 +169051,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -168673,14 +169076,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "pki-deps",
+"stream": "10.6"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "pki-deps",
+"stream": "10.6"
+}
 ],
 "name": "velocity-demo",
 "repository": "rhel8-AppStream"
@@ -168697,7 +169106,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -168723,14 +169131,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "pki-deps",
+"stream": "10.6"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "pki-deps",
+"stream": "10.6"
+}
 ],
 "name": "velocity-javadoc",
 "repository": "rhel8-AppStream"
@@ -168747,7 +169161,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -168773,14 +169186,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "pki-deps",
+"stream": "10.6"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "pki-deps",
+"stream": "10.6"
+}
 ],
 "name": "velocity-manual",
 "repository": "rhel8-AppStream"
@@ -169093,7 +169512,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -169119,14 +169537,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "pki-deps",
+"stream": "10.6"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "pki-deps",
+"stream": "10.6"
+}
 ],
 "name": "xalan-j2",
 "repository": "rhel8-AppStream"
@@ -169143,7 +169567,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -169169,14 +169592,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "xalan-j2-demo",
 "repository": "rhel8-CRB"
@@ -169193,7 +169622,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -169219,14 +169647,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "xalan-j2-javadoc",
 "repository": "rhel8-CRB"
@@ -169243,7 +169677,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -169269,14 +169702,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "xalan-j2-manual",
 "repository": "rhel8-CRB"
@@ -169293,7 +169732,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
 "ppc64le",
 "s390x",
 "x86_64"
@@ -169319,14 +169757,20 @@ null
 "modulestream_maps": [
 {
 "in_modulestream": null,
-"out_modulestream": null
+"out_modulestream": {
+"name": "javapackages-tools",
+"stream": "201801"
+}
 }
 ],
 "out_packageset": {
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
 ],
 "name": "xalan-j2-xsltc",
 "repository": "rhel8-CRB"
@@ -230176,8 +230620,6 @@ null
 "action": 0,
 "architectures": [
 "aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 6285,
@@ -230185,7 +230627,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
 ],
 "name": "python3-lldb",
 "repository": "rhel8-AppStream"
@@ -230193,7 +230638,11 @@ null
 ],
 "set_id": 9530
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -230215,7 +230664,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
 ],
 "name": "compiler-rt",
 "repository": "rhel8-AppStream"
@@ -230223,7 +230675,11 @@ null
 ],
 "set_id": 9533
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -230245,7 +230701,10 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
 ],
 "name": "python3-lit",
 "repository": "rhel8-AppStream"
@@ -230253,7 +230712,11 @@ null
 ],
 "set_id": 9534
 },
-"initial_release": null,
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
@@ -257092,9 +257555,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7052,
@@ -257129,9 +257589,6 @@ null
 {
 "action": 2,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7053,
@@ -257166,9 +257623,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7054,
@@ -257176,10 +257630,6 @@ null
 "package": [
 {
 "modulestreams": [
-{
-"name": "maven",
-"stream": "3.5"
-},
 {
 "name": "eclipse",
 "stream": "rhel8"
@@ -257207,9 +257657,6 @@ null
 {
 "action": 2,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7055,
@@ -257217,10 +257664,6 @@ null
 "package": [
 {
 "modulestreams": [
-{
-"name": "maven",
-"stream": "3.5"
-},
 {
 "name": "eclipse",
 "stream": "rhel8"
@@ -260998,12 +261441,12 @@ null
 {
 "modulestreams": [
 {
-"name": "parfait",
-"stream": "0.5"
+"name": "javapackages-tools",
+"stream": "201801"
 }
 ],
 "name": "log4j12",
-"repository": "rhel8-AppStream"
+"repository": "rhel8-CRB"
 }
 ],
 "set_id": 10704
@@ -261035,12 +261478,12 @@ null
 {
 "modulestreams": [
 {
-"name": "parfait",
-"stream": "0.5"
+"name": "javapackages-tools",
+"stream": "201801"
 }
 ],
 "name": "log4j12",
-"repository": "rhel8-AppStream"
+"repository": "rhel8-CRB"
 }
 ],
 "set_id": 18722
@@ -266242,9 +266685,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7345,
@@ -266279,9 +266719,6 @@ null
 {
 "action": 2,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7346,
@@ -266916,9 +267353,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7363,
@@ -266953,9 +267387,6 @@ null
 {
 "action": 2,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7364,
@@ -267064,9 +267495,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7367,
@@ -267101,9 +267529,6 @@ null
 {
 "action": 2,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 7368,
@@ -267149,16 +267574,12 @@ null
 {
 "modulestreams": [
 {
-"name": "scala",
-"stream": "2.10"
-},
-{
-"name": "maven",
-"stream": "3.5"
+"name": "javapackages-tools",
+"stream": "201801"
 }
 ],
 "name": "hawtjni",
-"repository": "rhel8-AppStream"
+"repository": "rhel8-CRB"
 }
 ],
 "set_id": 10899
@@ -267190,16 +267611,12 @@ null
 {
 "modulestreams": [
 {
-"name": "scala",
-"stream": "2.10"
-},
-{
-"name": "maven",
-"stream": "3.5"
+"name": "javapackages-tools",
+"stream": "201801"
 }
 ],
 "name": "hawtjni",
-"repository": "rhel8-AppStream"
+"repository": "rhel8-CRB"
 }
 ],
 "set_id": 18757
@@ -273221,174 +273638,6 @@ null
 }
 ],
 "set_id": 11192
-},
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 6,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 7670,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-{
-"name": "llvm-toolset",
-"stream": "rhel8"
-}
-],
-"name": "python3-clang",
-"repository": "rhel8-AppStream"
-}
-],
-"set_id": 11193
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 5,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": {
-"name": "llvm-toolset",
-"stream": "rhel8"
-},
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "python3-clang",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 11194
-},
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 6,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 7671,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-{
-"name": "llvm-toolset",
-"stream": "rhel8"
-}
-],
-"name": "python3-lit",
-"repository": "rhel8-AppStream"
-}
-],
-"set_id": 11195
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 5,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": {
-"name": "llvm-toolset",
-"stream": "rhel8"
-},
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "python3-lit",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 11196
-},
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 6,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 7672,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-{
-"name": "llvm-toolset",
-"stream": "rhel8"
-}
-],
-"name": "python3-lldb",
-"repository": "rhel8-AppStream"
-}
-],
-"set_id": 11197
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 5,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": {
-"name": "llvm-toolset",
-"stream": "rhel8"
-},
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "python3-lldb",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 11198
 },
 "release": {
 "major_version": 9,
@@ -302535,74 +302784,6 @@ null
 }
 ],
 "set_id": 12123
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 5,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 0,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 8455,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "bacula-console-bat",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 12124
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 5,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 0,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 8456,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "bacula-traymonitor",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 12125
 },
 "initial_release": {
 "major_version": 8,
@@ -355787,80 +355968,6 @@ null
 "s390x",
 "x86_64"
 ],
-"id": 9997,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-{
-"name": "parfait",
-"stream": "0.5"
-}
-],
-"name": "log4j12-javadoc",
-"repository": "rhel8-AppStream"
-}
-],
-"set_id": 13972
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 6,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 2,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 9998,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-{
-"name": "parfait",
-"stream": "0.5"
-}
-],
-"name": "log4j12-javadoc",
-"repository": "rhel8-AppStream"
-}
-],
-"set_id": 19041
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 5,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 8,
-"minor_version": 6,
-"os_name": "RHEL"
-}
-},
-{
-"action": 1,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
 "id": 9999,
 "in_packageset": {
 "package": [
@@ -373452,9 +373559,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10499,
@@ -373750,9 +373854,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10505,
@@ -373806,9 +373907,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10506,
@@ -373936,9 +374034,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10509,
@@ -374048,9 +374143,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10511,
@@ -374138,9 +374230,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10513,
@@ -374250,9 +374339,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10515,
@@ -374473,9 +374559,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10520,
@@ -381535,9 +381618,6 @@ null
 {
 "action": 1,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10697,
@@ -381572,9 +381652,6 @@ null
 {
 "action": 2,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 10698,
@@ -399589,10 +399666,6 @@ null
 "modulestreams": [
 {
 "name": "maven",
-"stream": "3.5"
-},
-{
-"name": "maven",
 "stream": "3.6"
 }
 ],
@@ -399612,13 +399685,6 @@ null
 "in_modulestream": {
 "name": "maven",
 "stream": "3.6"
-},
-"out_modulestream": null
-},
-{
-"in_modulestream": {
-"name": "maven",
-"stream": "3.5"
 },
 "out_modulestream": null
 }
@@ -400248,9 +400314,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 11187,
@@ -400572,9 +400635,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 11192,
@@ -400897,10 +400957,6 @@ null
 "modulestreams": [
 {
 "name": "maven",
-"stream": "3.5"
-},
-{
-"name": "maven",
 "stream": "3.6"
 }
 ],
@@ -400920,13 +400976,6 @@ null
 "in_modulestream": {
 "name": "maven",
 "stream": "3.6"
-},
-"out_modulestream": null
-},
-{
-"in_modulestream": {
-"name": "maven",
-"stream": "3.5"
 },
 "out_modulestream": null
 }
@@ -401567,10 +401616,6 @@ null
 {
 "name": "maven",
 "stream": "3.6"
-},
-{
-"name": "pki-deps",
-"stream": "10.6"
 }
 ],
 "name": "jcl-over-slf4j",
@@ -401596,13 +401641,6 @@ null
 "in_modulestream": {
 "name": "maven",
 "stream": "3.6"
-},
-"out_modulestream": null
-},
-{
-"in_modulestream": {
-"name": "pki-deps",
-"stream": "10.6"
 },
 "out_modulestream": null
 }
@@ -401639,14 +401677,6 @@ null
 {
 "modulestreams": [
 {
-"name": "maven",
-"stream": "3.5"
-},
-{
-"name": "maven",
-"stream": "3.6"
-},
-{
 "name": "pki-deps",
 "stream": "10.6"
 }
@@ -401667,20 +401697,6 @@ null
 "in_modulestream": {
 "name": "pki-deps",
 "stream": "10.6"
-},
-"out_modulestream": null
-},
-{
-"in_modulestream": {
-"name": "maven",
-"stream": "3.5"
-},
-"out_modulestream": null
-},
-{
-"in_modulestream": {
-"name": "maven",
-"stream": "3.6"
 },
 "out_modulestream": null
 }
@@ -405018,9 +405034,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 11259,
@@ -405038,7 +405051,7 @@ null
 },
 "initial_release": {
 "major_version": 8,
-"minor_version": 6,
+"minor_version": 10,
 "os_name": "RHEL"
 },
 "modulestream_maps": [
@@ -511782,21 +511795,21 @@ null
 null
 ],
 "name": "rpm-sequoia",
-"repository": "rhel10-BaseOS"
+"repository": "rhel9-BaseOS"
 }
 ],
 "set_id": 19997
 },
 "initial_release": {
 "major_version": 9,
-"minor_version": 5,
+"minor_version": 6,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
-"major_version": 10,
-"minor_version": 0,
+"major_version": 9,
+"minor_version": 7,
 "os_name": "RHEL"
 }
 },
@@ -597343,40 +597356,6 @@ null
 "s390x",
 "x86_64"
 ],
-"id": 16619,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "ocaml-augeas",
-"repository": "rhel9-CRB"
-}
-],
-"set_id": 22803
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 5,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 1,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
 "id": 16620,
 "in_packageset": {
 "package": [
@@ -602177,7 +602156,7 @@ null
 null
 ],
 "name": "amd-gpu-firmware",
-"repository": "rhel10-BaseOS"
+"repository": "rhel10-AppStream"
 },
 {
 "modulestreams": [
@@ -602226,7 +602205,7 @@ null
 null
 ],
 "name": "intel-gpu-firmware",
-"repository": "rhel10-BaseOS"
+"repository": "rhel10-AppStream"
 },
 {
 "modulestreams": [
@@ -602268,7 +602247,7 @@ null
 null
 ],
 "name": "nvidia-gpu-firmware",
-"repository": "rhel10-BaseOS"
+"repository": "rhel10-AppStream"
 },
 {
 "modulestreams": [
@@ -621056,14 +621035,14 @@ null
 },
 "initial_release": {
 "major_version": 9,
-"minor_version": 5,
+"minor_version": 4,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
 "major_version": 9,
-"minor_version": 6,
+"minor_version": 5,
 "os_name": "RHEL"
 }
 },
@@ -695610,6 +695589,2832 @@ null
 "release": {
 "major_version": 10,
 "minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19565,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libgfortran-static",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26171
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"ppc64le",
+"x86_64"
+],
+"id": 19566,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libquadmath-static",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26172
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 1,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19567,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libgfortran-static",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26173
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 1,
+"architectures": [
+"ppc64le",
+"x86_64"
+],
+"id": 19568,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libquadmath-static",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26174
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19569,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libgfortran-static",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26175
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 4,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 5,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"ppc64le",
+"x86_64"
+],
+"id": 19570,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libquadmath-static",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26176
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 4,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 5,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19571,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-toolset-15",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26179
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19572,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-toolset-15-gcc",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26180
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 4,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19573,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "cockpit-ws",
+"repository": "rhel10-BaseOS"
+}
+],
+"set_id": 26181
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "cockpit-ws",
+"repository": "rhel10-BaseOS"
+},
+{
+"modulestreams": [
+null
+],
+"name": "cockpit-ws-selinux",
+"repository": "rhel10-BaseOS"
+}
+],
+"set_id": 26182
+},
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"x86_64"
+],
+"id": 19574,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "eclipse",
+"stream": "rhel8"
+}
+],
+"name": "hamcrest-core",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26183
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"x86_64"
+],
+"id": 19575,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "eclipse",
+"stream": "rhel8"
+}
+],
+"name": "glassfish-servlet-api",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26184
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"x86_64"
+],
+"id": 19576,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "eclipse",
+"stream": "rhel8"
+}
+],
+"name": "glassfish-annotation-api",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26185
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"x86_64"
+],
+"id": 19577,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "eclipse",
+"stream": "rhel8"
+}
+],
+"name": "apache-commons-jxpath",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26186
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"x86_64"
+],
+"id": 19578,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "eclipse",
+"stream": "rhel8"
+}
+],
+"name": "glassfish-el",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26187
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 1,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19579,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "javapackages-tools",
+"stream": "201801"
+}
+],
+"name": "glassfish-el",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26188
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"x86_64"
+],
+"id": 19580,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "eclipse",
+"stream": "rhel8"
+}
+],
+"name": "glassfish-jsp-api",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26189
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 4,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19581,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "cockpit-ws",
+"repository": "rhel9-BaseOS"
+}
+],
+"set_id": 26190
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "cockpit-ws",
+"repository": "rhel9-BaseOS"
+},
+{
+"modulestreams": [
+null
+],
+"name": "cockpit-ws-selinux",
+"repository": "rhel9-BaseOS"
+}
+],
+"set_id": 26191
+},
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19582,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "jbig2dec-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26192
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19583,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "librabbitmq-tools",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26193
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 8,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19584,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "git-credential-libsecret",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26194
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 2,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 3,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19585,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "git-lfs",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26195
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 2,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 3,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"ppc64le"
+],
+"id": 19586,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "ppc64-diag-rtas",
+"repository": "rhel8-BaseOS"
+}
+],
+"set_id": 26196
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 2,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 3,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19587,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda",
+"repository": "rhel7-base"
+}
+],
+"set_id": 26197
+},
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26198
+},
+"release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19588,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-client",
+"repository": "rhel7-base"
+}
+],
+"set_id": 26199
+},
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-client",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26200
+},
+"release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19589,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-libs",
+"repository": "rhel7-base"
+}
+],
+"set_id": 26201
+},
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-libs",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26202
+},
+"release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"x86_64"
+],
+"id": 19590,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-server",
+"repository": "rhel7-optional"
+}
+],
+"set_id": 26203
+},
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-server",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26204
+},
+"release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19591,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-server",
+"repository": "rhel7-base"
+}
+],
+"set_id": 26205
+},
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "amanda-server",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26206
+},
+"release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19592,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "asciidoc",
+"repository": "rhel7-optional"
+}
+],
+"set_id": 26207
+},
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "asciidoc",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26208
+},
+"release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19593,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "at",
+"repository": "rhel7-base"
+}
+],
+"set_id": 26209
+},
+"initial_release": {
+"major_version": 7,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "at",
+"repository": "rhel8-BaseOS"
+}
+],
+"set_id": 26210
+},
+"release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"x86_64"
+],
+"id": 19594,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "azure-vm-utils",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26213
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19595,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-toolset-15-binutils",
+"repository": "rhel9-BaseOS"
+}
+],
+"set_id": 26214
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19596,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-toolset-15-binutils",
+"repository": "rhel10-BaseOS"
+}
+],
+"set_id": 26215
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19597,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-plugin-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26216
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-plugin-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26217
+},
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19598,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-plugin-devel",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26222
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-plugin-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26223
+},
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 1,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19599,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "SDL2",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26220
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19600,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "SDL2",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26221
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"x86_64"
+],
+"id": 19601,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "azure-vm-utils",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26224
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19602,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-toolset-15",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26225
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19603,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "valkey",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26226
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19604,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "valkey-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26227
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19605,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gcc-toolset-15-gcc",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26228
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19606,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-rpm-macros",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26229
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19607,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-rpm-macros",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26230
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 7,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19608,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3-lit",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26231
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+},
+"out_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3.12-lit",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26232
+},
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 7,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19609,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3.12-lit",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26233
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+},
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3-lit",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26234
+},
+"release": {
+"major_version": 9,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 7,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19610,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3-lldb",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26235
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+},
+"out_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3.12-lldb",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26236
+},
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 7,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19611,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3.12-lldb",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26237
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+},
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3-lldb",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26238
+},
+"release": {
+"major_version": 9,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 7,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19612,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3.12-clang",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26239
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+},
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3-clang",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26240
+},
+"release": {
+"major_version": 9,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 7,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19613,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3-clang",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26241
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+},
+"out_modulestream": {
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3.12-clang",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26242
+},
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19614,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "llvm-toolset",
+"stream": "rhel8"
+}
+],
+"name": "python3-clang",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26243
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 7,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19615,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libpeas",
+"repository": "rhel9-BaseOS"
+}
+],
+"set_id": 26244
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libpeas1",
+"repository": "rhel10-BaseOS"
+}
+],
+"set_id": 26245
+},
+"release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19616,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libwebp-tools",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26246
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19617,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-common",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26247
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19618,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-ide-signed",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26248
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19619,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-pce-signed",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26249
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19620,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-tdqe-signed",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26250
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19621,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-common",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26251
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19622,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-libs",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26252
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19623,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-mpa",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26253
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19624,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-pckid-tool",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26254
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19625,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "tdx-qgs",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26255
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19626,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-common",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26256
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19627,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-libs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26257
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19628,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-mpa",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26258
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19629,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-pckid-tool",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26259
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19630,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "tdx-qgs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26260
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19631,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-common",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26261
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19632,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-ide-signed",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26262
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19633,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-pce-signed",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26263
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"x86_64"
+],
+"id": 19634,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sgx-enclave-prebuilt-tdqe-signed",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26264
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"ppc64le",
+"x86_64"
+],
+"id": 19635,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sap-hana-ha",
+"repository": "rhel9-SAP-Solutions"
+}
+],
+"set_id": 26265
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 3,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 4,
+"os_name": "RHEL"
+}
+},
+{
+"action": 1,
+"architectures": [
+"ppc64le",
+"x86_64"
+],
+"id": 19636,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "sap-hana-ha",
+"repository": "rhel9-SAP-Solutions"
+}
+],
+"set_id": 26266
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 4,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 5,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19637,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "fips-provider-next",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26267
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19638,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "insights-core-selinux",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26268
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19639,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "insights-core-selinux",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26269
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
 "os_name": "RHEL"
 }
 }
