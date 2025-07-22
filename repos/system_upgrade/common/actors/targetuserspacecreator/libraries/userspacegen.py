@@ -295,6 +295,8 @@ def _get_files_owned_by_rpms(context, dirpath, pkgs=None, recursive=False):
     """
     Return the list of file names inside dirpath owned by RPMs.
 
+    The returned paths are relative to the dirpath.
+
     This is important e.g. in case of RHUI which installs specific repo files
     in the yum.repos.d directory.
 
@@ -312,7 +314,7 @@ def _get_files_owned_by_rpms(context, dirpath, pkgs=None, recursive=False):
     searchdir = context.full_path(dirpath)
     if recursive:
         for root, _, files in os.walk(searchdir):
-            if '/directory-hash/' in root:
+            if '/directory-hash' in root:
                 # tl;dr; for the performance improvement
                 # The directory has been relatively recently added to ca-certificates
                 # rpm on EL 9+ systems and the content does not seem to be important
@@ -335,7 +337,7 @@ def _get_files_owned_by_rpms(context, dirpath, pkgs=None, recursive=False):
             api.current_logger().debug('SKIP the {} file: not owned by any rpm'.format(fname))
             continue
         if pkgs and not [pkg for pkg in pkgs if pkg in result['stdout']]:
-            api.current_logger().debug('SKIP the {} file: not owned by any searched rpm:'.format(fname))
+            api.current_logger().debug('SKIP the {} file: not owned by any searched rpm'.format(fname))
             continue
         api.current_logger().debug('Found the file owned by an rpm: {}.'.format(fname))
         files_owned_by_rpms.append(fname)
@@ -929,7 +931,13 @@ def _get_rh_available_repoids(context, indata):
             os.rename(foreign_repofile, '{0}.back'.format(foreign_repofile))
 
         try:
-            dnf_cmd = ['dnf', 'repolist', '--releasever', target_ver, '-v', '--enablerepo', '*']
+            dnf_cmd = [
+                'dnf', 'repolist',
+                '--releasever', target_ver, '-v',
+                '--enablerepo', '*',
+                '--disablerepo', '*-source-*',
+                '--disablerepo', '*-debug-*',
+            ]
             repolist_result = context.call(dnf_cmd)['stdout']
             repoid_lines = [line for line in repolist_result.split('\n') if line.startswith('Repo-id')]
             rhui_repoids = {extract_repoid_from_line(line) for line in repoid_lines}

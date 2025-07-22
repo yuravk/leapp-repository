@@ -158,6 +158,17 @@ RHUI_SETUPS = {
                         ('cdn.redhat.com-chain.crt', RHUI_PKI_DIR),
                         ('content-rhel9.crt', RHUI_PKI_PRODUCT_DIR)
                       ], os_version='9'),
+        mk_rhui_setup(clients={'rh-amazon-rhui-client'}, leapp_pkg='leapp-rhui-aws',
+                      mandatory_files=[
+                        ('rhui-client-config-server-10.crt', RHUI_PKI_PRODUCT_DIR),
+                        ('rhui-client-config-server-10.key', RHUI_PKI_DIR),
+                        ('leapp-aws.repo', YUM_REPOS_PATH)
+                      ],
+                      optional_files=[
+                        ('content-rhel10.key', RHUI_PKI_DIR),
+                        ('cdn.redhat.com-chain.crt', RHUI_PKI_DIR),
+                        ('content-rhel10.crt', RHUI_PKI_PRODUCT_DIR)
+                      ], os_version='10'),
     ],
     RHUIFamily(RHUIProvider.AWS, arch=arch.ARCH_ARM64, client_files_folder='aws'): [
         mk_rhui_setup(clients={'rh-amazon-rhui-client-arm'}, optional_files=[], os_version='7', arch=arch.ARCH_ARM64),
@@ -185,6 +196,17 @@ RHUI_SETUPS = {
                         ('cdn.redhat.com-chain.crt', RHUI_PKI_DIR),
                         ('content-rhel9.crt', RHUI_PKI_PRODUCT_DIR)
                       ], os_version='9', arch=arch.ARCH_ARM64),
+        mk_rhui_setup(clients={'rh-amazon-rhui-client'}, leapp_pkg='leapp-rhui-aws',
+                      mandatory_files=[
+                        ('rhui-client-config-server-10.crt', RHUI_PKI_PRODUCT_DIR),
+                        ('rhui-client-config-server-10.key', RHUI_PKI_DIR),
+                        ('leapp-aws.repo', YUM_REPOS_PATH)
+                      ],
+                      optional_files=[
+                        ('content-rhel10.key', RHUI_PKI_DIR),
+                        ('cdn.redhat.com-chain.crt', RHUI_PKI_DIR),
+                        ('content-rhel10.crt', RHUI_PKI_PRODUCT_DIR)
+                      ], os_version='10'),
     ],
     RHUIFamily(RHUIProvider.AWS, variant=RHUIVariant.SAP, client_files_folder='aws-sap-e4s'): [
         mk_rhui_setup(clients={'rh-amazon-rhui-client-sap-bundle'}, optional_files=[], os_version='7',
@@ -250,6 +272,19 @@ RHUI_SETUPS = {
                       ],
                       extra_info={'agent_pkg': 'WALinuxAgent'},
                       os_version='9'),
+        mk_rhui_setup(clients={'rhui-azure-rhel10'}, leapp_pkg='leapp-rhui-azure',
+                      mandatory_files=[
+                          ('leapp-azure.repo', YUM_REPOS_PATH),
+                          # We need to have the new GPG key ready when we will be bootstrapping
+                          # target rhui client.
+                          ('RPM-GPG-KEY-microsoft-azure-release-new', '/etc/pki/rpm-gpg/')
+                      ],
+                      optional_files=[
+                        ('key.pem', RHUI_PKI_DIR),
+                        ('content.crt', RHUI_PKI_PRODUCT_DIR)
+                      ],
+                      extra_info={'agent_pkg': 'WALinuxAgent'},
+                      os_version='10'),
     ],
     RHUIFamily(RHUIProvider.AZURE, variant=RHUIVariant.SAP_APPS, client_files_folder='azure-sap-apps'): [
         mk_rhui_setup(clients={'rhui-azure-rhel7-base-sap-apps'}, os_version='7', content_channel=ContentChannel.EUS),
@@ -348,6 +383,13 @@ RHUI_SETUPS = {
                         ('content.crt', RHUI_PKI_PRODUCT_DIR)
                       ],
                       os_version='9'),
+        mk_rhui_setup(clients={'aliyun_rhui_rhel10'}, leapp_pkg='leapp-rhui-alibaba',
+                      mandatory_files=[('leapp-alibaba.repo', YUM_REPOS_PATH)],
+                      optional_files=[
+                        ('key.pem', RHUI_PKI_DIR),
+                        ('content.crt', RHUI_PKI_PRODUCT_DIR)
+                      ],
+                      os_version='10'),
     ],
     RHUIFamily(RHUIProvider.ALIBABA, arch=arch.ARCH_ARM64, client_files_folder='alibaba'): [
         mk_rhui_setup(clients={'aliyun_rhui_rhel8'}, leapp_pkg='leapp-rhui-alibaba',
@@ -364,6 +406,13 @@ RHUI_SETUPS = {
                         ('content.crt', RHUI_PKI_PRODUCT_DIR)
                       ],
                       os_version='9'),
+        mk_rhui_setup(clients={'aliyun_rhui_rhel10'}, leapp_pkg='leapp-rhui-alibaba',
+                      mandatory_files=[('leapp-alibaba.repo', YUM_REPOS_PATH)],
+                      optional_files=[
+                        ('key.pem', RHUI_PKI_DIR),
+                        ('content.crt', RHUI_PKI_PRODUCT_DIR)
+                      ],
+                      os_version='10'),
     ]
 }
 
@@ -566,15 +615,29 @@ RHUI_CLOUD_MAP = {
             ],
         },
     },
+    '9to10': {
+        'alibaba': {
+            'src_pkg': 'aliyun_rhui_rhel9',
+            'target_pkg': 'aliyun_rhui_rhel10',
+            'leapp_pkg': 'leapp-rhui-alibaba',
+            'leapp_pkg_repo': 'leapp-alibaba.repo',
+            'files_map': [
+                ('content.crt', RHUI_PKI_PRODUCT_DIR),
+                ('key.pem', RHUI_PKI_DIR),
+                ('leapp-alibaba.repo', YUM_REPOS_PATH)
+            ],
+        },
+    }
 }
 
 
-# TODO(mmatuska) deprecate or adjust for 9to10?
 def get_upg_path():
     """
     Get upgrade path in specific string format
     """
-    return '7to8' if get_target_major_version() == '8' else '8to9'
+    source_major_version = get_source_major_version()
+    target_major_version = get_target_major_version()
+    return '{0}to{1}'.format(source_major_version, target_major_version)
 
 
 @deprecated(since='2023-07-27', message='This functionality has been replaced with the RHUIInfo message.')

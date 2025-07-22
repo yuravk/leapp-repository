@@ -1,7 +1,7 @@
 # Contribution and development guidelines
 ## Code guidelines
 
-Your code should follow the [Python Coding Guidelines](https://leapp.readthedocs.io/en/latest/python-coding-guidelines.html) used for the leapp project. On top of these rules follow instructions
+Your code should follow the [Python Coding Guidelines](https://leapp.readthedocs.io/en/latest/contributing.html#follow-python-coding-guidelines) used for the leapp project. On top of these rules follow instructions
 below.
 
 ### Retrieving information about the source system should be separated from its use
@@ -51,7 +51,6 @@ can be used.
 Here is the list of repositories in this project with the Python compatibility
 requirements:
 * `system_upgrade/common` - 3.6, 3.9, 3.12 (_you can start to ignore Python 2.7_)
-* _`system_upgrade/el7toel8` - 2.7, 3.6 (deprecated)_
 * `system_upgrade/el8toel9` - 3.6, 3.9
 * `system_upgrade/el9toel10` - 3.9, 3.12
 
