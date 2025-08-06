@@ -1,5 +1,5 @@
 {
-"timestamp": "202507110905Z",
+"timestamp": "202507291505Z",
 "provided_data_streams": [
 "4.0"
 ],
@@ -253792,7 +253792,14 @@ null
 "package": [
 {
 "modulestreams": [
-null
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+}
 ],
 "name": "php-pecl-xdebug",
 "repository": "rhel8-AppStream"
@@ -253807,7 +253814,17 @@ null
 },
 "modulestream_maps": [
 {
-"in_modulestream": null,
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
 "out_modulestream": null
 }
 ],
@@ -343388,6 +343405,10 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
 }
 ],
 "name": "php-recode",
@@ -343462,6 +343483,14 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
 }
 ],
 "name": "php-xmlrpc",
@@ -364612,6 +364641,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php",
@@ -364632,6 +364673,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -364641,7 +364703,7 @@ null
 null
 ],
 "name": "php",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14230
@@ -364668,6 +364730,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-bcmath",
@@ -364688,6 +364762,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -364697,7 +364792,7 @@ null
 null
 ],
 "name": "php-bcmath",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14232
@@ -364724,6 +364819,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-cli",
@@ -364744,6 +364851,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -364753,7 +364881,7 @@ null
 null
 ],
 "name": "php-cli",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14234
@@ -364780,6 +364908,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-common",
@@ -364800,6 +364940,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -364809,7 +364970,7 @@ null
 null
 ],
 "name": "php-common",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14236
@@ -364836,6 +364997,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-dba",
@@ -364856,6 +365029,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -364865,7 +365059,7 @@ null
 null
 ],
 "name": "php-dba",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14238
@@ -364892,6 +365086,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-dbg",
@@ -364912,6 +365118,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -364921,7 +365148,7 @@ null
 null
 ],
 "name": "php-dbg",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14240
@@ -364948,6 +365175,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-devel",
@@ -364968,6 +365207,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -364977,7 +365237,7 @@ null
 null
 ],
 "name": "php-devel",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14242
@@ -365004,6 +365264,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-embedded",
@@ -365024,6 +365296,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365033,7 +365326,7 @@ null
 null
 ],
 "name": "php-embedded",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14244
@@ -365060,6 +365353,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-enchant",
@@ -365080,6 +365385,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365089,7 +365415,7 @@ null
 null
 ],
 "name": "php-enchant",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14246
@@ -365116,6 +365442,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-fpm",
@@ -365136,6 +365474,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365145,7 +365504,7 @@ null
 null
 ],
 "name": "php-fpm",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14248
@@ -365172,6 +365531,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-gd",
@@ -365192,6 +365563,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365201,7 +365593,7 @@ null
 null
 ],
 "name": "php-gd",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14250
@@ -365228,6 +365620,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-gmp",
@@ -365248,6 +365652,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365257,7 +365682,7 @@ null
 null
 ],
 "name": "php-gmp",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14252
@@ -365284,6 +365709,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-intl",
@@ -365304,6 +365741,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365313,7 +365771,7 @@ null
 null
 ],
 "name": "php-intl",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14254
@@ -365325,7 +365783,7 @@ null
 }
 },
 {
-"action": 6,
+"action": 1,
 "architectures": [
 "aarch64",
 "ppc64le",
@@ -365340,6 +365798,14 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
 }
 ],
 "name": "php-json",
@@ -365353,27 +365819,8 @@ null
 "minor_version": 6,
 "os_name": "RHEL"
 },
-"modulestream_maps": [
-{
-"in_modulestream": {
-"name": "php",
-"stream": "7.2"
-},
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "php-json",
-"repository": "rhel9-BaseOS"
-}
-],
-"set_id": 14256
-},
+"modulestream_maps": [],
+"out_packageset": null,
 "release": {
 "major_version": 9,
 "minor_version": 0,
@@ -365396,6 +365843,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-ldap",
@@ -365416,6 +365875,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365425,7 +365905,7 @@ null
 null
 ],
 "name": "php-ldap",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14258
@@ -365452,6 +365932,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-mbstring",
@@ -365472,6 +365964,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365481,7 +365994,7 @@ null
 null
 ],
 "name": "php-mbstring",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14260
@@ -365508,6 +366021,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-mysqlnd",
@@ -365528,6 +366053,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365537,7 +366083,7 @@ null
 null
 ],
 "name": "php-mysqlnd",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14262
@@ -365564,6 +366110,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-odbc",
@@ -365584,6 +366142,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365593,7 +366172,7 @@ null
 null
 ],
 "name": "php-odbc",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14264
@@ -365620,6 +366199,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-opcache",
@@ -365640,6 +366231,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365649,7 +366261,7 @@ null
 null
 ],
 "name": "php-opcache",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14266
@@ -365676,6 +366288,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-pdo",
@@ -365696,6 +366320,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365705,7 +366350,7 @@ null
 null
 ],
 "name": "php-pdo",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14268
@@ -365794,7 +366439,7 @@ null
 null
 ],
 "name": "php-pear",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14270
@@ -365821,6 +366466,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-pecl-apcu",
@@ -365839,6 +366496,27 @@ null
 "in_modulestream": {
 "name": "php",
 "stream": "7.2"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
 },
 "out_modulestream": null
 }
@@ -365877,6 +366555,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-pecl-apcu-devel",
@@ -365897,6 +366587,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365906,7 +366617,7 @@ null
 null
 ],
 "name": "php-pecl-apcu-devel",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14274
@@ -365933,6 +366644,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-pecl-zip",
@@ -365953,6 +366676,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -365962,7 +366706,7 @@ null
 null
 ],
 "name": "php-pecl-zip",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14276
@@ -365989,6 +366733,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-pgsql",
@@ -366009,6 +366765,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -366018,7 +366795,7 @@ null
 null
 ],
 "name": "php-pgsql",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14278
@@ -366045,6 +366822,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-process",
@@ -366065,6 +366854,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -366074,7 +366884,7 @@ null
 null
 ],
 "name": "php-process",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14280
@@ -366101,6 +366911,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-snmp",
@@ -366121,6 +366943,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -366130,7 +366973,7 @@ null
 null
 ],
 "name": "php-snmp",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14282
@@ -366157,6 +367000,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-soap",
@@ -366177,6 +367032,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -366186,7 +367062,7 @@ null
 null
 ],
 "name": "php-soap",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14284
@@ -366213,6 +367089,18 @@ null
 {
 "name": "php",
 "stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
 }
 ],
 "name": "php-xml",
@@ -366233,6 +367121,27 @@ null
 "stream": "7.2"
 },
 "out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.3"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
 }
 ],
 "out_packageset": {
@@ -366242,7 +367151,7 @@ null
 null
 ],
 "name": "php-xml",
-"repository": "rhel9-BaseOS"
+"repository": "rhel9-AppStream"
 }
 ],
 "set_id": 14286
@@ -698415,6 +699324,646 @@ null
 "release": {
 "major_version": 9,
 "minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19640,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "lftp",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26270
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19641,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "ftp",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26271
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19642,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "vsftpd",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26272
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19643,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "hunspell-ka",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26273
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 6,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19644,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "php",
+"stream": "7.4"
+},
+{
+"name": "php",
+"stream": "8.0"
+}
+],
+"name": "php-ffi",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26274
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": {
+"name": "php",
+"stream": "7.4"
+},
+"out_modulestream": null
+},
+{
+"in_modulestream": {
+"name": "php",
+"stream": "8.0"
+},
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php-ffi",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26275
+},
+"release": {
+"major_version": 9,
+"minor_version": 0,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19645,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "php",
+"stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+}
+],
+"name": "php-json",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26276
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19646,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "php",
+"stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+}
+],
+"name": "php-recode",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26277
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 2,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19647,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "php",
+"stream": "7.2"
+},
+{
+"name": "php",
+"stream": "7.3"
+},
+{
+"name": "php",
+"stream": "7.4"
+}
+],
+"name": "php-xmlrpc",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26278
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19648,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "perl-XS-Parse-Keyword-Builder",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26279
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19649,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "bindgen-cli",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26280
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19650,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "bindgen-cli",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26281
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19651,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "cbindgen",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26282
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19652,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "cbindgen",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26283
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19653,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "image-builder",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26284
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19654,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "image-builder",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26285
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19655,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "fips-provider-next",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26286
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19656,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "redhat-cloud-client-configuration-cdn",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26287
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 5,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 6,
 "os_name": "RHEL"
 }
 }
