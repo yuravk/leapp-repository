@@ -24,7 +24,9 @@ def get_distribution_data(distribution):
 
     # Extend with Vendors signatures
     for siglist in api.consume(VendorSignatures):
-        distro_config_json["keys"].extend(siglist.sigs)
+        for sig in siglist.sigs:
+            # Add vendor signature as a new key with empty package list
+            distro_config_json["keys"][sig] = []
 
     return distro_config_json
 
