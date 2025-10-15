@@ -74,6 +74,7 @@ _DISTRO_REPOFILES_MAP = {
             '/etc/yum.repos.d/almalinux.repo': ARCH_ACCEPTED,
         },
         '9': {
+            '/etc/yum.repos.d/almalinux.repo': ARCH_ACCEPTED,
             '/etc/yum.repos.d/almalinux-appstream.repo': ARCH_ACCEPTED,
             '/etc/yum.repos.d/almalinux-baseos.repo': ARCH_ACCEPTED,
             '/etc/yum.repos.d/almalinux-crb.repo': ARCH_ACCEPTED,
