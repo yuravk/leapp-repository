@@ -1,5 +1,5 @@
 {
-"timestamp": "202511121106Z",
+"timestamp": "202512021706Z",
 "provided_data_streams": [
 "4.1"
 ],
@@ -250419,9 +250419,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 6802,
@@ -315101,7 +315098,7 @@ null
 },
 "initial_release": {
 "major_version": 8,
-"minor_version": 5,
+"minor_version": 10,
 "os_name": "RHEL"
 },
 "modulestream_maps": [
@@ -315124,7 +315121,7 @@ null
 null
 ],
 "name": "openexr-devel",
-"repository": "rhel9-AppStream"
+"repository": "rhel9-CRB"
 }
 ],
 "set_id": 12502
@@ -583248,40 +583245,6 @@ null
 "s390x",
 "x86_64"
 ],
-"id": 16179,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "openexr-devel",
-"repository": "rhel9-CRB"
-}
-],
-"set_id": 22334
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 10,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 0,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
 "id": 16180,
 "in_packageset": {
 "package": [
@@ -708768,6 +708731,454 @@ null
 "release": {
 "major_version": 10,
 "minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19909,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rhc-playbook-verifier",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26586
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19910,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rhc-playbook-verifier",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26587
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19911,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3-zstandard",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26588
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19912,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "unbound-utils",
+"repository": "rhel10-BaseOS"
+}
+],
+"set_id": 26589
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 5,
+"architectures": [
+"x86_64"
+],
+"id": 19913,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel10-NFV"
+},
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt-kvm",
+"repository": "rhel10-NFV"
+}
+],
+"set_id": 26593
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel10-NFV"
+}
+],
+"set_id": 26600
+},
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 5,
+"architectures": [
+"x86_64"
+],
+"id": 19915,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel9-NFV"
+},
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt-kvm",
+"repository": "rhel9-NFV"
+}
+],
+"set_id": 26595
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel9-NFV"
+}
+],
+"set_id": 26601
+},
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19916,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gnome-autoar-devel",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26596
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19917,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rest-devel",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26597
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19918,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "plymouth-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26598
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19919,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "plymouth-devel",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26599
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19920,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libdmx-devel",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26602
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19921,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libdmx-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26603
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
 "os_name": "RHEL"
 }
 }
