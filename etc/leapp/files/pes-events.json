@@ -1,7 +1,7 @@
 {
-"timestamp": "202512021706Z",
+"timestamp": "202512221307Z",
 "provided_data_streams": [
-"4.1"
+"4.2"
 ],
 "packageinfo": [
 {
@@ -709179,6 +709179,956 @@ null
 "release": {
 "major_version": 9,
 "minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19922,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "v4l-utils",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26604
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19923,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "v4l-utils",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26605
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19924,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26606
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19925,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-client",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26607
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19926,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-docs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26608
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19927,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-upgrade",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26609
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19928,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-utils",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26610
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19929,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-pgaudit",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26611
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19930,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-pgvector",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26612
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19931,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-pg_repack",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26613
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19932,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-decoderbufs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26614
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"x86_64"
+],
+"id": 19933,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "virt-firmware-rs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26615
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19934,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libexttextcat-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26616
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19935,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rest-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26617
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19936,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gnome-autoar-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26618
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19937,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26619
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19938,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-contrib",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26620
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19939,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-docs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26621
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19940,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-plperl",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26622
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19941,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-plpython3",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26623
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19942,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-private-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26624
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19943,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-private-libs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26625
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19944,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-server",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26626
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19945,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-server-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26627
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19946,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-static",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26628
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19947,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-test",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26629
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19948,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-upgrade",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26630
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19949,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-upgrade-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26631
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
 "os_name": "RHEL"
 }
 }
