@@ -240,4 +240,10 @@ def get_distro_efidir_canon_path(distro_id):
     if distro_id == "rhel":
         return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "redhat")
 
+    if distro_id == "almalinux":
+        return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "almalinux")
+
+    if distro_id == "centos":
+        return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "centos")
+
     return os.path.join(efi.EFI_MOUNTPOINT, "EFI", distro_id)
