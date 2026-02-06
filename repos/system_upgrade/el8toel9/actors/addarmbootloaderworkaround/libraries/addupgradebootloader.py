@@ -8,23 +8,6 @@ from leapp.libraries.common.grub import get_boot_partition
 from leapp.libraries.stdlib import api, CalledProcessError, run
 from leapp.models import ArmWorkaroundEFIBootloaderInfo, EFIBootEntry, TargetUserSpaceInfo
 
-# TODO: These Vendors related changes probably not required anymore
-dirname = {
-        'AlmaLinux': 'almalinux',
-        'CentOS Linux': 'centos',
-        'CentOS Stream': 'centos',
-        'Oracle Linux Server': 'redhat',
-        'Red Hat Enterprise Linux': 'redhat',
-        'Rocky Linux': 'rocky',
-        'Scientific Linux': 'redhat',
-}
-
-with open('/etc/system-release', 'r') as sr:
-    release_line = next(line for line in sr if 'release' in line)
-    distro = release_line.split(' release ', 1)[0]
-
-distro_dir = dirname.get(distro, 'default')
-
 UPGRADE_EFI_ENTRY_LABEL = 'Leapp Upgrade'
 
 ARM_SHIM_PACKAGE_NAME = 'shim-aa64'
