@@ -993,8 +993,8 @@ def _get_distro_available_repoids(context, indata):
              provider has itw own rpm).
     On other: Repositories are provided in specific repofiles (e.g. centos.repo
               and centos-addons.repo on CS)
-              Exception: On CS8->CS9 there are no distro-provided repoids as
-              the repofile layout and urls are different
+              Exception: On CS8->CS9 and AL8->AL9 there are no distro-provided
+              repoids as the repofile layout and urls are different
     Conversions: Only custom repos - no distro repoids (all distros)
 
     :return: A set of repoids provided by distribution
@@ -1006,10 +1006,14 @@ def _get_distro_available_repoids(context, indata):
     is_source_cs8 = (
         get_source_distro_id() == "centos" and get_source_major_version() == '8'
     )
+    is_source_almalinux8 = (
+        get_source_distro_id() == "almalinux" and get_source_major_version() == '8'
+    )
 
     if (
         not is_conversion()  # conversions only work with custom repos
-        and not is_source_cs8  # there are no distro_repoids on CS8->CS9
+        and not (is_source_cs8 # there are no distro_repoids on CS8->CS9
+        or is_source_almalinux8)  # there are no distro_repoids on AL8->AL9
         and (target_distro != "rhel" or rhel_and_rhsm)
     ):
         _inhibit_if_no_base_repos(distro_repoids)

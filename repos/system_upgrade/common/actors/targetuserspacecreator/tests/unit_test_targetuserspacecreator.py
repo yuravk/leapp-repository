@@ -1242,8 +1242,8 @@ def test__get_distro_available_repoids_nobaserepos_inhibit(
 
     indata = testInData(_PACKAGES_MSGS, None, None, _XFS_MSG, _STORAGEINFO_MSG, None)
 
-    if src_distro == "centos" and src_ver == "8.10" or src_distro != dst_distro:
-        # should not raise on CS 8to9 and when converting
+    if src_distro in ("centos", "almalinux") and src_ver == "8.10" or src_distro != dst_distro:
+        # should not raise on CS 8to9, AL 8to9, and when converting
         userspacegen._get_distro_available_repoids(None, indata)
         return
 
