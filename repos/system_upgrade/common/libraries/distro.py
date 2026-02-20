@@ -7,6 +7,7 @@ from leapp.libraries.common.config import get_target_distro_id
 from leapp.libraries.common.config.architecture import ARCH_ACCEPTED, ARCH_X86_64
 from leapp.libraries.common.config.version import get_target_major_version
 from leapp.libraries.stdlib import api
+from leapp.models import VendorSignatures
 
 
 def get_distribution_data(distribution):
@@ -15,12 +16,19 @@ def get_distribution_data(distribution):
     distribution_config = os.path.join(distributions_path, distribution, 'gpg-signatures.json')
     if os.path.exists(distribution_config):
         with open(distribution_config) as distro_config_file:
-            return json.load(distro_config_file)
+            distro_config_json = json.load(distro_config_file)
     else:
         raise StopActorExecutionError(
             'Cannot find distribution signature configuration.',
             details={'Problem': 'Distribution {} was not found in {}.'.format(distribution, distributions_path)})
 
+    # Extend with Vendors signatures
+    for siglist in api.consume(VendorSignatures):
+        for sig in siglist.sigs:
+            # Add vendor signature as a new key with empty package list
+            distro_config_json["keys"][sig] = []
+
+    return distro_config_json
 
 # distro -> major_version -> repofile -> tuple of architectures where it's present
 _DISTRO_REPOFILES_MAP = {
@@ -243,5 +251,11 @@ def get_distro_efidir_canon_path(distro_id):
     """
     if distro_id == "rhel":
         return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "redhat")
+
+    if distro_id == "almalinux":
+        return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "almalinux")
+
+    if distro_id == "centos":
+        return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "centos")
 
     return os.path.join(efi.EFI_MOUNTPOINT, "EFI", distro_id)

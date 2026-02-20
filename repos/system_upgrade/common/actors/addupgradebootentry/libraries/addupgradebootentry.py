@@ -91,7 +91,7 @@ def figure_out_commands_needed_to_add_entry(kernel_path, initramfs_path, args_to
         '/usr/sbin/grubby',
         '--add-kernel', '{0}'.format(kernel_path),
         '--initrd', '{0}'.format(initramfs_path),
-        '--title', 'RHEL-Upgrade-Initramfs',
+        '--title', 'ELevate-Upgrade-Initramfs',
         '--copy-default',
         '--make-default',
         '--args', args_to_add_str

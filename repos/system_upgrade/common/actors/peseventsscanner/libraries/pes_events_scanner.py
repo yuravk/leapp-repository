@@ -1,5 +1,6 @@
 from collections import defaultdict, namedtuple
 from functools import partial
+import os
 
 from leapp import reporting
 from leapp.exceptions import StopActorExecutionError
@@ -7,6 +8,7 @@ from leapp.libraries.actor import peseventsscanner_repomap
 from leapp.libraries.actor.pes_event_parsing import Action, get_pes_events, Package
 from leapp.libraries.common import rpms
 from leapp.libraries.common.config import get_target_distro_id, version
+from leapp.libraries.common.repomaputils import combine_repomap_messages
 from leapp.libraries.stdlib import api
 from leapp.libraries.stdlib.config import is_verbose
 from leapp.models import (
@@ -20,7 +22,8 @@ from leapp.models import (
     RepositoriesMapping,
     RepositoriesSetupTasks,
     RHUIInfo,
-    RpmTransactionTasks
+    RpmTransactionTasks,
+    ActiveVendorList,
 )
 
 SKIPPED_PKGS_MSG = (
@@ -31,8 +34,9 @@ SKIPPED_PKGS_MSG = (
     'for details.\nThe list of these packages:'
 )
 
+VENDORS_DIR = "/etc/leapp/files/vendors.d"
 
-TransactionConfiguration = namedtuple('TransactionConfiguration', ('to_install', 'to_remove', 'to_keep'))
+TransactionConfiguration = namedtuple('TransactionConfiguration', ('to_install', 'to_remove', 'to_keep', 'to_reinstall'))
 
 
 def get_cloud_provider_name(cloud_provider_variant):
@@ -86,7 +90,7 @@ def get_transaction_configuration():
 
     :return: TransactionConfiguration
     """
-    transaction_configuration = TransactionConfiguration(to_install=set(), to_remove=set(), to_keep=set())
+    transaction_configuration = TransactionConfiguration(to_install=set(), to_remove=set(), to_keep=set(), to_reinstall=set())
 
     _Pkg = partial(Package, repository=None, modulestream=None)
 
@@ -94,6 +98,7 @@ def get_transaction_configuration():
         transaction_configuration.to_install.update(_Pkg(name=pkg_name) for pkg_name in tasks.to_install)
         transaction_configuration.to_remove.update(_Pkg(name=pkg_name) for pkg_name in tasks.to_remove)
         transaction_configuration.to_keep.update(_Pkg(name=pkg_name) for pkg_name in tasks.to_keep)
+        transaction_configuration.to_reinstall.update(_Pkg(name=pkg_name) for pkg_name in tasks.to_reinstall)
     return transaction_configuration
 
 
@@ -133,6 +138,7 @@ def compute_pkg_changes_between_consequent_releases(source_installed_pkgs,
     logger = api.current_logger()
     # Start with the installed packages and modify the set according to release events
     target_pkgs = set(source_installed_pkgs)
+    pkgs_to_reinstall = set()
 
     release_events = [e for e in events if e.to_release == release]
 
@@ -191,9 +197,12 @@ def compute_pkg_changes_between_consequent_releases(source_installed_pkgs,
                 target_pkgs = target_pkgs.difference(event.out_pkgs)
                 target_pkgs = target_pkgs.union(event.out_pkgs)
 
+            if (event.action == Action.REINSTALLED and is_any_in_pkg_present):
+                pkgs_to_reinstall = pkgs_to_reinstall.union(event.in_pkgs)
+
         pkgs_to_demodularize = pkgs_to_demodularize.difference(event.in_pkgs)
 
-    return (target_pkgs, pkgs_to_demodularize)
+    return (target_pkgs, pkgs_to_demodularize, pkgs_to_reinstall)
 
 
 def remove_undesired_events(events, relevant_to_releases):
@@ -259,15 +268,17 @@ def compute_packages_on_target_system(source_pkgs, events, releases):
             did_processing_cross_major_version = True
             pkgs_to_demodularize = {pkg for pkg in target_pkgs if pkg.modulestream}
 
-        target_pkgs, pkgs_to_demodularize = compute_pkg_changes_between_consequent_releases(target_pkgs, events,
-                                                                                            release, seen_pkgs,
-                                                                                            pkgs_to_demodularize)
+        target_pkgs, pkgs_to_demodularize, pkgs_to_reinstall = compute_pkg_changes_between_consequent_releases(
+            target_pkgs, events,
+            release, seen_pkgs,
+            pkgs_to_demodularize
+        )
         seen_pkgs = seen_pkgs.union(target_pkgs)
 
     demodularized_pkgs = {Package(pkg.name, pkg.repository, None) for pkg in pkgs_to_demodularize}
     demodularized_target_pkgs = target_pkgs.difference(pkgs_to_demodularize).union(demodularized_pkgs)
 
-    return (demodularized_target_pkgs, pkgs_to_demodularize)
+    return (demodularized_target_pkgs, pkgs_to_demodularize, pkgs_to_reinstall)
 
 
 def compute_rpm_tasks_from_pkg_set_diff(source_pkgs, target_pkgs, pkgs_to_demodularize):
@@ -371,15 +382,13 @@ def get_pesid_to_repoid_map(target_pesids):
     :return: Dictionary mapping the target_pesids to their corresponding repoid
     """
 
-    repositories_map_msgs = api.consume(RepositoriesMapping)
-    repositories_map_msg = next(repositories_map_msgs, None)
-    if list(repositories_map_msgs):
-        api.current_logger().warning('Unexpectedly received more than one RepositoriesMapping message.')
-    if not repositories_map_msg:
+    repositories_map_msgs = list(api.consume(RepositoriesMapping))
+    if not repositories_map_msgs:
         raise StopActorExecutionError(
             'Cannot parse RepositoriesMapping data properly',
             details={'Problem': 'Did not receive a message with mapped repositories'}
         )
+    repositories_map_msg = combine_repomap_messages(repositories_map_msgs)
 
     rhui_info = next(api.consume(RHUIInfo), None)
     cloud_provider = rhui_info.provider if rhui_info else ''
@@ -570,6 +579,19 @@ def process():
     if not events:
         return
 
+    active_vendors = []
+    for vendor_list in api.consume(ActiveVendorList):
+        active_vendors.extend(vendor_list.data)
+
+    pes_json_suffix = "_pes.json"
+    if os.path.isdir(VENDORS_DIR):
+        vendor_pesfiles = list(filter(lambda vfile: pes_json_suffix in vfile, os.listdir(VENDORS_DIR)))
+
+        for pesfile in vendor_pesfiles:
+            if pesfile[:-len(pes_json_suffix)] in active_vendors:
+                vendor_events = get_pes_events(VENDORS_DIR, pesfile)
+                events.extend(vendor_events)
+
     releases = get_relevant_releases(events)
     installed_pkgs = get_installed_pkgs()
     transaction_configuration = get_transaction_configuration()
@@ -583,7 +605,7 @@ def process():
     events = remove_undesired_events(events, releases)
 
     # Apply events - compute what packages should the target system have
-    target_pkgs, pkgs_to_demodularize = compute_packages_on_target_system(pkgs_to_begin_computation_with,
+    target_pkgs, pkgs_to_demodularize, pkgs_to_reinstall = compute_packages_on_target_system(pkgs_to_begin_computation_with,
                                                                           events, releases)
 
     # Packages coming out of the events have PESID as their repository, however, we need real repoid
@@ -603,4 +625,5 @@ def process():
     rpm_tasks = include_instructions_from_transaction_configuration(rpm_tasks, transaction_configuration,
                                                                     installed_pkgs)
     if rpm_tasks:
+        rpm_tasks.to_reinstall = sorted(pkgs_to_reinstall)
         api.produce(rpm_tasks)

@@ -117,12 +117,15 @@ def get_path_to_gpg_certs():
     if target_product_type == 'beta':
         certs_dir = '{}beta'.format(target_major_version)
     distro = config.get_target_distro_id()
-    return os.path.join(
-        api.get_common_folder_path('distro'),
-        distro,
-        GPG_CERTS_FOLDER,
-        certs_dir
-    )
+    return [
+        "/etc/leapp/files/vendors.d/rpm-gpg/",
+        os.path.join(
+            api.get_common_folder_path('distro'),
+            distro,
+            GPG_CERTS_FOLDER,
+            certs_dir
+        )
+    ]
 
 
 def is_nogpgcheck_set():

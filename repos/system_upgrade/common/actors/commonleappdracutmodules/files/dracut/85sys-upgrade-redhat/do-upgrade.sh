@@ -390,4 +390,3 @@ getarg 'rd.break=leapp-logs' 'rd.upgrade.break=leapp-finish' && {
 sync
 mount -o "remount,$old_opts" "$NEWROOT"
 exit $result
-

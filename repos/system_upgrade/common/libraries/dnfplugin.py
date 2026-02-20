@@ -89,6 +89,7 @@ def build_plugin_data(target_repoids, debug, test, tasks, on_aws):
             'to_install': sorted(tasks.to_install),
             'to_remove': sorted(tasks.to_remove),
             'to_upgrade': sorted(tasks.to_upgrade),
+            'to_reinstall': sorted(tasks.to_reinstall),
             'modules_to_enable': sorted(['{}:{}'.format(m.name, m.stream) for m in tasks.modules_to_enable]),
         },
         'dnf_conf': {

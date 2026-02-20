@@ -152,11 +152,11 @@ def _report(title, summary, keys, inhibitor=False):
     )
     hint = (
         'Check the path to the listed GPG keys is correct, the keys are valid and'
-        ' import them into the host RPM DB or store them inside the {} directory'
+        ' import them into the host RPM DB or store them inside on of the {} directories'
         ' prior the upgrade.'
         ' If you want to proceed the in-place upgrade without checking any RPM'
         ' signatures, execute leapp with the `--nogpgcheck` option.'
-        .format(get_path_to_gpg_certs())
+        .format(','.format(get_path_to_gpg_certs()))
     )
     groups = [reporting.Groups.REPOSITORY]
     if inhibitor:
@@ -188,7 +188,7 @@ def _report_missing_keys(keys):
     summary = (
         'Some of the target repositories require GPG keys that are not installed'
         ' in the current RPM DB or are not stored in the {trust_dir} directory.'
-        .format(trust_dir=get_path_to_gpg_certs())
+        .format(trust_dir=','.join(get_path_to_gpg_certs()))
     )
     _report('Detected unknown GPG keys for target system repositories', summary, keys, True)
 
@@ -262,11 +262,12 @@ def _report_repos_missing_keys(repos):
 
 
 def register_dnfworkaround():
-    api.produce(DNFWorkaround(
-        display_name='import trusted gpg keys to RPM DB',
-        script_path=api.current_actor().get_common_tool_path('importrpmgpgkeys'),
-        script_args=[get_path_to_gpg_certs()],
-    ))
+    for trust_certs_dir in get_path_to_gpg_certs():
+        api.produce(DNFWorkaround(
+            display_name='import trusted gpg keys to RPM DB',
+            script_path=api.current_actor().get_common_tool_path('importrpmgpgkeys'),
+            script_args=[trust_certs_dir],
+        ))
 
 
 @suppress_deprecation(TMPTargetRepositoriesFacts)

@@ -13,13 +13,14 @@ def _get_pubkeys(installed_rpms):
     pubkeys = get_pubkeys_from_rpms(installed_rpms)
     db_pubkeys = [key.fingerprint for key in pubkeys]
     certs_path = get_path_to_gpg_certs()
-    for certname in os.listdir(certs_path):
-        key_file = os.path.join(certs_path, certname)
-        fps = get_gpg_fp_from_file(key_file)
-        for fp in fps:
-            if fp not in db_pubkeys:
-                pubkeys.append(GpgKey(fingerprint=fp, rpmdb=False, filename=key_file))
-                db_pubkeys += fp
+    for trusted_dir in certs_path:
+        for certname in os.listdir(trusted_dir):
+            key_file = os.path.join(trusted_dir, certname)
+            fps = get_gpg_fp_from_file(key_file)
+            for fp in fps:
+                if fp not in db_pubkeys:
+                    pubkeys.append(GpgKey(fingerprint=fp, rpmdb=False, filename=key_file))
+                    db_pubkeys += fp
     return pubkeys
 
 

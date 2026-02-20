@@ -53,7 +53,7 @@ run_args_add = [
     '/usr/sbin/grubby',
     '--add-kernel', '/abc',
     '--initrd', '/def',
-    '--title', 'RHEL-Upgrade-Initramfs',
+    '--title', 'ELevate-Upgrade-Initramfs',
     '--copy-default',
     '--make-default',
     '--args',
