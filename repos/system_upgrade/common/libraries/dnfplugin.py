@@ -19,7 +19,6 @@ _DEDICATED_URL = 'https://access.redhat.com/solutions/7011704'
 
 class _DnfPluginPathStr(str):
     _PATHS = {
-        "8": os.path.join('/lib/python3.6/site-packages/dnf-plugins', DNF_PLUGIN_NAME),
         "9": os.path.join('/lib/python3.9/site-packages/dnf-plugins', DNF_PLUGIN_NAME),
         "10": os.path.join('/lib/python3.12/site-packages/dnf-plugins', DNF_PLUGIN_NAME),
     }
@@ -272,26 +271,24 @@ def _transaction(context, stage, target_repoids, tasks, plugin_info, xfs_info,
             # allow handling new RHEL 9 syscalls by systemd-nspawn
             env = {'SYSTEMD_SECCOMP': '0'}
 
-            # We need to reset modules twice, once before we check, and the second time before we actually perform
-            # the upgrade. Not more often as the modules will be reset already.
-            if stage in ('check', 'upgrade') and tasks.modules_to_reset:
-                # We shall only reset modules that are not going to be enabled
-                # This will make sure it is so
-                modules_to_reset = {(module.name, module.stream) for module in tasks.modules_to_reset}
-                modules_to_enable = {(module.name, module.stream) for module in tasks.modules_to_enable}
-                module_reset_list = [module[0] for module in modules_to_reset - modules_to_enable]
-                # Perform module reset
-                cmd = ['/usr/bin/dnf', 'module', 'reset', '--enabled', ] + module_reset_list
-                cmd += ['--disablerepo', '*', '-y', '--installroot', '/installroot']
-                try:
-                    context.call(
-                        cmd=cmd_prefix + cmd + common_params,
-                        callback_raw=utils.logging_handler,
-                        env=env
-                    )
-                except (CalledProcessError, OSError):
-                    api.current_logger().debug('Failed to reset modules via dnf with an error. Ignoring.',
-                                               exc_info=True)
+        if tasks.modules_to_reset:
+            # We shall only reset modules that are not going to be enabled
+            # This will make sure it is so
+            modules_to_reset = {(module.name, module.stream) for module in tasks.modules_to_reset}
+            modules_to_enable = {(module.name, module.stream) for module in tasks.modules_to_enable}
+            module_reset_list = [module[0] for module in modules_to_reset - modules_to_enable]
+            # Perform module reset
+            cmd = ['/usr/bin/dnf', 'module', 'reset', '--enabled', ] + module_reset_list
+            cmd += ['--disablerepo', '*', '-y', '--installroot', '/installroot']
+            try:
+                context.call(
+                    cmd=cmd_prefix + cmd + common_params,
+                    callback_raw=utils.logging_handler,
+                    env=env
+                )
+            except (CalledProcessError, OSError):
+                api.current_logger().debug('Failed to reset modules via dnf with an error. Ignoring.',
+                                           exc_info=True)
 
         cmd = [
             '/usr/bin/dnf',
@@ -406,13 +403,9 @@ def perform_transaction_install(target_userspace_info, storage_info, used_repos,
         '/run/udev:/installroot/run/udev',
     ]
 
-    if get_target_major_version() == '8':
-        bind_mounts.append('/sys:/installroot/sys')
-    else:
-        # the target major version is RHEL 9+
-        # we are bindmounting host's "/sys" to the intermediate "/hostsys"
-        # in the upgrade initramdisk to avoid cgroups tree layout clash
-        bind_mounts.append('/hostsys:/installroot/sys')
+    # we are bindmounting host's "/sys" to the intermediate "/hostsys"
+    # in the upgrade initramdisk to avoid cgroups tree layout clash
+    bind_mounts.append('/hostsys:/installroot/sys')
 
     already_mounted = {entry.split(':')[0] for entry in bind_mounts}
     for entry in storage_info.fstab:

@@ -2,28 +2,11 @@ import os
 import shutil
 
 from leapp.exceptions import StopActorExecutionError
+from leapp.libraries.common import efi
 from leapp.libraries.stdlib import api, CalledProcessError, run
 from leapp.models import ArmWorkaroundEFIBootloaderInfo
 
-dirname = {
-        'AlmaLinux': 'almalinux',
-        'CentOS Linux': 'centos',
-        'CentOS Stream': 'centos',
-        'Oracle Linux Server': 'redhat',
-        'Red Hat Enterprise Linux': 'redhat',
-        'Rocky Linux': 'rocky',
-        'Scientific Linux': 'redhat',
-}
-
-with open('/etc/system-release', 'r') as sr:
-    release_line = next(line for line in sr if 'release' in line)
-    distro = release_line.split(' release ', 1)[0]
-
-distro_dir = dirname.get(distro, 'default')
-
-EFI_MOUNTPOINT = '/boot/efi/'
-LEAPP_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/leapp/')
-RHEL_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/', distro_dir)
+LEAPP_EFIDIR_CANONICAL_PATH = os.path.join(efi.EFI_MOUNTPOINT, 'EFI/leapp/')
 
 
 def get_workaround_efi_info():
@@ -52,13 +35,8 @@ def remove_upgrade_efi_entry():
 
     upgrade_boot_number = bootloader_info.upgrade_entry.boot_number
     try:
-        run([
-            '/usr/sbin/efibootmgr',
-            '--delete-bootnum',
-            '--bootnum',
-            upgrade_boot_number
-        ])
-    except CalledProcessError:
+        efi.remove_boot_entry(upgrade_boot_number)
+    except efi.EFIError:
         api.current_logger().warning('Unable to remove Leapp upgrade efi entry.')
 
     try:
@@ -69,7 +47,10 @@ def remove_upgrade_efi_entry():
     _remove_upgrade_blsdir(bootloader_info)
 
     original_boot_number = bootloader_info.original_entry.boot_number
-    run(['/usr/sbin/efibootmgr', '--bootnext', original_boot_number])
+    # NOTE: during conversion this will be overwritten by the convert/updateefi
+    # actor, which is executed later and sets BootNext to a newly created entry
+    # for the target OS
+    efi.set_bootnext(original_boot_number)
 
     # TODO: Move calling `mount -a` to a separate actor as it is not really
     # related to removing the upgrade boot entry. It's worth to call it after

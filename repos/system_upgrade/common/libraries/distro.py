@@ -2,7 +2,7 @@ import json
 import os
 
 from leapp.exceptions import StopActorExecutionError
-from leapp.libraries.common import repofileutils, rhsm
+from leapp.libraries.common import efi, repofileutils, rhsm
 from leapp.libraries.common.config import get_target_distro_id
 from leapp.libraries.common.config.architecture import ARCH_ACCEPTED, ARCH_X86_64
 from leapp.libraries.common.config.version import get_target_major_version
@@ -76,7 +76,6 @@ _DISTRO_REPOFILES_MAP = {
             '/etc/yum.repos.d/almalinux.repo': ARCH_ACCEPTED,
         },
         '9': {
-            '/etc/yum.repos.d/almalinux.repo': ARCH_ACCEPTED,
             '/etc/yum.repos.d/almalinux-appstream.repo': ARCH_ACCEPTED,
             '/etc/yum.repos.d/almalinux-baseos.repo': ARCH_ACCEPTED,
             '/etc/yum.repos.d/almalinux-crb.repo': ARCH_ACCEPTED,
@@ -186,7 +185,18 @@ def get_distro_repoids(context, distro, major_version, arch):
         # TODO: very similar thing should happens for all other repofiles in container
         return rhsm.get_available_repo_ids(context)
 
-    repofiles = repofileutils.get_parsed_repofiles(context)
+    try:
+        repofiles = repofileutils.get_parsed_repofiles(context)
+    except repofileutils.InvalidRepoDefinition as e:
+        raise StopActorExecutionError(
+            message="Failed to get distro provided repositories: {}".format(str(e)),
+            details={
+                'hint': 'Ensure the repository definition is correct or remove it '
+                        'if the repository is not needed anymore. '
+                        'This issue is typically caused by missing definition of the name field. '
+                        'For more information, see: https://access.redhat.com/solutions/6969001.'
+            })
+
     distro_repofiles = _get_distro_repofiles(distro, major_version, arch)
     if not distro_repofiles:
         # TODO: a different way of signaling an error would be preferred (e.g. returning None),
@@ -217,3 +227,35 @@ def get_distro_repoids(context, distro, major_version, arch):
                 distro_repoids.extend([repo.repoid for repo in rfile.data])
 
     return sorted(distro_repoids)
+
+
+def distro_id_to_pretty_name(distro_id):
+    """
+    Get pretty name for the given distro id.
+
+    The pretty name is what is found in the NAME field of /etc/os-release.
+    """
+    return {
+        "rhel": "Red Hat Enterprise Linux",
+        "centos": "CentOS Stream",
+        "almalinux": "AlmaLinux",
+    }[distro_id]
+
+
+def get_distro_efidir_canon_path(distro_id):
+    """
+    Get canonical path to the distro EFI directory in the EFI mountpoint.
+
+    NOTE: The path might be incorrect for distros not properly enabled for IPU,
+    when enabling new distros in the codebase, make sure the path is correct.
+    """
+    if distro_id == "rhel":
+        return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "redhat")
+
+    if distro_id == "almalinux":
+        return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "almalinux")
+
+    if distro_id == "centos":
+        return os.path.join(efi.EFI_MOUNTPOINT, "EFI", "centos")
+
+    return os.path.join(efi.EFI_MOUNTPOINT, "EFI", distro_id)

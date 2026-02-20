@@ -1,7 +1,7 @@
 {
-"timestamp": "202511121106Z",
+"timestamp": "202602051305Z",
 "provided_data_streams": [
-"4.1"
+"4.2"
 ],
 "packageinfo": [
 {
@@ -250419,9 +250419,6 @@ null
 {
 "action": 6,
 "architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
 "x86_64"
 ],
 "id": 6802,
@@ -269460,6 +269457,10 @@ null
 {
 "name": "ruby",
 "stream": "3.1"
+},
+{
+"name": "ruby",
+"stream": "3.3"
 }
 ],
 "name": "rubygem-abrt",
@@ -269470,7 +269471,7 @@ null
 },
 "initial_release": {
 "major_version": 8,
-"minor_version": 7,
+"minor_version": 10,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
@@ -269513,6 +269514,10 @@ null
 {
 "name": "ruby",
 "stream": "3.1"
+},
+{
+"name": "ruby",
+"stream": "3.3"
 }
 ],
 "name": "rubygem-abrt",
@@ -269523,14 +269528,14 @@ null
 },
 "initial_release": {
 "major_version": 8,
-"minor_version": 6,
+"minor_version": 9,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
 "major_version": 8,
-"minor_version": 7,
+"minor_version": 10,
 "os_name": "RHEL"
 }
 },
@@ -269566,6 +269571,10 @@ null
 {
 "name": "ruby",
 "stream": "3.1"
+},
+{
+"name": "ruby",
+"stream": "3.3"
 }
 ],
 "name": "rubygem-abrt-doc",
@@ -269576,7 +269585,7 @@ null
 },
 "initial_release": {
 "major_version": 8,
-"minor_version": 7,
+"minor_version": 10,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
@@ -269619,6 +269628,10 @@ null
 {
 "name": "ruby",
 "stream": "3.1"
+},
+{
+"name": "ruby",
+"stream": "3.3"
 }
 ],
 "name": "rubygem-abrt-doc",
@@ -269629,14 +269642,14 @@ null
 },
 "initial_release": {
 "major_version": 8,
-"minor_version": 6,
+"minor_version": 9,
 "os_name": "RHEL"
 },
 "modulestream_maps": [],
 "out_packageset": null,
 "release": {
 "major_version": 8,
-"minor_version": 7,
+"minor_version": 10,
 "os_name": "RHEL"
 }
 },
@@ -315101,7 +315114,7 @@ null
 },
 "initial_release": {
 "major_version": 8,
-"minor_version": 5,
+"minor_version": 10,
 "os_name": "RHEL"
 },
 "modulestream_maps": [
@@ -315124,7 +315137,7 @@ null
 null
 ],
 "name": "openexr-devel",
-"repository": "rhel9-AppStream"
+"repository": "rhel9-CRB"
 }
 ],
 "set_id": 12502
@@ -583248,40 +583261,6 @@ null
 "s390x",
 "x86_64"
 ],
-"id": 16179,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "openexr-devel",
-"repository": "rhel9-CRB"
-}
-],
-"set_id": 22334
-},
-"initial_release": {
-"major_version": 8,
-"minor_version": 10,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 9,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 0,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
 "id": 16180,
 "in_packageset": {
 "package": [
@@ -634622,7 +634601,7 @@ null
 }
 },
 {
-"action": 7,
+"action": 3,
 "architectures": [
 "aarch64",
 "ppc64le",
@@ -634644,7 +634623,7 @@ null
 },
 "initial_release": {
 "major_version": 9,
-"minor_version": 7,
+"minor_version": 8,
 "os_name": "RHEL"
 },
 "modulestream_maps": [
@@ -634659,7 +634638,7 @@ null
 "modulestreams": [
 null
 ],
-"name": "tomcat9-el-3.0-api",
+"name": "tomcat-el-5.0-api",
 "repository": "rhel10-AppStream"
 }
 ],
@@ -634672,7 +634651,7 @@ null
 }
 },
 {
-"action": 7,
+"action": 3,
 "architectures": [
 "aarch64",
 "ppc64le",
@@ -634694,7 +634673,7 @@ null
 },
 "initial_release": {
 "major_version": 9,
-"minor_version": 7,
+"minor_version": 8,
 "os_name": "RHEL"
 },
 "modulestream_maps": [
@@ -634709,7 +634688,7 @@ null
 "modulestreams": [
 null
 ],
-"name": "tomcat9-servlet-4.0-api",
+"name": "tomcat-servlet-6.0-api",
 "repository": "rhel10-AppStream"
 }
 ],
@@ -634722,7 +634701,7 @@ null
 }
 },
 {
-"action": 7,
+"action": 3,
 "architectures": [
 "aarch64",
 "ppc64le",
@@ -634744,7 +634723,7 @@ null
 },
 "initial_release": {
 "major_version": 9,
-"minor_version": 7,
+"minor_version": 8,
 "os_name": "RHEL"
 },
 "modulestream_maps": [
@@ -634759,7 +634738,7 @@ null
 "modulestreams": [
 null
 ],
-"name": "tomcat9-jsp-2.3-api",
+"name": "tomcat-jsp-3.1-api",
 "repository": "rhel10-AppStream"
 }
 ],
@@ -635381,256 +635360,6 @@ null
 }
 },
 {
-"action": 7,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 17728,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 24313
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": null,
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat9",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24314
-},
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 7,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 17729,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat-admin-webapps",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 24315
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": null,
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat9-admin-webapps",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24316
-},
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 7,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 17730,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat-docs-webapp",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 24317
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": null,
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat9-docs-webapp",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24318
-},
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 7,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 17731,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat-lib",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 24323
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": null,
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat9-lib",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24324
-},
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 7,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 17732,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat-webapps",
-"repository": "rhel9-AppStream"
-}
-],
-"set_id": 24327
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [
-{
-"in_modulestream": null,
-"out_modulestream": null
-}
-],
-"out_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat9-webapps",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24328
-},
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
 "action": 0,
 "architectures": [
 "aarch64",
@@ -635740,74 +635469,6 @@ null
 "s390x",
 "x86_64"
 ],
-"id": 17736,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat-el-5.0-api",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24332
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 0,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 17737,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat-jsp-3.1-api",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24333
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 0,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
 "id": 17738,
 "in_packageset": {
 "package": [
@@ -635820,40 +635481,6 @@ null
 }
 ],
 "set_id": 24334
-},
-"initial_release": {
-"major_version": 9,
-"minor_version": 7,
-"os_name": "RHEL"
-},
-"modulestream_maps": [],
-"out_packageset": null,
-"release": {
-"major_version": 10,
-"minor_version": 0,
-"os_name": "RHEL"
-}
-},
-{
-"action": 0,
-"architectures": [
-"aarch64",
-"ppc64le",
-"s390x",
-"x86_64"
-],
-"id": 17739,
-"in_packageset": {
-"package": [
-{
-"modulestreams": [
-null
-],
-"name": "tomcat-servlet-6.0-api",
-"repository": "rhel10-AppStream"
-}
-],
-"set_id": 24335
 },
 "initial_release": {
 "major_version": 9,
@@ -708757,6 +708384,8047 @@ null
 }
 ],
 "set_id": 26585
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19909,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rhc-playbook-verifier",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26586
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19910,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rhc-playbook-verifier",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26587
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19911,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3-zstandard",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26588
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19912,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "unbound-utils",
+"repository": "rhel10-BaseOS"
+}
+],
+"set_id": 26589
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 5,
+"architectures": [
+"x86_64"
+],
+"id": 19913,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel10-NFV"
+},
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt-kvm",
+"repository": "rhel10-NFV"
+}
+],
+"set_id": 26593
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 0,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel10-NFV"
+}
+],
+"set_id": 26600
+},
+"release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+}
+},
+{
+"action": 5,
+"architectures": [
+"x86_64"
+],
+"id": 19915,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel9-NFV"
+},
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt-kvm",
+"repository": "rhel9-NFV"
+}
+],
+"set_id": 26595
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 6,
+"os_name": "RHEL"
+},
+"modulestream_maps": [
+{
+"in_modulestream": null,
+"out_modulestream": null
+}
+],
+"out_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "kernel-rt",
+"repository": "rhel9-NFV"
+}
+],
+"set_id": 26601
+},
+"release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19916,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gnome-autoar-devel",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26596
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19917,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rest-devel",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26597
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19918,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "plymouth-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26598
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19919,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "plymouth-devel",
+"repository": "rhel8-AppStream"
+}
+],
+"set_id": 26599
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19920,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libdmx-devel",
+"repository": "rhel8-CRB"
+}
+],
+"set_id": 26602
+},
+"initial_release": {
+"major_version": 8,
+"minor_version": 9,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 8,
+"minor_version": 10,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19921,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libdmx-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26603
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19922,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "v4l-utils",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26604
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19923,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "v4l-utils",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26605
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19924,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26606
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19925,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-client",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26607
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19926,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-docs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26608
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19927,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-upgrade",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26609
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19928,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-postgis-utils",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26610
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19929,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-pgaudit",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26611
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19930,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-pgvector",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26612
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19931,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-pg_repack",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26613
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19932,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-decoderbufs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26614
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"x86_64"
+],
+"id": 19933,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "virt-firmware-rs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26615
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19934,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "libexttextcat-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26616
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19935,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "rest-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26617
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19936,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "gnome-autoar-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26618
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19937,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26619
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19938,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-contrib",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26620
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19939,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-docs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26621
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19940,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-plperl",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26622
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19941,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-plpython3",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26623
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19942,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-private-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26624
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19943,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-private-libs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26625
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19944,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-server",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26626
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19945,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-server-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26627
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19946,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-static",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26628
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19947,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-test",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26629
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19948,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-upgrade",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26630
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19949,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "postgresql18-upgrade-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26631
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19950,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26633
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19951,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "pgaudit",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26634
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19952,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "pg_repack",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26635
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19953,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "pgvector",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26636
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19954,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgis",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26637
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19955,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgis-client",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26638
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19956,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgis-docs",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26639
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19957,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgis-upgrade",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26640
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19958,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgis-utils",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26641
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19959,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgres-decoderbufs",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26642
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19960,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26643
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19961,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-contrib",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26644
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19962,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-docs",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26645
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19963,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-plperl",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26646
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19964,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-plpython3",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26647
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19965,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-private-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26648
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19966,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-private-libs",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26649
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19967,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-server",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26650
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19968,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-server-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26651
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19969,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-static",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26652
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19970,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-test",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26653
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19971,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-test-rpm-macros",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26654
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19972,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-upgrade",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26655
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19973,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "postgresql",
+"stream": "18"
+}
+],
+"name": "postgresql-upgrade-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26656
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19974,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mesa-compat",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26661
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19975,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mesa-compat",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26662
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19977,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26660
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19978,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-cffi",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26663
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19979,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-charset-normalizer",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26664
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19980,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-cryptography",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26665
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19981,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-Cython",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26666
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19982,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-debug",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26667
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19983,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26668
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19984,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-flit-core",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26669
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19985,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-debug",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26670
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19986,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-devel",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26671
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19987,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-idle",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26672
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19988,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26673
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19989,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-libs",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26674
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19990,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-test",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26675
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19991,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-tkinter",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26676
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19992,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-idle",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26677
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19993,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-idna",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26678
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19994,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-iniconfig",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26679
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19995,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-libs",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26680
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19996,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-lxml",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26681
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19997,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-meson-python",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26682
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19998,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-mod_wsgi",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26683
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 19999,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-numpy-f2py",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26684
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20000,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-numpy",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26685
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20001,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-packaging",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26686
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20002,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pip",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26687
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20003,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pip-wheel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26688
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20004,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pluggy",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26689
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20005,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-ply",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26690
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20006,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-psycopg2",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26691
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20007,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-psycopg2-tests",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26692
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20008,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pybind11-devel",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26693
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20009,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pybind11",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26694
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20010,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pycparser",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26695
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20011,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-PyMySQL",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26696
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20012,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-PyMySQL+rsa",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26697
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20013,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pyproject-metadata",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26698
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20014,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pytest",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26699
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20015,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pyyaml",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26700
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20016,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-requests",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26701
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20017,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-scipy",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26702
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20018,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-semantic_version",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26703
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20019,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26704
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20020,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools-rust",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26705
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20021,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools_scm",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26706
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20022,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools_scm+toml",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26707
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20023,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools-wheel",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26708
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20024,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-test",
+"repository": "rhel10-CRB"
+}
+],
+"set_id": 26709
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20025,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-tkinter",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26710
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20026,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-urllib3",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26711
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20028,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-cffi",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26713
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20029,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-charset-normalizer",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26714
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20030,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-cryptography",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26715
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20031,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-Cython",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26716
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20032,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-debug",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26717
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20033,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26718
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20034,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-flit-core",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26719
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20035,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-debug",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26720
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20036,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26721
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20037,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-idle",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26722
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20038,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26723
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20039,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-libs",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26724
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20040,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-test",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26725
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20041,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-freethreading-tkinter",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26726
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20042,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-idle",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26727
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20043,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-idna",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26728
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20044,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-iniconfig",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26729
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20045,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26730
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20046,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-libs",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26731
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20047,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-lxml",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26732
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20048,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-meson-python",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26733
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20049,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-mod_wsgi",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26734
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20050,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-numpy-f2py",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26735
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20051,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-numpy",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26736
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20052,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-packaging",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26737
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20053,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pip",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26738
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20054,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pip-wheel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26739
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20055,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pluggy",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26740
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20056,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-ply",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26741
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20057,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-psycopg2",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26742
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20058,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-psycopg2-tests",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26743
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20059,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pybind11-devel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26744
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20060,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pybind11",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26745
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20061,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pycparser",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26746
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20062,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-PyMySQL",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26747
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20063,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-PyMySQL+rsa",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26748
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20064,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pyproject-metadata",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26749
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20065,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pytest",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26750
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20066,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-pyyaml",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26751
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20067,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-requests",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26752
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20068,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-scipy",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26753
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20069,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-semantic_version",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26754
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20070,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26755
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20071,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools-rust",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26756
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20072,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools_scm",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26757
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20073,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools_scm+toml",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26758
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20074,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-setuptools-wheel",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26759
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20075,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-test",
+"repository": "rhel9-CRB"
+}
+],
+"set_id": 26760
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20076,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-tkinter",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26761
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20077,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "python3.14-urllib3",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26762
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20078,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "frr10",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26763
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"x86_64"
+],
+"id": 20084,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "greenboot",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26786
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"x86_64"
+],
+"id": 20085,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "greenboot",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26787
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20086,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "ansible-collection-redhat-leapp",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26788
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20087,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "clevis-pin-trustee",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26789
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20088,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26790
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20089,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-backup",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26791
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20090,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-client-utils",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26792
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20091,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-common",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26793
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20092,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26794
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20093,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-embedded",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26795
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20094,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-embedded-devel",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26796
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20095,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-errmsg",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26797
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20096,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-gssapi-server",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26798
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20097,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-oqgraph-engine",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26799
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20098,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-pam",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26800
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20099,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-server",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26801
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20100,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-server-galera",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26802
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20101,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-server-utils",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26803
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20102,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "mariadb-test",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26804
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20103,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+{
+"name": "mariadb",
+"stream": "11.8"
+}
+],
+"name": "galera",
+"repository": "rhel9-AppStream"
+}
+],
+"set_id": 26805
+},
+"initial_release": {
+"major_version": 9,
+"minor_version": 7,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 9,
+"minor_version": 8,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20104,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-backup",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26806
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20105,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-client-utils",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26807
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20106,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-common",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26808
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20107,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26809
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20108,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-embedded",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26810
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20109,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-embedded-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26811
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20110,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-errmsg",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26812
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20111,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-gssapi-server",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26813
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20112,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-oqgraph-engine",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26814
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20113,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-pam",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26815
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20114,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-server",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26816
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20115,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-server-galera",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26817
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20116,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-server-utils",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26818
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20117,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "mariadb11.8-test",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26819
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20118,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26820
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20119,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-bcmath",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26821
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20120,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-cli",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26822
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20121,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-common",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26823
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20122,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-dba",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26824
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20123,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-dbg",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26825
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20124,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26826
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20125,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-embedded",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26827
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20126,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-enchant",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26828
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20127,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-ffi",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26829
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20128,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-fpm",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26830
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20129,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-gd",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26831
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20130,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-gmp",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26832
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20131,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-intl",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26833
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20132,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-ldap",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26834
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20133,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-mbstring",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26835
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20134,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-mysqlnd",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26836
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20135,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-odbc",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26837
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20136,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-opcache",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26838
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20137,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pdo",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26839
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20138,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pgsql",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26840
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20139,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-process",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26841
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20140,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-snmp",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26842
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20141,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-soap",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26843
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20142,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-xml",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26844
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20143,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pecl-xdebug3",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26845
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20144,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pecl-rrd",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26846
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20145,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pecl-zip",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26847
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20146,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pecl-apcu",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26848
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20147,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pecl-apcu-devel",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26849
+},
+"initial_release": {
+"major_version": 10,
+"minor_version": 1,
+"os_name": "RHEL"
+},
+"modulestream_maps": [],
+"out_packageset": null,
+"release": {
+"major_version": 10,
+"minor_version": 2,
+"os_name": "RHEL"
+}
+},
+{
+"action": 0,
+"architectures": [
+"aarch64",
+"ppc64le",
+"s390x",
+"x86_64"
+],
+"id": 20148,
+"in_packageset": {
+"package": [
+{
+"modulestreams": [
+null
+],
+"name": "php8.4-pecl-redis6",
+"repository": "rhel10-AppStream"
+}
+],
+"set_id": 26850
 },
 "initial_release": {
 "major_version": 10,

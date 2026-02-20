@@ -7,8 +7,18 @@ from leapp import reporting
 from leapp.exceptions import StopActorExecution, StopActorExecutionError
 from leapp.libraries.actor import constants
 from leapp.libraries.common import distro, dnfplugin, mounting, overlaygen, repofileutils, rhsm, utils
-from leapp.libraries.common.config import get_env, get_product_type, get_source_distro_id, get_target_distro_id
-from leapp.libraries.common.config.version import get_target_major_version, get_target_version
+from leapp.libraries.common.config import (
+    get_env,
+    get_product_type,
+    get_source_distro_id,
+    get_target_distro_id,
+    is_conversion
+)
+from leapp.libraries.common.config.version import (
+    get_source_major_version,
+    get_target_major_version,
+    get_target_version
+)
 from leapp.libraries.common.gpg import get_path_to_gpg_certs, is_nogpgcheck_set
 from leapp.libraries.stdlib import api, CalledProcessError, config, run
 from leapp.models import RequiredTargetUserspacePackages  # deprecated
@@ -822,7 +832,15 @@ def _inhibit_on_duplicate_repos(repofiles):
 
 
 def _get_all_available_repoids(context):
-    repofiles = repofileutils.get_parsed_repofiles(context)
+    try:
+        repofiles = repofileutils.get_parsed_repofiles(context)
+    except repofileutils.InvalidRepoDefinition as e:
+        raise StopActorExecutionError(
+            message="Failed to parse available repoids: {}".format(str(e)),
+            details={
+                'hint': 'Ensure the repository definition is correct or remove it '
+                        'if the repository is not required for the upgrade.'
+            })
     # TODO: this is not good solution, but keep it as it is now
     # Issue: #486
     if rhsm.skip_rhsm():
@@ -975,14 +993,29 @@ def _get_distro_available_repoids(context, indata):
              provider has itw own rpm).
     On other: Repositories are provided in specific repofiles (e.g. centos.repo
               and centos-addons.repo on CS)
+              Exception: On CS8->CS9 and AL8->AL9 there are no distro-provided
+              repoids as the repofile layout and urls are different
+    Conversions: Only custom repos - no distro repoids (all distros)
 
     :return: A set of repoids provided by distribution
     :rtype: set[str]
     """
     distro_repoids = distro.get_target_distro_repoids(context)
-    distro_id = get_target_distro_id()
-    rhel_and_rhsm = distro_id == 'rhel' and not rhsm.skip_rhsm()
-    if distro_id != 'rhel' or rhel_and_rhsm:
+    target_distro = get_target_distro_id()
+    rhel_and_rhsm = target_distro == 'rhel' and not rhsm.skip_rhsm()
+    is_source_cs8 = (
+        get_source_distro_id() == "centos" and get_source_major_version() == '8'
+    )
+    is_source_almalinux8 = (
+        get_source_distro_id() == "almalinux" and get_source_major_version() == '8'
+    )
+
+    if (
+        not is_conversion()  # conversions only work with custom repos
+        and not (is_source_cs8 # there are no distro_repoids on CS8->CS9
+        or is_source_almalinux8)  # there are no distro_repoids on AL8->AL9
+        and (target_distro != "rhel" or rhel_and_rhsm)
+    ):
         _inhibit_if_no_base_repos(distro_repoids)
 
     if indata and indata.rhui_info:
@@ -1304,7 +1337,15 @@ def setup_target_rhui_access_if_needed(context, indata):
         copied_repofiles = [copy.src for copy in copy_tasks if copy.src.endswith('.repo')]
         copied_repoids = set()
         for repofile in copied_repofiles:
-            repofile_contents = repofileutils.parse_repofile(repofile)
+            try:
+                repofile_contents = repofileutils.parse_repofile(repofile)
+            except repofileutils.InvalidRepoDefinition as e:
+                raise StopActorExecutionError(
+                    message="Failed to parse repositories for RHUI: {}".format(str(e)),
+                    details={
+                        'hint': 'Ensure the repository definition is correct or remove it '
+                                'if the repository is not required for the upgrade.'
+                    })
             copied_repoids.update(entry.repoid for entry in repofile_contents.data)
 
         cmd += ['--disablerepo', '*']
@@ -1405,7 +1446,17 @@ def perform():
                 target_repoids = _gather_target_repositories(context, indata, prod_cert_path)
                 _create_target_userspace(context, indata, indata.packages, indata.files, target_repoids)
                 # TODO: this is tmp solution as proper one needs significant refactoring
-                target_repo_facts = repofileutils.get_parsed_repofiles(context)
+                try:
+                    target_repo_facts = repofileutils.get_parsed_repofiles(context)
+                except repofileutils.InvalidRepoDefinition as e:
+                    raise StopActorExecutionError(
+                        message="Failed to parse target system repofiles: {}".format(str(e)),
+                        details={
+                            'hint': 'Ensure the repository definition is correct or remove it '
+                                    'if the repository is not needed anymore. '
+                                    'This issue is typically caused by missing definition of the name field. '
+                                    'For more information, see: https://access.redhat.com/solutions/6969001.'
+                        })
                 api.produce(TMPTargetRepositoriesFacts(repositories=target_repo_facts))
                 # ## TODO ends here
                 api.produce(UsedTargetRepositories(

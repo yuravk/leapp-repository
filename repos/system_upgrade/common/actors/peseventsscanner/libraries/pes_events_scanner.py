@@ -142,22 +142,40 @@ def compute_pkg_changes_between_consequent_releases(source_installed_pkgs,
 
     release_events = [e for e in events if e.to_release == release]
 
+    def log_replaced_pkgs(removed, added):
+        removed_pkgs_str = ', '.join(str(pkg) for pkg in removed) or '[]'
+        added_pkgs_str = ', '.join(str(pkg) for pkg in added) or '[]'
+        logger.debug('Applying event %d (%s): replacing packages %s with %s',
+                     event.id, event.action.name, removed_pkgs_str, added_pkgs_str)
+
     for event in release_events:
         # PRESENCE events have a different semantics than the other events - they add a package to a target state
         # only if it had been seen (installed) during the course of the overall target packages
         if event.action == Action.PRESENT:
-            for pkg in event.in_pkgs:
-                if pkg in seen_pkgs:
-                    # First remove the package with the old repository and add it back, but now with the new
-                    # repository. As the Package class has a custom __hash__ and __eq__ comparing only name
-                    # and modulestream, the pkg.repository field is ignore and therefore the add() call
-                    # does not update the entry.
-                    if pkg in target_pkgs:
-                        target_pkgs.remove(pkg)
-                    target_pkgs.add(pkg)
+            # explicitly take the common pkgs from the event.in_pkgs,
+            # intersection cannot be used as it isn't defined from which set an
+            # element is taken if two elements have the same hash and are equal
+            # (there can be optimalizations such as always iterating the
+            # smaller set).
+            seen_in_pkgs = {pkg for pkg in event.in_pkgs if pkg in seen_pkgs}
+            if seen_in_pkgs:
+                removed_pkgs = target_pkgs.intersection(seen_in_pkgs)
+                log_replaced_pkgs(removed_pkgs, seen_in_pkgs)
+
+                # First, remove the packages with the old repositories and add them
+                # back, but now with the new repositories. As the Package class has
+                # a custom __hash__ and __eq__ comparing only name and
+                # modulestream, the pkg.repository field is ignored and therefore
+                # the union() call does not update the entries.
+                target_pkgs = target_pkgs.difference(seen_in_pkgs)
+                target_pkgs = seen_in_pkgs.union(target_pkgs)
+
         elif event.action == Action.DEPRECATED:
             if event.in_pkgs.intersection(source_installed_pkgs):
                 # Remove packages with old repositories add packages with the new one
+                removed_pkgs = target_pkgs.intersection(event.in_pkgs)
+                log_replaced_pkgs(removed_pkgs, event.in_pkgs)
+
                 target_pkgs = target_pkgs.difference(event.in_pkgs)
                 target_pkgs = target_pkgs.union(event.in_pkgs)
         else:
@@ -169,10 +187,7 @@ def compute_pkg_changes_between_consequent_releases(source_installed_pkgs,
             # For MERGE to be relevant it is sufficient for only one of its in_pkgs to be installed
             if are_all_in_pkgs_present or (event.action == Action.MERGED and is_any_in_pkg_present):
                 removed_pkgs = target_pkgs.intersection(event.in_pkgs)
-                removed_pkgs_str = ', '.join(str(pkg) for pkg in removed_pkgs) if removed_pkgs else '[]'
-                added_pkgs_str = ', '.join(str(pkg) for pkg in event.out_pkgs) if event.out_pkgs else '[]'
-                logger.debug('Applying event %d (%s): replacing packages %s with %s',
-                             event.id, event.action, removed_pkgs_str, added_pkgs_str)
+                log_replaced_pkgs(removed_pkgs, event.out_pkgs)
 
                 # In pkgs are present, event can be applied
                 # Note: We do a .difference(event.out_packages) followed by an .union(event.out_packages) to overwrite
@@ -501,15 +516,16 @@ def apply_transaction_configuration(source_pkgs, transaction_configuration):
 
 
 def remove_leapp_related_events(events):
-    # NOTE(ivasilev) Need to revisit this once rhel9->rhel10 upgrades become a thing
-    leapp_pkgs = rpms.get_leapp_dep_packages(
-            major_version=['7', '8']) + rpms.get_leapp_packages(major_version=['7', '8'])
+    major_vers = ['7', '8', '9']
+    leapp_pkgs = rpms.get_leapp_dep_packages(major_vers) + rpms.get_leapp_packages(major_vers)
     res = []
     for event in events:
         if not any(pkg.name in leapp_pkgs for pkg in event.in_pkgs):
             res.append(event)
         else:
-            api.current_logger().debug('Filtered out leapp related event, event id: {}'.format(event.id))
+            api.current_logger().debug(
+                'Filtered out leapp related event, event id: {}'.format(event.id)
+            )
     return res
 
 

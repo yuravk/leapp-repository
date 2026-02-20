@@ -2,42 +2,18 @@ import os
 import shutil
 
 from leapp.exceptions import StopActorExecutionError
-from leapp.libraries.common import mounting
-from leapp.libraries.common.grub import (
-    canonical_path_to_efi_format,
-    EFIBootInfo,
-    get_boot_partition,
-    get_device_number,
-    get_efi_device,
-    get_efi_partition
-)
+from leapp.libraries.common import distro, efi, mounting, partitions
+from leapp.libraries.common.config import get_source_distro_id
+from leapp.libraries.common.grub import get_boot_partition
 from leapp.libraries.stdlib import api, CalledProcessError, run
 from leapp.models import ArmWorkaroundEFIBootloaderInfo, EFIBootEntry, TargetUserSpaceInfo
-
-dirname = {
-        'AlmaLinux': 'almalinux',
-        'CentOS Linux': 'centos',
-        'CentOS Stream': 'centos',
-        'Oracle Linux Server': 'redhat',
-        'Red Hat Enterprise Linux': 'redhat',
-        'Rocky Linux': 'rocky',
-        'Scientific Linux': 'redhat',
-}
-
-with open('/etc/system-release', 'r') as sr:
-    release_line = next(line for line in sr if 'release' in line)
-    distro = release_line.split(' release ', 1)[0]
-
-distro_dir = dirname.get(distro, 'default')
 
 UPGRADE_EFI_ENTRY_LABEL = 'Leapp Upgrade'
 
 ARM_SHIM_PACKAGE_NAME = 'shim-aa64'
 ARM_GRUB_PACKAGE_NAME = 'grub2-efi-aa64'
 
-EFI_MOUNTPOINT = '/boot/efi/'
-LEAPP_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/leapp/')
-RHEL_EFIDIR_CANONICAL_PATH = os.path.join(EFI_MOUNTPOINT, 'EFI/', distro_dir)
+LEAPP_EFIDIR_CANONICAL_PATH = os.path.join(efi.EFI_MOUNTPOINT, 'EFI/leapp/')
 UPGRADE_BLS_DIR = '/boot/upgrade-loader'
 
 CONTAINER_DOWNLOAD_DIR = '/tmp_pkg_download_dir'
@@ -48,7 +24,6 @@ Our grub configuration file template that is used in case the system's grubcfg w
 
 The template contains placeholders named with LEAPP_*, that need to be replaced in order to
 obtain a valid config.
-
 """
 
 
@@ -69,19 +44,30 @@ def process():
     with mounting.NspawnActions(base_dir=userspace.path) as context:
         _ensure_clean_environment()
 
+        distro_efidir = distro.get_distro_efidir_canon_path(get_source_distro_id())
         # NOTE(dkubek): Assumes required shim-aa64 and grub2-efi-aa64 packages
         # have been installed
-        context.copytree_from(RHEL_EFIDIR_CANONICAL_PATH, LEAPP_EFIDIR_CANONICAL_PATH)
+        context.copytree_from(distro_efidir, LEAPP_EFIDIR_CANONICAL_PATH)
 
         _copy_grub_files(['grubenv', 'grub.cfg'], ['user.cfg'])
 
-        efibootinfo = EFIBootInfo()
+        try:
+            efibootinfo = efi.EFIBootInfo()
+        except efi.EFIError as e:
+            raise StopActorExecutionError(
+                "Failed to obtain information about UEFI: {}".format(e)
+            )
         current_boot_entry = efibootinfo.entries[efibootinfo.current_bootnum]
         upgrade_boot_entry = _add_upgrade_boot_entry(efibootinfo)
 
-        patch_efi_redhat_grubcfg_to_load_correct_grubenv()
+        patch_efidir_grubcfg_to_load_correct_grubenv()
 
-        _set_bootnext(upgrade_boot_entry.boot_number)
+        try:
+            efi.set_bootnext(upgrade_boot_entry.boot_number)
+        except efi.EFIError as e:
+            raise StopActorExecutionError(
+                'Could not set boot entry {} as BootNext: {}.'.format(upgrade_boot_entry.boot_number, e)
+            )
 
         efibootentry_fields = ['boot_number', 'label', 'active', 'efi_bin_source']
         api.produce(
@@ -89,7 +75,7 @@ def process():
                 original_entry=EFIBootEntry(**{f: getattr(current_boot_entry, f) for f in efibootentry_fields}),
                 upgrade_entry=EFIBootEntry(**{f: getattr(upgrade_boot_entry, f) for f in efibootentry_fields}),
                 upgrade_bls_dir=UPGRADE_BLS_DIR,
-                upgrade_entry_efi_path=os.path.join(EFI_MOUNTPOINT, LEAPP_EFIDIR_CANONICAL_PATH),
+                upgrade_entry_efi_path=LEAPP_EFIDIR_CANONICAL_PATH,
             )
         )
 
@@ -114,12 +100,13 @@ def _ensure_clean_environment():
 
 def _copy_grub_files(required, optional):
     """
-    Copy grub files from redhat/ dir to the /boot/efi/EFI/leapp/ dir.
+    Copy grub files from the distro EFI dir to the /boot/efi/EFI/leapp/ dir.
     """
 
     all_files = required + optional
     for filename in all_files:
-        src_path = os.path.join(RHEL_EFIDIR_CANONICAL_PATH, filename)
+        distro_efidir = distro.get_distro_efidir_canon_path(get_source_distro_id())
+        src_path = os.path.join(distro_efidir, filename)
         dst_path = os.path.join(LEAPP_EFIDIR_CANONICAL_PATH, filename)
 
         if not os.path.exists(src_path):
@@ -142,70 +129,22 @@ def _add_upgrade_boot_entry(efibootinfo):
     Return the upgrade efi entry (EFIEntry).
     """
 
-    dev_number = get_device_number(get_efi_partition())
-    blk_dev = get_efi_device()
-
     tmp_efi_path = os.path.join(LEAPP_EFIDIR_CANONICAL_PATH, 'shimaa64.efi')
     if os.path.exists(tmp_efi_path):
-        efi_path = canonical_path_to_efi_format(tmp_efi_path)
+        efi_path = efi.canonical_path_to_efi_format(tmp_efi_path)
     else:
         raise StopActorExecutionError('Unable to detect upgrade UEFI binary file.')
 
-    upgrade_boot_entry = _get_upgrade_boot_entry(efibootinfo, efi_path, UPGRADE_EFI_ENTRY_LABEL)
+    upgrade_boot_entry = efi.get_boot_entry(efibootinfo, UPGRADE_EFI_ENTRY_LABEL, efi_path)
     if upgrade_boot_entry is not None:
         return upgrade_boot_entry
 
-    cmd = [
-        "/usr/sbin/efibootmgr",
-        "--create",
-        "--disk",
-        blk_dev,
-        "--part",
-        str(dev_number),
-        "--loader",
-        efi_path,
-        "--label",
-        UPGRADE_EFI_ENTRY_LABEL,
-    ]
-
     try:
-        run(cmd)
-    except CalledProcessError:
-        raise StopActorExecutionError('Unable to add a new UEFI bootloader entry for upgrade.')
-
-    # Sanity check new boot entry has been added
-    efibootinfo_new = EFIBootInfo()
-    upgrade_boot_entry = _get_upgrade_boot_entry(efibootinfo_new, efi_path, UPGRADE_EFI_ENTRY_LABEL)
-    if upgrade_boot_entry is None:
-        raise StopActorExecutionError('Unable to find the new UEFI bootloader entry after adding it.')
-
-    return upgrade_boot_entry
-
-
-def _get_upgrade_boot_entry(efibootinfo, efi_path, label):
-    """
-    Get the UEFI boot entry with label `label` and EFI binary path `efi_path`
-
-    Return EFIBootEntry or None if not found.
-    """
-
-    for entry in efibootinfo.entries.values():
-        if entry.label == label and efi_path in entry.efi_bin_source:
-            return entry
-
-    return None
-
-
-def _set_bootnext(boot_number):
-    """
-    Set the BootNext UEFI entry to `boot_number`.
-    """
-
-    api.current_logger().debug('Setting {} as BootNext'.format(boot_number))
-    try:
-        run(['/usr/sbin/efibootmgr', '--bootnext', boot_number])
-    except CalledProcessError:
-        raise StopActorExecutionError('Could not set boot entry {} as BootNext.'.format(boot_number))
+        return efi.add_boot_entry(UPGRADE_EFI_ENTRY_LABEL, efi_path)
+    except efi.EFIError as e:
+        raise StopActorExecutionError(
+            "Unable to add a new UEFI bootloader entry for upgrade: {}".format(e)
+        )
 
 
 def _notify_user_to_check_grub2_cfg():
@@ -227,7 +166,13 @@ def _will_grubcfg_read_our_grubenv(grubcfg_path):
 
 
 def _get_boot_device_uuid():
-    boot_device = get_boot_partition()
+    try:
+        boot_device = get_boot_partition()
+    except partitions.StorageScanError as e:
+        raise StopActorExecutionError(
+            'Failed to determine boot partition: {}'.format(e)
+        )
+
     try:
         raw_device_info_lines = run(['blkid', boot_device], split=True)['stdout']
         raw_device_info = raw_device_info_lines[0]  # There is only 1 output line
@@ -269,15 +214,15 @@ def _write_config(config_path, config_contents):
         grub_cfg_handle.write(config_contents)
 
 
-def patch_efi_redhat_grubcfg_to_load_correct_grubenv():
+def patch_efidir_grubcfg_to_load_correct_grubenv():
     """
-    Replaces /boot/efi/EFI/redhat/grub2.cfg with a patched grub2.cfg shipped in leapp.
+    Replaces <distro efi directory>/grub2.cfg with a patched grub2.cfg shipped in leapp.
 
     The grub2.cfg shipped on some AWS images omits the section that loads grubenv different
     EFI entries. Thus, we need to replace it with our own that will load grubenv shipped
     of our UEFI boot entry.
     """
-    leapp_grub_cfg_path = os.path.join(EFI_MOUNTPOINT, LEAPP_EFIDIR_CANONICAL_PATH, 'grub.cfg')
+    leapp_grub_cfg_path = os.path.join(LEAPP_EFIDIR_CANONICAL_PATH, 'grub.cfg')
 
     if not os.path.isfile(leapp_grub_cfg_path):
         msg = 'The file {} does not exists, cannot check whether bootloader is configured properly.'
