@@ -69,6 +69,7 @@ PROD_CERTS_FOLDER = 'prod-certs'
 PERSISTENT_PACKAGE_CACHE_DIR = '/var/lib/leapp/persistent_package_cache'
 DEDICATED_LEAPP_PART_URL = 'https://access.redhat.com/solutions/7011704'
 FMT_LIST_SEPARATOR = '\n    - '
+CUSTOM_ROOTFS_PATH = '/etc/leapp/files/rootfs'
 
 
 def _check_deprecated_rhsm_skip():
@@ -215,6 +216,27 @@ def prepare_target_userspace(context, userspace_dir, enabled_repos, packages):
 
     run(['rm', '-rf', userspace_dir])
     _create_target_userspace_directories(userspace_dir)
+
+    # Check if a custom rootfs tarball is available to use instead of dnf --installroot
+    rootfs_tarball = _get_custom_rootfs_tarball()
+    if rootfs_tarball:
+        api.current_logger().info(
+            'Using custom rootfs tarball for target userspace: %s', rootfs_tarball
+        )
+        try:
+            run(['tar', '-xf', rootfs_tarball, '-C', userspace_dir])
+        except CalledProcessError as exc:
+            raise StopActorExecutionError(
+                message='Failed to extract custom rootfs tarball: {}'.format(rootfs_tarball),
+                details={'details': str(exc), 'stderr': exc.stderr}
+            )
+        return
+
+    # Check if a container image is configured to use as rootfs
+    container_image = get_env('LEAPP_DEVEL_ROOTFS_CONTAINER_IMAGE', None)
+    if container_image:
+        _pull_and_extract_container_rootfs(userspace_dir, container_image)
+        return
 
     target_major_version = get_target_major_version()
     install_root_dir = '/el{}target'.format(target_major_version)
@@ -649,7 +671,7 @@ def _prep_repository_access(context, target_userspace):
     # NOTE(dkubek): context.call(['update-ca-trust']) seems to not be working.
     #               I am not really sure why. The changes to files are not
     #               being written to disk.
-    run(["chroot", target_userspace, "/bin/bash", "-c", "su - -c update-ca-trust"])
+    run(["chroot", target_userspace, "/usr/bin/update-ca-trust"])
 
     if not rhsm.skip_rhsm():
         _copy_certificates(context, target_userspace)
@@ -772,6 +794,70 @@ def _create_target_userspace_directories(target_userspace):
                 'hint': 'Please ensure that {directory} is empty and modifiable.'.format(directory=target_userspace)
             }
         )
+
+
+def _get_custom_rootfs_tarball():
+    """Find a custom rootfs tarball in CUSTOM_ROOTFS_PATH if it exists."""
+    if not os.path.isdir(CUSTOM_ROOTFS_PATH):
+        return None
+    for fname in sorted(os.listdir(CUSTOM_ROOTFS_PATH)):
+        if fname.endswith(('.tar.xz', '.tar.gz', '.tar.bz2', '.tar')):
+            return os.path.join(CUSTOM_ROOTFS_PATH, fname)
+    return None
+
+
+def _pull_and_extract_container_rootfs(userspace_dir, image_url):
+    """
+    Pull a container image and extract its filesystem into userspace_dir.
+
+    Uses podman to pull the image, create a temporary container, and
+    export its flat filesystem directly into the target userspace.
+
+    The platform can be specified via the LEAPP_DEVEL_ROOTFS_CONTAINER_PLATFORM
+    environment variable (e.g. ``linux/amd64/v2``).
+    """
+    platform = get_env('LEAPP_DEVEL_ROOTFS_CONTAINER_PLATFORM', None)
+    platform_opts = ['--platform', platform] if platform else []
+
+    api.current_logger().info(
+        'Pulling container image for target userspace: %s (platform=%s)',
+        image_url, platform or 'default'
+    )
+    try:
+        run(['podman', 'pull'] + platform_opts + [image_url])
+    except CalledProcessError as exc:
+        raise StopActorExecutionError(
+            message='Failed to pull container image: {}'.format(image_url),
+            details={'details': str(exc), 'stderr': exc.stderr}
+        )
+
+    container_name = 'leapp-userspace-rootfs-tmp'
+    try:
+        # Remove stale container from a previous failed run, if any
+        try:
+            run(['podman', 'rm', '-f', container_name])
+        except CalledProcessError:
+            pass
+        # Create a temporary container (do not start it)
+        run(['podman', 'create'] + platform_opts + ['--name', container_name, image_url, '/bin/bash'])
+        # Export and extract the flat filesystem into the userspace directory
+        run([
+            'bash', '-c',
+            'podman export {} | tar -xf - -C {}'.format(container_name, userspace_dir)
+        ])
+    except CalledProcessError as exc:
+        raise StopActorExecutionError(
+            message='Failed to export container rootfs from image: {}'.format(image_url),
+            details={'details': str(exc), 'stderr': exc.stderr}
+        )
+    finally:
+        # Clean up the temporary container
+        try:
+            run(['podman', 'rm', '-f', container_name])
+        except CalledProcessError:
+            api.current_logger().warning(
+                'Failed to remove temporary container: %s', container_name
+            )
 
 
 def _inhibit_on_duplicate_repos(repofiles):
