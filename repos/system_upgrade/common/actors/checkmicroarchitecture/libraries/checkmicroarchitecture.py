@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from leapp import reporting
+from leapp.libraries.common.config import get_target_distro_id
 from leapp.libraries.common.config.architecture import ARCH_X86_64, matches_architecture
 from leapp.libraries.common.config.version import get_target_major_version
 from leapp.libraries.common.distro import DISTRO_REPORT_NAMES
@@ -60,16 +61,30 @@ def process():
         url='https://red.ht/rhel-10-intel-microarchitectures'
     )
 
-    rhel_major_to_microarch_reqs = {
-        '9': MicroarchInfo(microarch_ver='x86-64-v2',
-                           required_flags=(X86_64_BASELINE_FLAGS + X86_64_V2_FLAGS),
-                           extra_report_fields=[rhel9_microarch_article]),
-        '10': MicroarchInfo(microarch_ver='x86-64-v3',
-                            required_flags=(X86_64_BASELINE_FLAGS + X86_64_V2_FLAGS + X86_64_V3_FLAGS),
-                            extra_report_fields=[rhel10_microarch_article]),
-    }
+    # AlmaLinux 10 is additionally built for the x86-64-v2 microarchitecture
+    # level, so the baseline requirement for AlmaLinux targets stays at v2
+    # regardless of the major version. For RHEL/CentOS Stream 10 the
+    # requirement is x86-64-v3 (RHEL 10 dropped support for v2).
+    if get_target_distro_id() == 'almalinux':
+        major_to_microarch_reqs = {
+            '9': MicroarchInfo(microarch_ver='x86-64-v2',
+                               required_flags=(X86_64_BASELINE_FLAGS + X86_64_V2_FLAGS),
+                               extra_report_fields=[rhel9_microarch_article]),
+            '10': MicroarchInfo(microarch_ver='x86-64-v2',
+                                required_flags=(X86_64_BASELINE_FLAGS + X86_64_V2_FLAGS),
+                                extra_report_fields=[]),
+        }
+    else:
+        major_to_microarch_reqs = {
+            '9': MicroarchInfo(microarch_ver='x86-64-v2',
+                               required_flags=(X86_64_BASELINE_FLAGS + X86_64_V2_FLAGS),
+                               extra_report_fields=[rhel9_microarch_article]),
+            '10': MicroarchInfo(microarch_ver='x86-64-v3',
+                                required_flags=(X86_64_BASELINE_FLAGS + X86_64_V2_FLAGS + X86_64_V3_FLAGS),
+                                extra_report_fields=[rhel10_microarch_article]),
+        }
 
-    microarch_info = rhel_major_to_microarch_reqs.get(get_target_major_version())
+    microarch_info = major_to_microarch_reqs.get(get_target_major_version())
     if not microarch_info:
         api.current_logger().info(
             'No known microarchitecture requirements are known'

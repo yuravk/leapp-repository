@@ -30,13 +30,17 @@ ENTIRE_V3_FLAG_SET = ENTIRE_V2_FLAG_SET + checkmicroarchitecture.X86_64_V3_FLAGS
 
 
 @pytest.mark.parametrize(
-    ('target_ver', 'cpu_flags'),
+    ('target_ver', 'cpu_flags', 'dst_distro'),
     [
-        ('9.0', ENTIRE_V2_FLAG_SET),
-        ('10.0', ENTIRE_V3_FLAG_SET)
+        ('9.0', ENTIRE_V2_FLAG_SET, 'rhel'),
+        ('10.0', ENTIRE_V3_FLAG_SET, 'rhel'),
+        ('9.0', ENTIRE_V2_FLAG_SET, 'almalinux'),
+        # AlmaLinux 10 is built for x86-64-v2 as well, so v2 flags are enough
+        ('10.0', ENTIRE_V2_FLAG_SET, 'almalinux'),
+        ('10.0', ENTIRE_V3_FLAG_SET, 'almalinux'),
     ]
 )
-def test_valid_microarchitecture(monkeypatch, target_ver, cpu_flags):
+def test_valid_microarchitecture(monkeypatch, target_ver, cpu_flags, dst_distro):
     """
     Test no report is generated on a valid microarchitecture
     """
@@ -45,6 +49,7 @@ def test_valid_microarchitecture(monkeypatch, target_ver, cpu_flags):
     monkeypatch.setattr(api, 'current_logger', logger_mocked())
 
     monkeypatch.setattr(api, 'current_actor', CurrentActorMocked(arch=ARCH_X86_64, dst_ver=target_ver,
+                                                                 dst_distro=dst_distro,
                                                                  msgs=[CPUInfo(flags=cpu_flags)]))
 
     checkmicroarchitecture.process()
@@ -54,13 +59,16 @@ def test_valid_microarchitecture(monkeypatch, target_ver, cpu_flags):
 
 
 @pytest.mark.parametrize(
-    ('target_ver', 'cpu_flags'),
+    ('target_ver', 'cpu_flags', 'dst_distro'),
     (
-        ('9.0', checkmicroarchitecture.X86_64_BASELINE_FLAGS),
-        ('10.0', ENTIRE_V2_FLAG_SET),
+        ('9.0', checkmicroarchitecture.X86_64_BASELINE_FLAGS, 'rhel'),
+        ('10.0', ENTIRE_V2_FLAG_SET, 'rhel'),
+        ('9.0', checkmicroarchitecture.X86_64_BASELINE_FLAGS, 'almalinux'),
+        # AlmaLinux 10 still requires v2 as the baseline
+        ('10.0', checkmicroarchitecture.X86_64_BASELINE_FLAGS, 'almalinux'),
     )
 )
-def test_invalid_microarchitecture(monkeypatch, target_ver, cpu_flags):
+def test_invalid_microarchitecture(monkeypatch, target_ver, cpu_flags, dst_distro):
     """
     Test report is generated on x86-64 architecture with invalid microarchitecture and the upgrade is inhibited
     """
@@ -68,7 +76,8 @@ def test_invalid_microarchitecture(monkeypatch, target_ver, cpu_flags):
     monkeypatch.setattr(reporting, "create_report", create_report_mocked())
     monkeypatch.setattr(api, 'current_logger', logger_mocked())
     monkeypatch.setattr(api, 'current_actor',
-                        CurrentActorMocked(arch=ARCH_X86_64, msgs=[cpu_info], dst_ver=target_ver))
+                        CurrentActorMocked(arch=ARCH_X86_64, msgs=[cpu_info], dst_ver=target_ver,
+                                           dst_distro=dst_distro))
 
     checkmicroarchitecture.process()
 
