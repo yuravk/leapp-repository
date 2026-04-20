@@ -20,6 +20,10 @@ class CheckMicroarchitecture(Actor):
     CPU compatible with ``x86-64-v2`` instruction set or higher. Similarly,
     RHEL10 requires at least ``x86-64-v3`` instruction set.
 
+    AlmaLinux 10 is additionally built for the ``x86-64-v2`` microarchitecture
+    level, so when the upgrade target distro is AlmaLinux the requirement for
+    the target major version 10 is kept at ``x86-64-v2``.
+
     .. table:: Required CPU features by microarchitecure level with a
                corresponding flag as shown by ``lscpu``.
 
