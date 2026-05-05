@@ -545,3 +545,24 @@ def test_bootstrap_from_custom_rootfs_not_configured(monkeypatch):
 
     assert tus_userspacebuild._bootstrap_from_custom_rootfs('/userspace') is False
     assert not run_spy.calls
+
+
+def test_copy_trusted_gpg_keys_to_userspace(monkeypatch, tmpdir):
+    vendors_dir = tmpdir.mkdir('vendors')
+    distro_dir = tmpdir.mkdir('distro')
+    vendors_dir.join('vendorkey').write('v')
+    distro_dir.join('distrokey').write('d')
+    distro_dir.mkdir('pqc').join('pqckey').write('p')
+    userspace = tmpdir.mkdir('userspace')
+    context = MockContext(base_dir=str(userspace))
+    monkeypatch.setattr(
+        tus_userspacebuild, 'get_path_to_gpg_certs',
+        lambda: [str(vendors_dir), str(tmpdir.join('missing')), str(distro_dir)]
+    )
+
+    tus_userspacebuild._copy_trusted_gpg_keys_to_userspace(context, '/leapp-trusted-gpg-keys')
+
+    dst = userspace.join('leapp-trusted-gpg-keys')
+    assert sorted(os.listdir(str(dst))) == ['distrokey', 'pqc', 'vendorkey']
+    assert os.listdir(str(dst.join('pqc'))) == ['pqckey']
+

@@ -23,7 +23,7 @@ from leapp.libraries.common.dnflibs import dnfplugin
 from leapp.libraries.common.gpg import get_path_to_gpg_certs, iter_gpg_keyfiles
 from leapp.libraries.common.rpms import has_package
 from leapp.libraries.stdlib import api, CalledProcessError, run
-from leapp.models import InstalledRPM, TargetUserSpaceInfo
+from leapp.models import DNFWorkaround, InstalledRPM, TargetUserSpaceInfo
 
 _DEDICATED_LEAPP_PARTITION_URL = 'https://access.redhat.com/solutions/5057391'
 # ELevate: location of a pre-built rootfs used instead of the dnf installation
@@ -149,6 +149,34 @@ def _import_gpg_keys_to_target_userspace(context_tus, certs_dir):
             "--import", os.path.relpath(certpath, context_tus.base_dir),
         ]
         context_tus.call(cmd, callback_raw=utils.logging_handler)
+
+
+def _copy_trusted_gpg_keys_to_userspace(context_tus, dst_dir):
+    """
+    Copy the trusted target GPG keys into a directory in the target userspace.
+
+    ELevate: there are several directories with trusted gpg keys (the vendors
+    one and the distribution one, see
+    :func:`leapp.libraries.common.gpg.get_path_to_gpg_certs`). Their content is
+    merged into the one directory in the target userspace, keeping the optional
+    ``pqc`` subdirectory layout. A directory that does not exist is skipped.
+
+    :param context_tus: The target userspace container context.
+    :type context_tus: mounting.IsolatedActions
+    :param dst_dir: Path (inside the target userspace) of the directory to copy the keys into.
+    :type dst_dir: str
+    :raises CalledProcessError: If the copy fails.
+    """
+    certs_dirs = get_path_to_gpg_certs()
+    if isinstance(certs_dirs, str):
+        certs_dirs = [certs_dirs]
+
+    dst_path = context_tus.full_path(dst_dir)
+    utils.makedirs(dst_path)
+    for certs_dir in certs_dirs:
+        if not os.path.isdir(certs_dir):
+            continue
+        run(['cp', '-a', os.path.join(certs_dir, '.'), dst_path])
 
 
 def _build_dnf_install_cmd(installroot, releasever, repoids, skip_rhsm, nogpgcheck, packages):
@@ -565,7 +593,7 @@ def build(context_scratch, layout, inputs, used_repos):
     # TODO(mmatuska): can this be put into the 'with' below?
     if not inputs.nogpgcheck and target_has_pqc:
         with mounting.NspawnActions(base_dir=layout.userspace_path) as container:
-            container.copytree_to(get_path_to_gpg_certs(), layout.userspace_gpg_keys_dir)
+            _copy_trusted_gpg_keys_to_userspace(container, layout.userspace_gpg_keys_dir)
             # TODO(mmatuska): we could move the exception handling into the import
             # function, same for the import above
             try:
@@ -578,6 +606,15 @@ def build(context_scratch, layout, inputs, used_repos):
                     ),
                     details={'details': str(exc), 'stderr': exc.stderr}
                 )
+
+        api.produce(
+            DNFWorkaround(
+                display_name="import trusted gpg keys to RPM DB from target userspace",
+                script_path=api.current_actor().get_common_tool_path("importrpmgpgkeysintarget"),
+                script_args=[layout.userspace_gpg_keys_dir],
+                execution_context='container',
+            )
+        )
 
     # Prepare certificate / repository-file access inside the built userspace.
     tus_repoaccess.prep_repository_access(context_scratch, layout.userspace_path)
