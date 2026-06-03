@@ -2,7 +2,7 @@
 from leapp.models import PESIDRepositoryEntry, RepoMapEntry, RepositoriesMapping
 
 class RepoMapData:
-    VERSION_FORMAT = '1.3.0'
+    VERSION_FORMAT = '2.0.0'
 
     def __init__(self):
         self.repositories = []
@@ -41,7 +41,7 @@ class RepoMapData:
         """
         return [repo.repoid for repo in self.repositories if repo.major_version == major_version]
 
-    def add_mapping(self, source_major_version, target_major_version, source_pesid, target_pesid):
+    def add_mapping(self, source_major_version, target_major_version, source_pesid, target_pesids):
         """
         Add a new mapping entry that is mapping the source pesid to the destination pesid(s),
         relevant in an IPU from the supplied source major version to the supplied target
@@ -52,24 +52,24 @@ class RepoMapData:
         :param str target_major_version: Specifies the major version of the target system
                                          for which the added mapping applies.
         :param str source_pesid: PESID of the source repository.
-        :param Union[str|List[str]] target_pesid: A single target PESID or a list of target
-                                                  PESIDs of the added mapping.
+        :param dict[str, list[str]] target_pesids: A dict mapping distro to a list of PESIDs
+                                                   (version_format 2.0.0).
         """
         # NOTE: it could be more simple, but I prefer to be sure the input data
         # contains just one map per source PESID.
         key = '{}:{}'.format(source_major_version, target_major_version)
-        rmap = self.mapping.get(key, defaultdict(set))
-        self.mapping[key] = rmap
-        if isinstance(target_pesid, list):
-            rmap[source_pesid].update(target_pesid)
-        else:
-            rmap[source_pesid].add(target_pesid)
+        # source -> distro -> targets
+        rmap = self.mapping.setdefault(key, defaultdict(lambda: defaultdict(set)))
+        for distro, pesids in target_pesids.items():
+            rmap[source_pesid][distro].update(pesids)
 
-    def get_mappings(self, src_major_version, dst_major_version):
+    def get_mappings(self, src_major_version, dst_major_version, dst_distro):
         """
         Return the list of RepoMapEntry objects for the specified upgrade path.
 
-        IOW, the whole mapping for specified IPU.
+        IOW, the whole mapping for specified IPU. Targets are resolved for the
+        given target distro, falling back to the 'default' distro key
+        (version_format 2.0.0).
         """
         key = '{}:{}'.format(src_major_version, dst_major_version)
         rmap = self.mapping.get(key, None)
@@ -77,7 +77,10 @@ class RepoMapData:
             return None
         map_list = []
         for src_pesid in sorted(rmap.keys()):
-            map_list.append(RepoMapEntry(source=src_pesid, target=sorted(rmap[src_pesid])))
+            target_pesids_by_distro = rmap[src_pesid]
+            default = target_pesids_by_distro['default']
+            targets = target_pesids_by_distro.get(dst_distro, default)
+            map_list.append(RepoMapEntry(source=src_pesid, target=sorted(targets)))
         return map_list
 
     @staticmethod
@@ -101,13 +104,20 @@ class RepoMapData:
         # Load mappings
         for mapping in data['mapping']:
             for entry in mapping['entries']:
-                if not isinstance(entry['target'], list):
+                target_pesids_by_distro = entry['target']
+                if not isinstance(target_pesids_by_distro, dict):
                     raise ValueError(
-                        'The target field of a mapping entry is not a list: {}'
+                        'The target field of a mapping entry is not a dict'
+                        ' (version_format 2.0.0 requires distro-keyed targets): {}'
                         .format(entry)
                     )
 
-                for pesid in [entry['source']] + entry['target']:
+                all_target_pesids = [
+                    pesid
+                    for pesids in target_pesids_by_distro.values()
+                    for pesid in pesids
+                ]
+                for pesid in [entry['source']] + all_target_pesids:
                     if pesid not in existing_pesids:
                         raise ValueError(
                             'The {} pesid is not related to any repository.'
@@ -117,7 +127,7 @@ class RepoMapData:
                     source_major_version=mapping['source_major_version'],
                     target_major_version=mapping['target_major_version'],
                     source_pesid=entry['source'],
-                    target_pesid=entry['target'],
+                    target_pesids=target_pesids_by_distro,
                 )
         return repomap
 

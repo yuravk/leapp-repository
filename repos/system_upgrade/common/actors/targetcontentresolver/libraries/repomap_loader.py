@@ -2,8 +2,8 @@ import os
 from collections import defaultdict
 
 from leapp.exceptions import StopActorExecutionError
+from leapp.libraries.common.config import get_target_distro_id
 from leapp.libraries.common.config.version import get_source_major_version, get_target_major_version
-from leapp.libraries.common.repomaputils import RepoMapData
 from leapp.libraries.common.fetch import load_data_asset
 from leapp.libraries.common.rpms import get_leapp_packages, LeappComponents
 from leapp.libraries.stdlib import api
@@ -12,6 +12,156 @@ from leapp.models.fields import ModelViolationError
 
 REPOMAP_FILE = 'repomap.json'
 """The name of the new repository mapping file."""
+
+
+class RepoMapData:
+    VERSION_FORMAT = '2.0.0'
+
+    def __init__(self):
+        self.repositories = []
+        self.mapping = {}
+
+    def _add_repository(self, data, pesid):
+        """
+        Add new PESIDRepositoryEntry with given pesid from the provided dictionary.
+
+        :param data: A dict containing the data of the added repository. The dictionary structure corresponds
+                     to the repositories entries in the repository mapping JSON schema.
+        :type data: Dict[str, str]
+        :param pesid: PES id of the repository family that the newly added repository belongs to.
+        :type pesid: str
+        """
+        self.repositories.append(PESIDRepositoryEntry(
+            repoid=data['repoid'],
+            channel=data['channel'],
+            rhui=data.get('rhui', ''),
+            repo_type=data['repo_type'],
+            arch=data['arch'],
+            major_version=data['major_version'],
+            pesid=pesid,
+            distro=data['distro'],
+        ))
+
+    def get_repositories(self, valid_major_versions):
+        """
+        Return the list of PESIDRepositoryEntry object matching the specified major versions.
+        """
+        return [repo for repo in self.repositories if repo.major_version in valid_major_versions]
+
+    def _add_mapping(
+        self,
+        source_major_version,
+        target_major_version,
+        source_pesid,
+        target_pesids,
+    ):
+        """
+        Add a new mapping entry that is mapping the source pesid to the destination pesid(s),
+        relevant in an IPU from the supplied source major version to the supplied target
+        major version.
+
+        :param str source_major_version: Specifies the major version of the source system
+                                         for which the added mapping applies.
+        :param str target_major_version: Specifies the major version of the target system
+                                         for which the added mapping applies.
+        :param str source_pesid: PESID of the source repository.
+        :param dict[str, list[str]] target_pesids: A dict mapping distro to a list of PESIDS
+        """
+        # NOTE: it could be more simple, but I prefer to be sure the input data
+        # contains just one map per source PESID.
+        key = '{}:{}'.format(source_major_version, target_major_version)
+        # source -> distro -> targets
+        pesids_map = self.mapping.setdefault(key, defaultdict(lambda: defaultdict(set)))
+
+        for distro, pesids in target_pesids.items():
+            pesids_map[source_pesid][distro].update(pesids)
+
+    def get_mappings(self, src_major_version, dst_major_version, dst_distro):
+        """
+        Return the list of RepoMapEntry objects for the specified upgrade path.
+
+        IOW, the whole mapping for specified IPU.
+        """
+        key = '{}:{}'.format(src_major_version, dst_major_version)
+        pesids_map = self.mapping.get(key, None)
+        if not pesids_map:
+            return None
+
+        map_list = []
+        for src_pesid in sorted(pesids_map.keys()):
+            target_pesids_by_distro = pesids_map[src_pesid]
+            default = target_pesids_by_distro['default']
+            targets = target_pesids_by_distro.get(dst_distro, default)
+
+            map_list.append(RepoMapEntry(source=src_pesid, target=sorted(targets)))
+
+        return map_list
+
+    @staticmethod
+    def load_from_dict(data):
+        if data['version_format'] != RepoMapData.VERSION_FORMAT:
+            raise ValueError(
+                'The obtained repomap data has unsupported version of format.'
+                ' Get {} required {}'
+                .format(data['version_format'], RepoMapData.VERSION_FORMAT)
+            )
+
+        repomap = RepoMapData()
+
+        # Load repositories
+        existing_pesids = set()
+        for repo_family in data['repositories']:
+            existing_pesids.add(repo_family['pesid'])
+            for repo in repo_family['entries']:
+                repomap._add_repository(repo, repo_family['pesid'])
+
+        # Load mappings
+        for mapping in data['mapping']:
+            for entry in mapping['entries']:
+                source_pesid = entry['source']
+                target_pesids_by_distro = entry['target']
+
+                if not isinstance(target_pesids_by_distro, dict):
+                    raise ValueError(
+                        "The 'target' of a mapping entry for PESID {} is {}, must be a dict".format(
+                            source_pesid, type(target_pesids_by_distro)
+                        )
+                    )
+
+                if 'default' not in target_pesids_by_distro:
+                    raise ValueError(
+                        "The 'target' of a mapping entry for PESID {} does not contain 'default'".format(
+                            source_pesid
+                        )
+                    )
+
+                for _distro, pesids in target_pesids_by_distro.items():
+                    if not isinstance(pesids, list):
+                        raise ValueError(
+                            "Values of the 'target' dict of a mapping entry for PESID {} must be lists".format(
+                                source_pesid
+                            )
+                        )
+
+                for pesid in [entry['source']] + [id for ids in entry['target'].values() for id in ids]:
+                    # FIXME: this check isn't complete since the distro field was
+                    # introduced for repositories, because the PESID might be
+                    # associated with just repositories for a particular
+                    # distro(s) and therefore might not be for the source or
+                    # target distro.
+                    # However this is better than nothing.
+                    if pesid not in existing_pesids:
+                        raise ValueError(
+                            'The {} pesid is not related to any repository.'.format(pesid)
+                        )
+
+                repomap._add_mapping(
+                    source_major_version=mapping['source_major_version'],
+                    target_major_version=mapping['target_major_version'],
+                    source_pesid=source_pesid,
+                    target_pesids=target_pesids_by_distro,
+                )
+        return repomap
 
 
 def _inhibit_upgrade(msg):
@@ -61,7 +211,17 @@ def load_repositories_mapping(read_repofile_func=_read_repofile):
     json_data = read_repofile_func(REPOMAP_FILE)
     try:
         repomap_data = RepoMapData.load_from_dict(json_data)
-        mapping = repomap_data.get_mappings(get_source_major_version(), get_target_major_version())
+        src_ver, dst_ver = get_source_major_version(), get_target_major_version()
+
+        mapping = repomap_data.get_mappings(src_ver, dst_ver, get_target_distro_id())
+        if mapping is None:
+            # don't really expect this to happen because before it was not
+            # handled at all and I am not aware of any crashes
+            err_message = (
+                'The repository mapping file is invalid: '
+                'no mappings found for IPU {}:{}'
+            )
+            _inhibit_upgrade(err_message.format(src_ver, dst_ver))
 
         valid_major_versions = [get_source_major_version(), get_target_major_version()]
         repositories_mapping = RepositoriesMapping(

@@ -2,6 +2,7 @@ import os
 import json
 
 from leapp.libraries.common import fetch
+from leapp.libraries.common.config import get_target_distro_id
 from leapp.libraries.common.config.version import get_target_major_version, get_source_major_version
 from leapp.libraries.common.repomaputils import RepoMapData
 from leapp.libraries.stdlib import api
@@ -44,7 +45,7 @@ def read_repomap_file(repomap_file, read_repofile_func, vendor_name):
             source_repoids=repomap_data.get_version_repoids(source_major)
         ))
 
-        mapping = repomap_data.get_mappings(source_major, target_major)
+        mapping = repomap_data.get_mappings(source_major, target_major, get_target_distro_id())
         valid_major_versions = [source_major, target_major]
 
         api.produce(VendorReposMapping(
