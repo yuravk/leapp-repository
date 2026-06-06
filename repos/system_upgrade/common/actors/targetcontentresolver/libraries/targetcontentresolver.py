@@ -124,7 +124,11 @@ def process():
     if vendor_map_msgs:
         repositories_map_msg = combine_repomap_messages([repositories_map_msg] + vendor_map_msgs)
 
-    blocklisted_repoids = repositoriesblocklist.compute_blocklist(repositories_map_msg, indata.external_tasks)
+    blocklisted_repoids = repositoriesblocklist.compute_blocklist(
+        repositories_map_msg,
+        indata.external_tasks,
+        indata.enabled_repoids
+    )
     pes_requested_repoids = pes_events_scanner.scan_pes_events(
         repositories_map_msg,
         blocklisted_repoids,
