@@ -2,6 +2,7 @@ from collections import namedtuple
 
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.actor import pes_events_scanner, repositoriesblocklist, setuptargetrepos
+from leapp.libraries.actor.repomap_calc import RepoMapDataHandler
 from leapp.libraries.actor.repomap_loader import load_repositories_mapping
 from leapp.libraries.common.repomaputils import combine_repomap_messages
 from leapp.libraries.stdlib import api
@@ -10,7 +11,8 @@ from leapp.models import (
     RepositoriesBlacklisted,
     RepositoriesFacts,
     RepositoriesMapping,
-    RepositoriesSetupTasks
+    RepositoriesSetupTasks,
+    RHUIInfo
 )
 from leapp.utils.deprecation import suppress_deprecation
 
@@ -93,6 +95,21 @@ class InputData():
                     self.enabled_repoids.add(repo.repoid)
 
 
+def _init_repomap_handler():
+    repomap_msg = load_repositories_mapping()
+
+    # ELevate: vendors can provide their own repository mappings (produced by
+    # the vendorrepositoriesmapping actor). Combine them with the main mapping
+    # so that the handler operates on vendor-aware mapping data.
+    vendor_map_msgs = list(api.consume(RepositoriesMapping))
+    if vendor_map_msgs:
+        repomap_msg = combine_repomap_messages([repomap_msg] + vendor_map_msgs)
+
+    rhui_info = next(api.consume(RHUIInfo), None)
+    cloud_provider = rhui_info.provider if rhui_info else ''
+    return RepoMapDataHandler(repomap_msg, cloud_provider=cloud_provider)
+
+
 def process():
     """
     Orchestrate the four stages of target content resolution.
@@ -115,28 +132,20 @@ def process():
        configuration.
     """
     indata = InputData()
-    repositories_map_msg = load_repositories_mapping()
-
-    # ELevate: vendors can provide their own repository mappings (produced by
-    # the vendorrepositoriesmapping actor). Combine them with the main mapping
-    # so that all downstream stages operate on vendor-aware mapping data.
-    vendor_map_msgs = list(api.consume(RepositoriesMapping))
-    if vendor_map_msgs:
-        repositories_map_msg = combine_repomap_messages([repositories_map_msg] + vendor_map_msgs)
-
+    repomap_handler = _init_repomap_handler()
     blocklisted_repoids = repositoriesblocklist.compute_blocklist(
-        repositories_map_msg,
+        repomap_handler,
         indata.external_tasks,
         indata.enabled_repoids
     )
     pes_requested_repoids = pes_events_scanner.scan_pes_events(
-        repositories_map_msg,
+        repomap_handler,
         blocklisted_repoids,
         indata.enabled_repoids
     )
 
     setuptargetrepos.setup_target_repos(
-        repositories_map_msg,
+        repomap_handler,
         pes_requested_repoids=pes_requested_repoids,
         blacklisted_repoids=blocklisted_repoids,
         external_repoids_requests=indata.external_tasks.to_enable,
