@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from leapp.exceptions import StopActorExecutionError
 from leapp.libraries.actor import pes_events_scanner, repositoriesblocklist, setuptargetrepos
-from leapp.libraries.actor.repomap_loader import scan_repositories
+from leapp.libraries.actor.repomap_loader import load_repositories_mapping
 from leapp.libraries.common.repomaputils import combine_repomap_messages
 from leapp.libraries.stdlib import api
 from leapp.models import (
@@ -115,7 +115,7 @@ def process():
        configuration.
     """
     indata = InputData()
-    repositories_map_msg = scan_repositories()
+    repositories_map_msg = load_repositories_mapping()
 
     # ELevate: vendors can provide their own repository mappings (produced by
     # the vendorrepositoriesmapping actor). Combine them with the main mapping
