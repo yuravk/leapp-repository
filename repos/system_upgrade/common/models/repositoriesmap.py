@@ -97,3 +97,24 @@ class RepositoriesMapping(Model):
     mapping = fields.List(fields.Model(RepoMapEntry), default=[])
     repositories = fields.List(fields.Model(PESIDRepositoryEntry), default=[])
     vendor = fields.Nullable(fields.String())
+
+
+class VendorReposMapping(Model):
+    """
+    Repository mapping contributed by a vendor (ELevate).
+
+    Same shape as RepositoriesMapping, but a distinct message type. The
+    target_content_resolver actor *produces* the main RepositoriesMapping and
+    therefore must not also *consume* it (that is a dependency cycle); vendor
+    mappings are produced by the vendorrepositoriesmapping actor under this
+    separate type and consumed by target_content_resolver, then combined with
+    the main mapping via combine_repomap_messages.
+
+    Warning: This model is not covered by the deprecation process and can be
+    changed or removed any time.
+    """
+    topic = TransactionTopic
+
+    mapping = fields.List(fields.Model(RepoMapEntry), default=[])
+    repositories = fields.List(fields.Model(PESIDRepositoryEntry), default=[])
+    vendor = fields.Nullable(fields.String())

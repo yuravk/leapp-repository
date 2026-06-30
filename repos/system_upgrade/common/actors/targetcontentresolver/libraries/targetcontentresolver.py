@@ -13,9 +13,9 @@ from leapp.models import (
     Module,
     RepositoriesBlacklisted,
     RepositoriesFacts,
-    RepositoriesMapping,
     RepositoriesSetupTasks,
-    RHUIInfo
+    RHUIInfo,
+    VendorReposMapping
 )
 from leapp.utils.deprecation import suppress_deprecation
 
@@ -120,9 +120,11 @@ def _init_repomap_handler():
     repomap_msg = load_repositories_mapping()
 
     # ELevate: vendors can provide their own repository mappings (produced by
-    # the vendorrepositoriesmapping actor). Combine them with the main mapping
-    # so that the handler operates on vendor-aware mapping data.
-    vendor_map_msgs = list(api.consume(RepositoriesMapping))
+    # the vendorrepositoriesmapping actor as VendorReposMapping — a separate
+    # type, so this actor can consume them without a produce/consume cycle on
+    # RepositoriesMapping). Combine them with the main mapping so that the
+    # handler operates on vendor-aware mapping data.
+    vendor_map_msgs = list(api.consume(VendorReposMapping))
     if vendor_map_msgs:
         repomap_msg = combine_repomap_messages([repomap_msg] + vendor_map_msgs)
 

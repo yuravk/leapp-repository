@@ -7,11 +7,11 @@ from leapp.models import (
     DistroTargetRepository,
     InstalledRPM,
     RHELTargetRepository,
-    RepositoriesMapping,
     SkippedRepositories,
     TargetRepositories,
     UsedRepositories,
-    VendorCustomTargetRepositoryList
+    VendorCustomTargetRepositoryList,
+    VendorReposMapping
 )
 from leapp.utils.deprecation import suppress_deprecation
 
@@ -112,7 +112,7 @@ def setup_target_repos(repomap_handler, enabled_repoids, pes_requested_repoids,
     used_repoids_dict = _get_used_repo_dict()
 
     # Remember that we can't just grab one message, each vendor can have its own mapping.
-    repo_mapping_list = list(api.consume(RepositoriesMapping))
+    repo_mapping_list = list(api.consume(VendorReposMapping))
 
     custom_repos = _get_custom_target_repos()
     repoids_from_installed_packages = _get_repoids_from_installed_packages()

@@ -18,7 +18,8 @@ from leapp.models import (
     SkippedRepositories,
     TargetRepositories,
     UsedRepositories,
-    VendorCustomTargetRepositoryList
+    VendorCustomTargetRepositoryList,
+    VendorReposMapping
 )
 from leapp.reporting import Report
 from leapp.tags import FactsPhaseTag, IPUWorkflowTag
@@ -49,11 +50,11 @@ class TargetContentResolver(Actor):
         RHUIInfo,
         RepositoriesBlacklisted,
         RepositoriesFacts,
-        RepositoriesMapping,
         RepositoriesSetupTasks,
         RpmTransactionTasks,
         UsedRepositories,
         VendorCustomTargetRepositoryList,
+        VendorReposMapping,
     )
     produces = (
         ConsumedDataAsset,

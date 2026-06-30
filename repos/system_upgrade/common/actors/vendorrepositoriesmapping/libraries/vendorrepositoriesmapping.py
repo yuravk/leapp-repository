@@ -5,7 +5,7 @@ from leapp.libraries.common import fetch
 from leapp.libraries.common.config.version import get_target_major_version, get_source_major_version
 from leapp.libraries.common.repomaputils import RepoMapData
 from leapp.libraries.stdlib import api
-from leapp.models import VendorSourceRepos, RepositoriesMapping
+from leapp.models import VendorSourceRepos, VendorReposMapping
 from leapp.models.fields import ModelViolationError
 from leapp.exceptions import StopActorExecutionError
 
@@ -47,7 +47,7 @@ def read_repomap_file(repomap_file, read_repofile_func, vendor_name):
         mapping = repomap_data.get_mappings(source_major, target_major)
         valid_major_versions = [source_major, target_major]
 
-        api.produce(RepositoriesMapping(
+        api.produce(VendorReposMapping(
             mapping=mapping,
             repositories=repomap_data.get_repositories(valid_major_versions),
             vendor=vendor_name
@@ -70,7 +70,7 @@ def read_repomap_file(repomap_file, read_repofile_func, vendor_name):
 
 def scan_vendor_repomaps(read_repofile_func=read_repofile):
     """
-    Scan the repository mapping file and produce RepositoriesMapping msg.
+    Scan the repository mapping file and produce VendorReposMapping msg.
 
     See the description of the actor for more details.
     """
