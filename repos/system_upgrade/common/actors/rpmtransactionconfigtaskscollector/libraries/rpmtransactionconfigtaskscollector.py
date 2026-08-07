@@ -1,6 +1,6 @@
 import os.path
 
-from leapp.libraries.stdlib import api
+from leapp.libraries.stdlib import api, format_list
 from leapp.models import DistributionSignedRPM, RpmTransactionTasks
 
 
@@ -25,10 +25,7 @@ def filter_out(installed_rpm_names, to_filter, debug_msg):
     # And these ones are the ones that are.
     filtered_out = list(set(to_filter) - set(filtered_ok))
     if filtered_out:
-        api.current_logger().debug(
-            debug_msg +
-            '\n- ' + '\n- '.join(filtered_out)
-        )
+        api.current_logger().debug('%s%s', debug_msg, format_list(filtered_out))
     # We may want to use either of the two sets.
     return filtered_ok, filtered_out
 
