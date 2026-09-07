@@ -1258,6 +1258,43 @@ def test__get_distro_available_repoids_nobaserepos_inhibit(
         assert reporting.Groups.INHIBITOR in report["groups"]
 
 
+def test__get_distro_available_repoids_custom_base_repos_no_inhibit(monkeypatch):
+    """
+    Custom target repos covering baseos/appstream satisfy the base repos check.
+
+    Hosts managed by Foreman/Katello or private mirrors have no standard
+    distro repofiles; all target content comes as custom target repositories.
+    """
+    msgs = _PACKAGES_MSGS + [
+        models.TargetRepositories(
+            rhel_repos=[],
+            distro_repos=[],
+            custom_repos=[
+                models.CustomTargetRepository(repoid='almalinux10-baseos'),
+                models.CustomTargetRepository(repoid='almalinux10-appstream'),
+            ],
+        )
+    ]
+    monkeypatch.setattr(
+        userspacegen.api,
+        "current_actor",
+        CurrentActorMocked(
+            src_distro="almalinux", dst_distro="almalinux", src_ver="9.8", dst_ver="10.2", msgs=msgs
+        ),
+    )
+    monkeypatch.setattr(userspacegen.api.current_actor(), 'produce', produce_mocked())
+    monkeypatch.setattr(reporting, "create_report", create_report_mocked())
+
+    monkeypatch.setattr(rhsm, 'skip_rhsm', lambda: True)
+    monkeypatch.setattr(distro, 'get_target_distro_repoids', lambda ctx: [])
+
+    indata = testInData(_PACKAGES_MSGS, None, None, _XFS_MSG, _STORAGEINFO_MSG, None)
+    repoids = userspacegen._get_distro_available_repoids(None, indata)
+
+    assert repoids == set()
+    assert not reporting.create_report.called
+
+
 def mocked_consume_data():
     packages = {'dnf', 'dnf-command(config-manager)', 'pkgA', 'pkgB'}
     rhsm_info = _RHSMINFO_MSG

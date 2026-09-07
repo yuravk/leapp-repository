@@ -1084,7 +1084,22 @@ def _get_distro_available_repoids(context, indata):
         or is_source_almalinux8)  # there are no distro_repoids on AL8->AL9
         and (target_distro != "rhel" or rhel_and_rhsm)
     ):
-        _inhibit_if_no_base_repos(distro_repoids)
+        # ELevate: hosts managed by Foreman/Katello or private mirror
+        # solutions often have no standard distro repofiles at all - the
+        # target content is provided purely via custom target repositories
+        # (typically the /etc/leapp/files/leapp_upgrade_repositories.repo
+        # file). On non-RHEL distros take custom target repoids into account
+        # as well, so such setups are not inhibited just because the stock
+        # repofiles are absent from the system. On RHEL the base repositories
+        # have to be provided via RHSM as before.
+        custom_repoids = set()
+        if target_distro != 'rhel':
+            custom_repoids = {
+                custom_repo.repoid
+                for target_repo in api.consume(TargetRepositories)
+                for custom_repo in target_repo.custom_repos
+            }
+        _inhibit_if_no_base_repos(set(distro_repoids) | custom_repoids)
 
     if indata and indata.rhui_info:
         rhui_repoids = _get_rhui_available_repoids(context, indata.rhui_info)
