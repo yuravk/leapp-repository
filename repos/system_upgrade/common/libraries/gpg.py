@@ -6,6 +6,7 @@ from leapp.libraries.stdlib import api, run
 from leapp.models import GpgKey
 
 GPG_CERTS_FOLDER = 'rpm-gpg'
+GPG_PQC_CERTS_SUBFOLDER = 'pqc'
 
 
 def get_pubkeys_from_rpms(installed_rpms):
@@ -126,6 +127,54 @@ def get_path_to_gpg_certs():
             certs_dir
         )
     ]
+
+
+def iter_gpg_keyfiles(root_dir=None, *, include_pqc):
+    """
+    Yield paths to all the keyfiles in the given directory with trusted gpg keys
+
+    The root directory is expected to contain v4 (traditional) keys only and its
+    'pqc' subdirectory v6 (PQC) keys only. This is checked by the
+    trusted_gpg_key_dir_check actor. The 'pqc' subdirectory is optional; it is
+    present for the target systems with PQC support only.
+
+    :param root_dir: Path to the directory with trusted gpg keys. When not
+        set, all the directories returned by get_path_to_gpg_certs() are
+        processed; those that do not exist are skipped.
+    :type root_dir: str
+    :param include_pqc: Yield also the keyfiles in the 'pqc' subdirectory
+    :type include_pqc: bool
+    """
+    if root_dir is None:
+        # ELevate: there are several directories with trusted gpg keys (the
+        # vendors one and the distribution one), see get_path_to_gpg_certs()
+        trusted_dirs = get_path_to_gpg_certs()
+        if isinstance(trusted_dirs, str):
+            trusted_dirs = [trusted_dirs]
+        for trusted_dir in trusted_dirs:
+            if not os.path.isdir(trusted_dir):
+                continue
+            for abs_path in iter_gpg_keyfiles(trusted_dir, include_pqc=include_pqc):
+                yield abs_path
+        return
+
+    for keyfile in os.listdir(root_dir):
+        abs_path = os.path.join(root_dir, keyfile)
+        if os.path.isfile(abs_path):
+            yield abs_path
+
+    if not include_pqc:
+        return
+
+    pqc_path = os.path.join(root_dir, GPG_PQC_CERTS_SUBFOLDER)
+    if not os.path.isdir(pqc_path):
+        # target systems without PQC support do not have the subdirectory
+        return
+
+    for keyfile in os.listdir(pqc_path):
+        abs_path = os.path.join(pqc_path, keyfile)
+        if os.path.isfile(abs_path):
+            yield abs_path
 
 
 def is_nogpgcheck_set():

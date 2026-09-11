@@ -11,6 +11,12 @@ from leapp.models import CopyFile, TargetUserSpaceInfo, UsedTargetRepositories, 
 
 _DEDICATED_LEAPP_PARTITION_URL = 'https://access.redhat.com/solutions/5057391'
 
+# keyed by whether PQC key should be included
+_IMPORT_KEYFILES = {
+    False: ['/keys/root-key'],
+    True: ['/keys/root-key', '/keys/pqc/pqc-key'],
+}
+
 
 class MockCM:
     """Generic no-op context manager that records construction kwargs."""
@@ -135,51 +141,20 @@ def test_persistent_cache_push_enabled(monkeypatch):
     assert moves == [(src, '/cache')]
 
 
-def test_import_gpg_keys_no_dir(monkeypatch):
-    logger = logger_mocked()
-    context = MockContext()
-    monkeypatch.setattr(api, 'current_logger', logger)
-    monkeypatch.setattr(tus_userspacebuild, 'get_path_to_gpg_certs', lambda: '/no/such/dir')
-    monkeypatch.setattr(os.path, 'isdir', lambda path: False)
-
-    tus_userspacebuild._import_gpg_keys(context, '/installroot')
-
-    assert not context.calls
-    assert len(logger.warnmsg) == 1
-
-
 def test_import_gpg_keys_with_keys(monkeypatch):
     context = MockContext()
-    certs_dir = '/etc/leapp/gpg'
-    monkeypatch.setattr(tus_userspacebuild, 'get_path_to_gpg_certs', lambda: certs_dir)
-    monkeypatch.setattr(os.path, 'isdir', lambda path: True)
-    monkeypatch.setattr(os, 'listdir', lambda path: ['key-b', 'key-a'])
+    monkeypatch.setattr(
+        tus_userspacebuild,
+        "iter_gpg_keyfiles",
+        lambda include_pqc: iter(_IMPORT_KEYFILES[include_pqc]),
+    )
 
     tus_userspacebuild._import_gpg_keys(context, '/installroot')
 
+    # pqc should not be included yet
     assert context.calls == [
-        ['rpm', '--root', '/installroot', '--import', os.path.join(certs_dir, 'key-a')],
-        ['rpm', '--root', '/installroot', '--import', os.path.join(certs_dir, 'key-b')],
+        ['rpm', '--root', '/installroot', '--import', '/keys/root-key'],
     ]
-
-
-def test_import_gpg_keys_multiple_dirs(monkeypatch):
-    logger = logger_mocked()
-    context = MockContext()
-    certs_dirs = ['/etc/leapp/files/vendors.d/rpm-gpg/', '/etc/leapp/gpg']
-    monkeypatch.setattr(api, 'current_logger', logger)
-    monkeypatch.setattr(tus_userspacebuild, 'get_path_to_gpg_certs', lambda: certs_dirs)
-    # the vendors directory does not exist; it is skipped with a warning
-    monkeypatch.setattr(os.path, 'isdir', lambda path: path == certs_dirs[1])
-    monkeypatch.setattr(os, 'listdir', lambda path: ['key-b', 'key-a'])
-
-    tus_userspacebuild._import_gpg_keys(context, '/installroot')
-
-    assert context.calls == [
-        ['rpm', '--root', '/installroot', '--import', os.path.join(certs_dirs[1], 'key-a')],
-        ['rpm', '--root', '/installroot', '--import', os.path.join(certs_dirs[1], 'key-b')],
-    ]
-    assert len(logger.warnmsg) == 1
 
 
 @pytest.mark.parametrize('nogpgcheck', [False, True])
