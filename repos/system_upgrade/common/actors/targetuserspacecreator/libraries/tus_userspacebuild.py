@@ -25,7 +25,7 @@ from leapp.libraries.common.config.version import (
     matches_target_version
 )
 from leapp.libraries.common.dnflibs import dnfplugin
-from leapp.libraries.common.gpg import get_path_to_gpg_certs, iter_gpg_keyfiles
+from leapp.libraries.common.gpg import get_path_to_gpg_certs, iter_gpg_keyfiles, VENDORS_GPG_CERTS_DIR
 from leapp.libraries.common.rpms import has_package
 from leapp.libraries.stdlib import api, CalledProcessError, run
 from leapp.models import DNFWorkaround, InstalledRPM, TargetUserSpaceInfo
@@ -157,32 +157,65 @@ def _import_gpg_keys_to_target_userspace(context_tus, certs_dir):
         context_tus.call(cmd, callback_raw=utils.logging_handler)
 
 
-def _copy_trusted_gpg_keys_to_userspace(context_tus, dst_dir):
+def _copy_trusted_gpg_keys_to_userspace(context_tus, dst_dir, vendors_dst_dir):
     """
-    Copy the trusted target GPG keys into a directory in the target userspace.
+    Copy the trusted target GPG keys into the target userspace.
 
     ELevate: there are several directories with trusted gpg keys (the vendors
     one and the distribution one, see
-    :func:`leapp.libraries.common.gpg.get_path_to_gpg_certs`). Their content is
-    merged into the one directory in the target userspace, keeping the optional
-    ``pqc`` subdirectory layout. A directory that does not exist is skipped.
+    :func:`leapp.libraries.common.gpg.get_path_to_gpg_certs`). The distribution
+    keys are copied into ``dst_dir`` and the vendors ones into
+    ``vendors_dst_dir``, keeping the optional ``pqc`` subdirectory layout. They
+    are kept apart as the import of the vendors keys is not allowed to fail the
+    upgrade, see :func:`_import_vendors_gpg_keys_to_target_userspace`.
+    A directory that does not exist is skipped.
 
     :param context_tus: The target userspace container context.
     :type context_tus: mounting.IsolatedActions
-    :param dst_dir: Path (inside the target userspace) of the directory to copy the keys into.
+    :param dst_dir: Path (inside the target userspace) of the directory for the distribution keys.
     :type dst_dir: str
+    :param vendors_dst_dir: Path (inside the target userspace) of the directory for the vendors keys.
+    :type vendors_dst_dir: str
     :raises CalledProcessError: If the copy fails.
     """
     certs_dirs = get_path_to_gpg_certs()
     if isinstance(certs_dirs, str):
         certs_dirs = [certs_dirs]
 
-    dst_path = context_tus.full_path(dst_dir)
-    utils.makedirs(dst_path)
+    for dirpath in (dst_dir, vendors_dst_dir):
+        utils.makedirs(context_tus.full_path(dirpath))
     for certs_dir in certs_dirs:
         if not os.path.isdir(certs_dir):
             continue
+        dst_path = context_tus.full_path(vendors_dst_dir if certs_dir == VENDORS_GPG_CERTS_DIR else dst_dir)
         run(['cp', '-a', os.path.join(certs_dir, '.'), dst_path])
+
+
+def _import_vendors_gpg_keys_to_target_userspace(context_tus, certs_dir):
+    """
+    Import the vendors RPM GPG keys from a directory in the context using rpm from the context
+
+    ELevate: unlike the distribution keys, a failed import of a vendor key is
+    only logged. The vendors keyfiles contain also legacy keys (e.g. with SHA-1
+    binding signatures) that the rpm of the target system refuses to import;
+    the other keys of such a keyfile are imported anyway. A key refused by the
+    target system could not be used to verify packages on it in any case.
+    """
+    container_certs_dir = os.path.join(context_tus.base_dir, os.path.relpath(certs_dir, '/'))
+    if not os.path.isdir(container_certs_dir):
+        return
+    for certpath in iter_gpg_keyfiles(container_certs_dir, include_pqc=True):
+        cmd = [
+            "rpm",
+            "--import", os.path.relpath(certpath, context_tus.base_dir),
+        ]
+        try:
+            context_tus.call(cmd, callback_raw=utils.logging_handler)
+        except CalledProcessError as exc:
+            api.current_logger().warning(
+                'Some of the vendors GPG keys from {} have not been imported into the target userspace: {}'
+                .format(os.path.basename(certpath), exc.stderr)
+            )
 
 
 def _build_dnf_install_cmd(installroot, releasever, repoids, skip_rhsm, nogpgcheck, packages):
@@ -601,7 +634,11 @@ def build(context_scratch, layout, inputs, used_repos):
     # TODO(mmatuska): can this be put into the 'with' below?
     if not inputs.nogpgcheck and source_has_pqc and target_has_pqc:
         with mounting.NspawnActions(base_dir=layout.userspace_path) as container:
-            _copy_trusted_gpg_keys_to_userspace(container, layout.userspace_gpg_keys_dir)
+            # ELevate: the vendors keys are kept and imported separately
+            userspace_vendors_gpg_keys_dir = layout.userspace_gpg_keys_dir + '-vendors'
+            _copy_trusted_gpg_keys_to_userspace(
+                container, layout.userspace_gpg_keys_dir, userspace_vendors_gpg_keys_dir
+            )
             # TODO(mmatuska): we could move the exception handling into the import
             # function, same for the import above
             try:
@@ -614,12 +651,22 @@ def build(context_scratch, layout, inputs, used_repos):
                     ),
                     details={'details': str(exc), 'stderr': exc.stderr}
                 )
+            _import_vendors_gpg_keys_to_target_userspace(container, userspace_vendors_gpg_keys_dir)
 
         api.produce(
             DNFWorkaround(
                 display_name="import trusted gpg keys to RPM DB from target userspace",
                 script_path=api.current_actor().get_common_tool_path("importrpmgpgkeysintarget"),
                 script_args=[layout.userspace_gpg_keys_dir],
+                execution_context='container',
+            )
+        )
+        # ELevate: a vendor key refused by the target system does not fail the upgrade
+        api.produce(
+            DNFWorkaround(
+                display_name="import trusted vendors gpg keys to RPM DB from target userspace",
+                script_path=api.current_actor().get_common_tool_path("importvendorsrpmgpgkeysintarget"),
+                script_args=[userspace_vendors_gpg_keys_dir],
                 execution_context='container',
             )
         )

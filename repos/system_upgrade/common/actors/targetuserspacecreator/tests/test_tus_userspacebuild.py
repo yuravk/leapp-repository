@@ -569,21 +569,62 @@ def test_bootstrap_from_custom_rootfs_not_configured(monkeypatch):
 
 
 def test_copy_trusted_gpg_keys_to_userspace(monkeypatch, tmpdir):
-    vendors_dir = tmpdir.mkdir('vendors')
+    vendors_dir = tus_userspacebuild.VENDORS_GPG_CERTS_DIR
     distro_dir = tmpdir.mkdir('distro')
-    vendors_dir.join('vendorkey').write('v')
-    distro_dir.join('distrokey').write('d')
-    distro_dir.mkdir('pqc').join('pqckey').write('p')
     userspace = tmpdir.mkdir('userspace')
     context = MockContext(base_dir=str(userspace))
+    run_spy = RunSpy()
+    monkeypatch.setattr(tus_userspacebuild, 'run', run_spy)
     monkeypatch.setattr(
         tus_userspacebuild, 'get_path_to_gpg_certs',
-        lambda: [str(vendors_dir), str(tmpdir.join('missing')), str(distro_dir)]
+        lambda: [vendors_dir, str(tmpdir.join('missing')), str(distro_dir)]
+    )
+    monkeypatch.setattr(os.path, 'isdir', lambda path: path in (vendors_dir, str(distro_dir)))
+
+    tus_userspacebuild._copy_trusted_gpg_keys_to_userspace(
+        context, '/leapp-trusted-gpg-keys', '/leapp-trusted-gpg-keys-vendors'
     )
 
-    tus_userspacebuild._copy_trusted_gpg_keys_to_userspace(context, '/leapp-trusted-gpg-keys')
+    dst = str(userspace.join('leapp-trusted-gpg-keys'))
+    vendors_dst = str(userspace.join('leapp-trusted-gpg-keys-vendors'))
+    # the vendors keys and the distribution keys are kept apart in the userspace
+    assert run_spy.calls == [
+        ['cp', '-a', os.path.join(vendors_dir, '.'), vendors_dst],
+        ['cp', '-a', os.path.join(str(distro_dir), '.'), dst],
+    ]
 
-    dst = userspace.join('leapp-trusted-gpg-keys')
-    assert sorted(os.listdir(str(dst))) == ['distrokey', 'pqc', 'vendorkey']
-    assert os.listdir(str(dst.join('pqc'))) == ['pqckey']
 
+def test_import_vendors_gpg_keys_to_target_userspace_failure_is_not_fatal(monkeypatch, tmpdir):
+    userspace = tmpdir.mkdir('userspace')
+    keys_dir = userspace.mkdir('leapp-trusted-gpg-keys-vendors')
+    keys_dir.join('legacy.gpg').write('k')
+    keys_dir.join('modern.gpg').write('k')
+    logger = logger_mocked()
+    monkeypatch.setattr(api, 'current_logger', logger)
+    calls = []
+
+    class _Context(MockContext):
+        def call(self, cmd, *args, **kwargs):
+            calls.append(cmd)
+            if cmd[-1].endswith('legacy.gpg'):
+                raise make_cpe(stderr='Policy rejects the key')
+            return {'stdout': '', 'stderr': ''}
+
+    context = _Context(base_dir=str(userspace))
+
+    tus_userspacebuild._import_vendors_gpg_keys_to_target_userspace(context, '/leapp-trusted-gpg-keys-vendors')
+
+    assert sorted(cmd[-1] for cmd in calls) == [
+        'leapp-trusted-gpg-keys-vendors/legacy.gpg',
+        'leapp-trusted-gpg-keys-vendors/modern.gpg',
+    ]
+    assert len(logger.warnmsg) == 1
+    assert 'legacy.gpg' in logger.warnmsg[0]
+
+
+def test_import_vendors_gpg_keys_to_target_userspace_no_dir(monkeypatch, tmpdir):
+    context = MockContext(base_dir=str(tmpdir))
+
+    tus_userspacebuild._import_vendors_gpg_keys_to_target_userspace(context, '/leapp-trusted-gpg-keys-vendors')
+
+    assert not context.calls

@@ -46,7 +46,9 @@ def test_register_dnfworkaround_source_version_gating(monkeypatch, src_ver, shou
 
     register_dnfworkaround()
 
-    assert api.produce.called == (1 if should_register else 0)
+    # ELevate: one workaround is registered per directory with trusted gpg keys
+    # (the vendors one and the distribution one)
+    assert api.produce.called == (2 if should_register else 0)
     if should_register:
         assert isinstance(api.produce.model_instances[0], DNFWorkaround)
 

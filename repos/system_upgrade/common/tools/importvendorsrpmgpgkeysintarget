@@ -1,0 +1,43 @@
+#!/usr/bin/bash -ef
+
+# ELevate: import the trusted GPG keys of the vendors to the RPM DB of the
+# upgraded system from the target userspace.
+#
+# Unlike importrpmgpgkeysintarget, a key that cannot be imported does not fail
+# the upgrade: the vendors keyfiles contain also legacy keys (e.g. with SHA-1
+# binding signatures) refused by the target system, which could not be used to
+# verify packages on it in any case. The other keys of such a keyfile are
+# imported.
+
+log_error() {
+  echo >&2 "Error: $1"
+}
+
+log_info() {
+  echo >&2 "Info: $1"
+}
+
+if [ "$#" -lt 1 ]; then
+    log_error "Missing the required path to the directory with trusted vendors GPG keys."
+    exit 1
+elif [ "$#" -ge 2 ]; then
+    log_error "Expected only one arguments, received $#. Possibly unescaped whitespaces? '$*'"
+    exit 1
+fi
+
+USERSPACE_GPG_KEYS_DIR="$1"
+
+if [ ! -e "$USERSPACE_GPG_KEYS_DIR" ]; then
+    log_info "The $USERSPACE_GPG_KEYS_DIR directory does not exist. Nothing to import."
+    exit 0
+fi
+
+while IFS= read -r -d '' key_file; do
+    log_info "Importing GPG keys from: $key_file"
+
+    if ! /usr/bin/rpmkeys --import --root /installroot "$key_file"; then
+        log_info "Some of the GPG keys have not been imported: $key_file"
+    fi
+done < <(find -L "$USERSPACE_GPG_KEYS_DIR" -type f -print0)
+
+exit 0

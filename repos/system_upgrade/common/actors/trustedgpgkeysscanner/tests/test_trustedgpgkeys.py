@@ -282,6 +282,29 @@ def test_get_misplaced_keyfiles(monkeypatch, keyfiles, expected_pqc, expected_cl
     assert as_tuples(misplaced_classic) == expected_classic
 
 
+def test_get_misplaced_keyfiles_multiple_trusted_dirs(monkeypatch):
+    """Each of the trusted directories (vendors, distribution) has its own 'pqc' subdirectory."""
+    vendors_dir = '/vendors/rpm-gpg/'
+    vendors_pqc_dir = os.path.join(vendors_dir, 'pqc')
+    keyfiles = {
+        os.path.join(_TRUSTED_DIR, 'v4key'): [_v4('fd431d51')],
+        os.path.join(_PQC_DIR, 'v6key'): [_v6('05707a62')],
+        os.path.join(vendors_dir, 'vendor-v6'): [_v6('aaaaaaaa')],
+        os.path.join(vendors_pqc_dir, 'vendor-v4'): [_v4('bbbbbbbb')],
+        os.path.join(vendors_pqc_dir, 'vendor-ok'): [_v6('cccccccc')],
+    }
+    monkeypatch.setattr(trustedgpgkeys, 'get_path_to_gpg_certs', lambda: [vendors_dir, _TRUSTED_DIR])
+
+    misplaced_pqc, misplaced_classic = trustedgpgkeys._get_misplaced_keyfiles(keyfiles)
+
+    assert [(k.filename, k.fingerprint) for k in misplaced_pqc] == [
+        (os.path.join(vendors_dir, 'vendor-v6'), 'aaaaaaaa')
+    ]
+    assert [(k.filename, k.fingerprint) for k in misplaced_classic] == [
+        (os.path.join(vendors_pqc_dir, 'vendor-v4'), 'bbbbbbbb')
+    ]
+
+
 def test_process_no_installed_rpms_raises(monkeypatch):
     monkeypatch.setattr(api, 'current_actor', CurrentActorMocked())
     monkeypatch.setattr(api, 'produce', produce_mocked())

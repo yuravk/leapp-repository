@@ -8,6 +8,8 @@ from leapp.models import GpgKey
 
 GPG_CERTS_FOLDER = 'rpm-gpg'
 GPG_PQC_CERTS_SUBFOLDER = 'pqc'
+# ELevate: the directory with the trusted gpg keys of the vendors
+VENDORS_GPG_CERTS_DIR = '/etc/leapp/files/vendors.d/rpm-gpg/'
 
 # The version of the gpg-pubkey RPMs is the last 8 characters of the long key
 # ID, which is a different part of the fingerprint for each key version:
@@ -310,7 +312,7 @@ def get_path_to_gpg_certs():
         certs_dir = '{}beta'.format(target_major_version)
     distro = config.get_target_distro_id()
     return [
-        "/etc/leapp/files/vendors.d/rpm-gpg/",
+        VENDORS_GPG_CERTS_DIR,
         os.path.join(
             api.get_common_folder_path('distro'),
             distro,

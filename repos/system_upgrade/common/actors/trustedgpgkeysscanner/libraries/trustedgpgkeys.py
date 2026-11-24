@@ -91,8 +91,12 @@ def _get_misplaced_keyfiles(keyfiles_to_infos):
     """
     Get keys incorrectly placed within the truste GPG keys directory
     """
-    root_dir = get_path_to_gpg_certs()
-    pqc_dir = os.path.join(root_dir, GPG_PQC_CERTS_SUBFOLDER)
+    # ELevate: there are several directories with trusted gpg keys (the
+    # vendors one and the distribution one), each with its own 'pqc' subdir
+    root_dirs = get_path_to_gpg_certs()
+    if isinstance(root_dirs, str):
+        root_dirs = [root_dirs]
+    pqc_dirs = {os.path.join(root_dir, GPG_PQC_CERTS_SUBFOLDER) for root_dir in root_dirs}
 
     misplaced_pqc = []  # pqc (v6) keys found at the 'root_dir'
     misplaced_classic = []  # non-PQC keys found in the 'pqc_dir'
@@ -105,7 +109,7 @@ def _get_misplaced_keyfiles(keyfiles_to_infos):
         )
 
     for keyfile, key_infos in keyfiles_to_infos.items():
-        if os.path.dirname(keyfile) == pqc_dir:
+        if os.path.dirname(keyfile) in pqc_dirs:
             misplaced_classic += [
                 make_model(keyfile, key) for key in key_infos if not key.is_pqc
             ]

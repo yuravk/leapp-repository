@@ -91,6 +91,12 @@ def process():
     misplaced_pqc = map_by_keyfile(misplaced_pqc)
     misplaced_classic = map_by_keyfile(misplaced_classic)
 
-    root_dir = get_path_to_gpg_certs()
-    pqc_dir = os.path.join(root_dir, GPG_PQC_CERTS_SUBFOLDER)
+    # ELevate: there are several directories with trusted gpg keys (the
+    # vendors one and the distribution one); list all of them in the report
+    root_dirs = get_path_to_gpg_certs()
+    if isinstance(root_dirs, str):
+        root_dirs = [root_dirs]
+    root_dirs = [root_dir.rstrip('/') for root_dir in root_dirs]
+    root_dir = ', '.join(root_dirs)
+    pqc_dir = ', '.join(os.path.join(root_dir, GPG_PQC_CERTS_SUBFOLDER) for root_dir in root_dirs)
     _report_misplaced_keys(misplaced_pqc, misplaced_classic, root_dir, pqc_dir)
